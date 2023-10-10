@@ -12,32 +12,60 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Copyright from '../../components/Copytight';
+import { useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCredentials } from '../../features/authSlice';
+import { useLoginMutation } from '../../features/authApiSlice';
+import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
-function Copyright(props: any) : JSX.Element {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignInSide() : JSX.Element{
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+export function SignInPage() : JSX.Element{
+  const userRef = useRef<HTMLInputElement>(null);
+  const errRef = useRef<HTMLParagraphElement>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const navigate = useNavigate();
+  const [login, { isLoading, isError, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    userRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [email, password]);
+
+  const handleSubmit =  async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    console.log(email, password)
+    if(email === '' || password === '') {
+      console.log('Please enter your email and password');
+      setErrMsg('Please enter your email and password');
+    } else
+      navigate('/welcome');
+
+    try {
+      // Assuming `login` is an asynchronous function that returns a promise
+      const userData = await login({ email, password });
+      dispatch(setCredentials({ ...userData, email }));
+        setEmail('');
+        setPassword('');
+        navigate('/welcome');
+    } catch (error) {
+      // Handle the error appropriately
+      console.error('Error:', error);
+  
+      // Update state or display an error message to the user
+      setErrMsg('error.message');
+      setPassword('');
+    }
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -73,7 +101,11 @@ export default function SignInSide() : JSX.Element{
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={
+              (event) => {
+                void handleSubmit(event)
+              }
+            } sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -83,6 +115,8 @@ export default function SignInSide() : JSX.Element{
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); }}
               />
               <TextField
                 margin="normal"
@@ -90,22 +124,31 @@ export default function SignInSide() : JSX.Element{
                 fullWidth
                 name="password"
                 label="Password"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); }}
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={errMsg !== ''}
+                helperText={errMsg}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          disabled={isLoading} // Disable the button when loading
+        >
+          {isLoading ? (
+            <CircularProgress size={24} color="inherit" /> // Loading indicator
+          ) : (
+            'Sign In'
+          )}
+        </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
@@ -126,3 +169,5 @@ export default function SignInSide() : JSX.Element{
     </ThemeProvider>
   );
 }
+
+export default SignInPage;
