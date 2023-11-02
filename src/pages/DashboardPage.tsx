@@ -2,16 +2,14 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Content from '../components/Content'
 
 const DashboardPage: React.FC = () => {
   return (
     <div>
       <Header />
       {/* Your dashboard content goes here */}
-      <div style={{ padding: '16px' }}>
-        <h1>Welcome to the Dashboard</h1>
-        {/* Add your dashboard components and content */}
-      </div>
+      <Content />
       <Footer />
     </div>
   )

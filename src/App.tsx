@@ -4,17 +4,17 @@ import SignInPage from './pages/auth/SignInPage'
 import AuthRequire from './features/authRequire'
 import WelcomePage from './features/Welcome'
 import DashboardPage from './pages/DashboardPage'
-import { PersonalInformationPage } from './pages/personal/PersonalInformationPage'
+import { PersonalPage } from './pages/personal/PersonalPage'
 
 function App(): JSX.Element {
   return (
     <Routes>
       <Route path='/' element={<DashboardPage />} />
       {/* public route */}
-      <Route index element={<PersonalInformationPage />} />
+      <Route index element={<DashboardPage />} />
       <Route path='login' element={<SignInPage />} />
 
-      <Route path='personal_information' element={<PersonalInformationPage />} />
+      <Route path='personal_information' element={<PersonalPage />} />
 
       {/* protected route */}
       <Route element={<AuthRequire />}>
