@@ -1,7 +1,7 @@
 // DashboardPage.tsx
-import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import React from 'react'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const DashboardPage: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const DashboardPage: React.FC = () => {
       </div>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default DashboardPage;
+export default DashboardPage
