@@ -2,6 +2,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import { TextFieldTitle } from '../components/TextFieldTitle'
 import React from 'react';
 import { ErrorMessage } from '../components/ErrorMessage';
+import CUSTOM_COLOR from '../../../constants/colors';
 
 export const ChangePasswordPage = () => {
 
@@ -22,7 +23,7 @@ export const ChangePasswordPage = () => {
 
             <Typography variant='h6' sx={{
                 fontWeight: 'bold'
-            }}>Thông tin cá nhân</Typography>
+            }}>Thay đổi mật khẩu</Typography>
 
             {error ? <ErrorMessage /> : null}
 
@@ -57,6 +58,9 @@ export const ChangePasswordPage = () => {
                 <Button
                     variant='contained'
                     onClick={() => { setError(!error) }}
+                    sx={{
+                        backgroundColor: CUSTOM_COLOR.primary
+                    }}
                 >
                     Cập nhật
                 </Button>

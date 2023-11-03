@@ -43,6 +43,9 @@ import { TextFieldTitle } from './components/TextFieldTitle'
 import { SelectAddress } from './components/SelectAddress'
 import { PersonalInformationPage } from './pages/PersonalInformationPage'
 import { ChangePasswordPage } from './pages/ChangePasswordPage'
+import { HomeCard } from './components/HomeCard'
+import { LovedNews } from './pages/LovedNews'
+import CUSTOM_COLOR from '../../constants/colors'
 
 const defaultTheme = createTheme()
 
@@ -127,9 +130,11 @@ export function PersonalPage(): JSX.Element {
                     <Button
                         variant='contained'
                         startIcon={<ReplyOutlinedIcon />}
+
                         sx={{
                             marginTop: 1,
                             width: '100%',
+                            backgroundColor: CUSTOM_COLOR.primary
                         }}
                     >
                         Chia sẻ trang của bạn
@@ -174,7 +179,7 @@ export function PersonalPage(): JSX.Element {
 
                     </List>
                 </Grid>
-                {selectedIndex === 0 ? <PersonalInformationPage /> : selectedIndex === 1 ? <ChangePasswordPage /> : null}
+                {selectedIndex === 0 ? <PersonalInformationPage /> : selectedIndex === 1 ? <LovedNews /> : selectedIndex === 2 ? <ChangePasswordPage /> : null}
             </Stack>
         </LocalizationProvider >
     )
