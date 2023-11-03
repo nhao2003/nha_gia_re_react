@@ -4,14 +4,28 @@ import CUSTOM_COLOR from '../../../constants/colors'
 import bedroom from '../../../assets/images/bedroom.svg'
 import bathroom from '../../../assets/images/bathroom.svg'
 import area from '../../../assets/images/area.svg'
-
 import { FacilityTag } from './FacilityTag'
-export const HomeCard = () => {
+
+
+interface PrivateProps {
+    image: string
+    price: any
+    title: string
+    loved: boolean
+    address: string
+    bedrooms: number
+    bathrooms: number
+    areas: number
+}
+
+
+
+export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathrooms, areas }: PrivateProps) => {
     return (
         <Stack
             direction={'column'}
             sx={{
-                width: '300px',
+
                 height: 'fit-content',
                 borderRadius: '10px',
                 border: '2px solid',
@@ -20,7 +34,7 @@ export const HomeCard = () => {
         >
 
             <img
-                src={require('../../../assets/images/home.jpg')}
+                src={image}
                 style={{
                     borderTopLeftRadius: '10px',
                     borderTopRightRadius: '10px'
@@ -40,7 +54,7 @@ export const HomeCard = () => {
                     color: CUSTOM_COLOR.primary,
                     fontSize: '20px',
                     fontWeight: 'bold'
-                }}>6 tỷ 699 triệu</Typography>
+                }}>{price}</Typography>
 
                 <Stack sx={{
                     border: '2px solid',
@@ -75,7 +89,7 @@ export const HomeCard = () => {
                     fontSize: '22px',
                     fontWeight: 'bold'
                 }}>
-                    Căn hộ cao cấp sân vườn, full nội thất
+                    {title}
                 </Typography>
 
             </Stack>
@@ -92,7 +106,7 @@ export const HomeCard = () => {
                     fontSize: '20px',
 
                 }}>
-                    Q5, TP. Hồ Chí Minh
+                    {address}
                 </Typography>
 
             </Stack>
@@ -117,19 +131,19 @@ export const HomeCard = () => {
 
                 <FacilityTag
                     icon={bedroom}
-                    value={2}
+                    value={bedrooms}
                     title={'PN'}
                 />
 
                 <FacilityTag
                     icon={bathroom}
-                    value={2}
+                    value={bathrooms}
                     title={'WC'}
                 />
 
                 <FacilityTag
-                    icon={bedroom}
-                    value={128}
+                    icon={area}
+                    value={areas}
                     title={<div><span>m</span><sup style={{ fontSize: '12px' }}>2</sup></div>}
                 />
 

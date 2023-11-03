@@ -1,5 +1,8 @@
-import { Avatar, Box, Grid, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { Tile } from './components/Tile';
+import AddIcon from '@mui/icons-material/Add';
+import CUSTOM_COLOR from '../../constants/colors';
+import { NewsPostedPage } from './pages/NewsPostedPage';
 
 export function OthersInformation(): JSX.Element {
     return (
@@ -55,7 +58,23 @@ export function OthersInformation(): JSX.Element {
                     />
 
                 </Grid>
+
+                <Button
+                    variant='contained'
+                    startIcon={<AddIcon />}
+
+                    sx={{
+                        marginTop: 1,
+                        width: '100%',
+                        backgroundColor: CUSTOM_COLOR.primary
+                    }}
+                >
+                    Theo dõi
+                </Button>
             </Grid>
+
+            <NewsPostedPage />
+
         </Stack>
     )
 }
