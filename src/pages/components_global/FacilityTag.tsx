@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import CUSTOM_COLOR from '../../../constants/colors';
+import CUSTOM_COLOR from '../../constants/colors';
 
 interface PrivateProps {
     icon: any
