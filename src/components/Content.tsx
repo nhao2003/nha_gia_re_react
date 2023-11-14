@@ -1,6 +1,6 @@
-import { OthersInformation } from '../pages/personal/OthersInformation'
-import { PersonalPage } from '../pages/personal/PersonalPage'
-import { SearchPage } from '../pages/search/pages/SearchPage'
+import { OthersInformation } from '../modules/personal/OthersInformation'
+import { PersonalPage } from '../modules/personal/PersonalPage'
+import { SearchPage } from '../modules/search/pages/SearchPage'
 
 const Content: React.FC = () => {
 

@@ -4,7 +4,7 @@ import CUSTOM_COLOR from '../../../constants/colors'
 import bedroom from '../../../assets/images/bedroom.svg'
 import bathroom from '../../../assets/images/bathroom.svg'
 import area from '../../../assets/images/area.svg'
-import { FacilityTag } from '../../components_global/FacilityTag'
+import { FacilityTag } from '../../../components/FacilityTag'
 
 
 interface PrivateProps {

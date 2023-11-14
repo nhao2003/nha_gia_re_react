@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import CUSTOM_COLOR from '../../constants/colors';
+import CUSTOM_COLOR from '../constants/colors';
 
 interface PrivateProps {
     icon: any
@@ -36,5 +36,4 @@ export const FacilityTag = ({ icon, value, title }: PrivateProps) => {
 const styleTyporaphy = {
     fontSize: '18px',
     marginLeft: '8px',
-
 }

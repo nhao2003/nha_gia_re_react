@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
 import './assets/styles/App.css'
-import SignInPage from './pages/auth/SignInPage'
+import SignInPage from './modules/auth/SignInPage'
 import AuthRequire from './features/authRequire'
 import WelcomePage from './features/Welcome'
-import DashboardPage from './pages/DashboardPage'
-import { PersonalPage } from './pages/personal/PersonalPage'
+import DashboardPage from './modules/DashboardPage'
+import { PersonalPage } from './modules/personal/PersonalPage'
 
 function App(): JSX.Element {
   return (
