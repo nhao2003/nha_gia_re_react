@@ -6,7 +6,7 @@ const Content: React.FC = () => {
 
 
     return (
-        <SearchPage />
+        <PersonalPage />
     )
 }
 
