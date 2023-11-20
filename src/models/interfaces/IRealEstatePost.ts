@@ -1,6 +1,6 @@
 import type Address from '../address';
 
-interface IRealEstatePost {
+interface RealEstatePost {
   id: string;
   user_id: string;
   project_id: string;
@@ -27,4 +27,4 @@ interface IRealEstatePost {
   update_count: number;
   is_active: boolean;
 }
-export default IRealEstatePost;
+export default RealEstatePost;
