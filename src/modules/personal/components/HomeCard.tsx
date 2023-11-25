@@ -16,16 +16,18 @@ interface PrivateProps {
     bedrooms: number
     bathrooms: number
     areas: number
+    sx?: object
 }
 
 
 
-export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathrooms, areas }: PrivateProps) => {
+export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathrooms, areas, sx }: PrivateProps) => {
     return (
         <Stack
             direction={'column'}
             sx={{
-
+                ...sx,
+                width: '280px',
                 height: 'fit-content',
                 borderRadius: '10px',
                 border: '2px solid',

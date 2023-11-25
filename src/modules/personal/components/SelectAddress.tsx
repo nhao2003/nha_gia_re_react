@@ -1,4 +1,5 @@
-import { FormControl, InputLabel, Select, Stack, Typography } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
+import addressUtils from '../../../utils/addressUtils'
 
 interface PrivateProps {
     title: string
@@ -24,7 +25,15 @@ export const SelectAddress = ({ title, require, placeholder }: PrivateProps) => 
                             borderRadius: '10px'
                         }
                     }}
-                />
+
+                >
+                    {
+                        addressUtils.getProvinces().map((e) => {
+                            return (<MenuItem value={e.code} key={e.code}>{e.name}</MenuItem>
+                            )
+                        })
+                    }
+                </Select>
 
             </FormControl>
         </Stack>
