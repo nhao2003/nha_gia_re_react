@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import EastIcon from '@mui/icons-material/East';
 import CUSTOM_COLOR from '../../constants/colors';
 import { Area } from './components/Area';
-import { HomeCard } from '../personal/components/HomeCard';
+import { HomeCard } from '../../components/HomeCard';
 
 function HomePage(): JSX.Element {
 

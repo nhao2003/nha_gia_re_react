@@ -43,7 +43,7 @@ import { TextFieldTitle } from './components/TextFieldTitle'
 import { SelectAddress } from './components/SelectAddress'
 import { PersonalInformationPage } from './pages/PersonalInformationPage'
 import { ChangePasswordPage } from './pages/ChangePasswordPage'
-import { HomeCard } from './components/HomeCard'
+import { HomeCard } from '../../components/HomeCard'
 import { LovedNews } from './pages/LovedNews'
 import CUSTOM_COLOR from '../../constants/colors'
 
