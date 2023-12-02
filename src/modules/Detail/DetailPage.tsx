@@ -143,7 +143,6 @@ function DetailPage(): JSX.Element {
                 >
                     <Stack
                         sx={{
-                            backgroundColor: 'AppWorkspace',
                             width: '70%',
 
                         }}

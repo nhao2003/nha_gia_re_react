@@ -10,6 +10,7 @@ import { OthersInformation } from './modules/personal/OthersInformation'
 import { SearchPage } from './modules/search/pages/SearchPage'
 import HomePage from './modules/home/HomePage'
 import DetailPage from './modules/Detail/DetailPage'
+import NewsPage from './modules/news/NewPage'
 
 function App(): JSX.Element {
   return (
@@ -22,6 +23,8 @@ function App(): JSX.Element {
       <Route path='/otheruser' element={<DashboardPage><OthersInformation /></DashboardPage>} />
       <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
       <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
+      <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
+
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>

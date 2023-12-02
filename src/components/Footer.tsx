@@ -1,6 +1,6 @@
 // Footer.tsx
 import React from 'react'
-import { AppBar, Stack, Toolbar, Typography } from '@mui/material'
+import { AppBar, Stack, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material'
 import CUSTOM_COLOR from '../constants/colors'
 import logo from '../assets/images/logo.svg'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -12,6 +12,12 @@ import logoZalo from '../assets/images/logo_zalo.svg'
 import logoChungNhan from '../assets/images/logoChungNhan.svg'
 
 const Footer: React.FC = () => {
+
+  const theme = useTheme();
+  const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
+  const matches = useMediaQuery(theme.breakpoints.up(950));
+
+
   return (
     // <AppBar position='static' sx={{ top: 'auto', bottom: 0 }}>
     //   <Toolbar>
@@ -43,8 +49,10 @@ const Footer: React.FC = () => {
           src={logo}
           style={{
             width: '300px',
-            height: '200px'
+            height: '200px',
+            alignSelf: matches ? 'start' : 'center'
           }}
+
         />
 
 
@@ -90,7 +98,11 @@ const Footer: React.FC = () => {
 
       </Stack>
 
-      <Stack direction={'column'} spacing={4}>
+      <Stack direction={'column'} spacing={4}
+        sx={{
+          display: matches ? 'block' : 'none'
+        }}
+      >
         <Stack direction={'row'} spacing={8}>
           <Stack direction={'row'} alignItems={'center'} spacing={1}>
             <PhoneEnabledOutlinedIcon />
@@ -138,7 +150,13 @@ const Footer: React.FC = () => {
 
           </Stack>
 
-          <Stack direction={'column'} spacing={5}>
+          <Stack direction={'column'} spacing={5}
+
+            sx={{
+              display: matches1440 ? 'block' : 'none'
+            }}
+
+          >
             <Stack direction={'column'} spacing={1}>
               <Typography variant='inherit' sx={{
                 fontWeight: '500'
