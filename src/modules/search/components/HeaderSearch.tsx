@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Button, FormControl, Grid, Icon, IconButton, InputAdornment, InputLabel, Link, MenuItem, OutlinedInput, Pagination, Select, Stack, SvgIcon, Tab, TextField, Typography } from '@mui/material'
+import { Box, Breadcrumbs, Button, FormControl, Grid, Icon, IconButton, InputAdornment, InputLabel, Link, MenuItem, OutlinedInput, Pagination, Select, Stack, SvgIcon, Tab, TextField, Typography, useMediaQuery, useTheme } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
@@ -15,6 +15,10 @@ import addressUtils from '../../../utils/addressUtils';
 export const HeaderSearch = () => {
 
 
+    const theme = useTheme();
+    const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
+    const matches = useMediaQuery(theme.breakpoints.up(950));
+
 
     return (
         <Stack direction={'column'}>
@@ -29,7 +33,7 @@ export const HeaderSearch = () => {
             >
                 <FormControl sx={{
 
-                    width: '20%'
+                    width: matches ? '20%' : '80%'
                 }}>
                     <OutlinedInput
 
@@ -57,8 +61,8 @@ export const HeaderSearch = () => {
 
                 <FormControl
                     sx={{
-
-                        width: '15%'
+                        display: matches ? 'inherit' : 'none',
+                        width: matches1440 ? '15%' : '18%'
                     }}
                 >
 
@@ -95,8 +99,8 @@ export const HeaderSearch = () => {
                 </FormControl>
 
                 <FormControl sx={{
-
-                    width: '15%'
+                    display: matches ? 'inherit' : 'none',
+                    width: matches1440 ? '15%' : '18%'
                 }}>
 
                     <Select
@@ -127,8 +131,8 @@ export const HeaderSearch = () => {
 
 
                 <FormControl sx={{
-
-                    width: '15%'
+                    display: matches ? 'inherit' : 'none',
+                    width: matches1440 ? '15%' : '18%'
                 }}>
 
                     <Select
@@ -158,8 +162,8 @@ export const HeaderSearch = () => {
                 </FormControl>
 
                 <FormControl sx={{
-
-                    width: '15%'
+                    display: matches ? 'inherit' : 'none',
+                    width: matches1440 ? '15%' : '18%'
                 }}>
 
                     <Select
@@ -194,7 +198,8 @@ export const HeaderSearch = () => {
                         height: '45px',
                         borderColor: CUSTOM_COLOR.grayNobel,
                         color: CUSTOM_COLOR.black,
-                        width: '8%'
+                        width: '8%',
+                        display: matches ? matches1440 ? 'inherit' : 'none' : 'none',
                     }}
                 >
                     Lọc thêm
@@ -206,7 +211,8 @@ export const HeaderSearch = () => {
                         height: '45px',
                         borderColor: CUSTOM_COLOR.grayNobel,
                         color: CUSTOM_COLOR.black,
-                        width: '8%'
+                        width: '8%',
+                        display: matches ? matches1440 ? 'inherit' : 'none' : 'none',
                     }}
                 >
                     Đặt lại

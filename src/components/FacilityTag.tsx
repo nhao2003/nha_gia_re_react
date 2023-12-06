@@ -34,6 +34,6 @@ export const FacilityTag = ({ icon, value, title }: PrivateProps) => {
 }
 
 const styleTyporaphy = {
-    fontSize: '18px',
+    fontSize: '14px',
     marginLeft: '8px',
 }
