@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material'
-import { HomeCard } from '../components/HomeCard'
+import { HomeCard } from '../../../components/HomeCard'
 
 export const NewsPostedPage = () => {
     return (

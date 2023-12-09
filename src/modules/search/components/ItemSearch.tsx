@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, FormControl, Grid, Link, List, ListItem, ListItemButton, ListItemText, MenuItem, Pagination, Select, Stack, Tab, Typography } from '@mui/material';
+import { Box, Breadcrumbs, FormControl, Grid, Link, List, ListItem, ListItemButton, ListItemText, MenuItem, Pagination, Select, Stack, Tab, Typography, useMediaQuery, useTheme } from '@mui/material';
 import CUSTOM_COLOR from '../../../constants/colors';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
@@ -8,6 +8,12 @@ import { ListItemFilter } from './ListItemFilter';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 export const ItemSearch = () => {
+
+
+    const theme = useTheme();
+    const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
+    const matches = useMediaQuery(theme.breakpoints.up(950));
+
 
     const [open, setOpen] = React.useState(true);
 
@@ -35,11 +41,17 @@ export const ItemSearch = () => {
 
     return (
         <Stack
-            width={'80%'}
+
             justifyContent={'center'}
             alignSelf={'center'}
             marginTop={3}
             marginBottom={3}
+            style={{
+                objectFit: 'cover',
+                width: '100%',
+                maxWidth: '1000px',
+                minWidth: '390px'
+            }}
         >
 
             <Breadcrumbs separator="›" aria-label="breadcrumb">
@@ -55,8 +67,11 @@ export const ItemSearch = () => {
 
                 }}
             >Mua bán bất động sản giá tốt</Typography>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-                <Box sx={{ width: '72%', typography: 'body1' }}>
+            <Stack direction={'row'} justifyContent={'space-between'
+            }
+
+            >
+                <Box sx={{ width: matches ? '72%' : '98%', typography: 'body1' }}>
                     <TabContext value={value}>
                         <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }} >
                             <TabList onChange={handleChange} aria-label="tab dbs"
@@ -119,7 +134,8 @@ export const ItemSearch = () => {
                     </TabContext>
                 </Box>
                 <Stack direction={'column'} sx={{
-                    width: '25%'
+                    width: '25%',
+                    display: matches ? 'inherit' : 'none'
                 }}
                     spacing={2}
                 >

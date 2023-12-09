@@ -4,12 +4,17 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Content from '../components/Content'
 
-const DashboardPage: React.FC = () => {
+
+interface PrivateProps {
+  children: React.ReactNode
+}
+
+const DashboardPage = ({ children }: PrivateProps) => {
   return (
     <div>
       <Header />
       {/* Your dashboard content goes here */}
-      <Content />
+      {children}
       <Footer />
     </div>
   )
