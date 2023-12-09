@@ -1,41 +1,84 @@
-
-import { Route, Routes } from 'react-router-dom'
-import './assets/styles/App.css'
-import SignInPage from './modules/auth/SignInPage'
-import AuthRequire from './features/authRequire'
-import WelcomePage from './features/Welcome'
-import DashboardPage from './modules/DashboardPage'
-import { PersonalPage } from './modules/personal/PersonalPage'
-import { Fragment } from 'react'
-import { OthersInformation } from './modules/personal/OthersInformation'
-import { SearchPage } from './modules/search/pages/SearchPage'
-import HomePage from './modules/home/HomePage'
-import DetailPage from './modules/Detail/DetailPage'
-import NewsPage from './modules/news/NewPage'
+import { Route, Routes } from 'react-router-dom';
+import './assets/styles/App.css';
+import AuthRequire from './features/authRequire';
+import WelcomePage from './features/Welcome';
+import DashboardPage from './modules/DashboardPage';
+import { PersonalPage } from './modules/personal/PersonalPage';
+import { Fragment } from 'react';
+import { OthersInformation } from './modules/personal/OthersInformation';
+import { SearchPage } from './modules/search/pages/SearchPage';
+import HomePage from './modules/home/HomePage';
+import DetailPage from './modules/Detail/DetailPage';
+import NewsPage from './modules/news/NewPage';
 
 import SignIn from './modules/auth/SignIn';
 import SignUp from './modules/auth/SignUp';
 
-
 function App(): JSX.Element {
   return (
     <Routes>
-      <Route path='/' element={<DashboardPage><HomePage /></DashboardPage>} />
+      <Route
+        path='/'
+        element={
+          <DashboardPage>
+            <HomePage />
+          </DashboardPage>
+        }
+      />
       {/* public route */}
 
-      <Route index element={<DashboardPage><HomePage /></DashboardPage>} />
-      <Route path='/personal' element={<DashboardPage><PersonalPage /></DashboardPage>} />
+      <Route
+        index
+        element={
+          <DashboardPage>
+            <HomePage />
+          </DashboardPage>
+        }
+      />
+      <Route
+        path='/personal'
+        element={
+          <DashboardPage>
+            <PersonalPage />
+          </DashboardPage>
+        }
+      />
 
-      <Route path='/otheruser' element={<DashboardPage><OthersInformation /></DashboardPage>} />
-      <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
-      <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
-      <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
+      <Route
+        path='/otheruser'
+        element={
+          <DashboardPage>
+            <OthersInformation />
+          </DashboardPage>
+        }
+      />
+      <Route
+        path='/search'
+        element={
+          <DashboardPage>
+            <SearchPage />
+          </DashboardPage>
+        }
+      />
+      <Route
+        path='/details'
+        element={
+          <DashboardPage>
+            <DetailPage />
+          </DashboardPage>
+        }
+      />
+      <Route
+        path='/news'
+        element={
+          <DashboardPage>
+            <NewsPage />
+          </DashboardPage>
+        }
+      />
 
-      
       <Route path='login' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
-
-
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
