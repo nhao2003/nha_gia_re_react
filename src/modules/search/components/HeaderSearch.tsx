@@ -10,6 +10,7 @@ import CUSTOM_COLOR from '../../../constants/colors';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import React from 'react';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
+import addressUtils from '../../../utils/addressUtils';
 
 export const HeaderSearch = () => {
 
@@ -83,7 +84,13 @@ export const HeaderSearch = () => {
                         }}
                     >
                         <MenuItem value={'Toàn quốc'}>Toàn Quốc</MenuItem>
-                        <MenuItem value={'Hồ Chí Minh'}>Hồ Chí Minh</MenuItem>
+                        {
+                            addressUtils.getProvinces().map((province, index) => {
+                                return (
+                                    <MenuItem key={index} value={province.name}>{province.name}</MenuItem>
+                                )
+                            })
+                        }
                     </Select>
                 </FormControl>
 

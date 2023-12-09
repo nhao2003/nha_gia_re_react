@@ -10,6 +10,7 @@ const Header: React.FC = () => {
         <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
+        <Button color='inherit' component={Link} to='/personal_information'>Thông tin tài khoản</Button>
         <Button color='inherit' component={Link} to='/welcome'>
           Welcome
         </Button>
