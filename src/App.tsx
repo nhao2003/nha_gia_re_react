@@ -1,3 +1,4 @@
+
 import { Route, Routes } from 'react-router-dom'
 import './assets/styles/App.css'
 import SignInPage from './modules/auth/SignInPage'
@@ -12,11 +13,16 @@ import HomePage from './modules/home/HomePage'
 import DetailPage from './modules/Detail/DetailPage'
 import NewsPage from './modules/news/NewPage'
 
+import SignIn from './modules/auth/SignIn';
+import SignUp from './modules/auth/SignUp';
+
+
 function App(): JSX.Element {
   return (
     <Routes>
       <Route path='/' element={<DashboardPage><HomePage /></DashboardPage>} />
       {/* public route */}
+
       <Route index element={<DashboardPage><HomePage /></DashboardPage>} />
       <Route path='/personal' element={<DashboardPage><PersonalPage /></DashboardPage>} />
 
@@ -25,13 +31,18 @@ function App(): JSX.Element {
       <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
 
+      
+      <Route path='login' element={<SignIn />} />
+      <Route path='signup' element={<SignUp />} />
+
+
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
       </Route> */}
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

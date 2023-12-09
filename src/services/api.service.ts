@@ -48,6 +48,7 @@ export class ApiServiceBuilder {
 
 export class ApiService {
   private readonly API_URL = 'https://nha-gia-re-server.onrender.com/api/v1';
+  // private readonly API_URL = 'http://localhost:8000/api/v1';
   private readonly api: AxiosInstance;
   private readonly apiConfig: ApiServiceConfig;
 

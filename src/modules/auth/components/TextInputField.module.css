@@ -1,0 +1,17 @@
+.input {
+  font: inherit;
+  display: block;
+  width: 100%;
+  font-size: large;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1rem;
+  outline: none;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #b8b7b7;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0f2c59;
+}
