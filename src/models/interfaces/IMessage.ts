@@ -1,4 +1,4 @@
-import { type MessageTypes } from '../../templates/classic/constants/enums';
+import { type MessageTypes } from '../../constants/enums';
 
 interface IMessage {
   id: string;

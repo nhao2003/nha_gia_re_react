@@ -8,9 +8,9 @@ import NewsPage from './templates/classic/modules/news/NewPage'
 import { OthersInformation } from './templates/classic/modules/personal/OthersInformation'
 import { PersonalPage } from './templates/classic/modules/personal/PersonalPage'
 import { SearchPage } from './templates/classic/modules/search/pages/SearchPage'
+import SignIn from './templates/classic/modules/auth/SignIn'
+import SignUp from './templates/classic/modules/auth/SignUp'
 
-import SignIn from './modules/auth/SignIn';
-import SignUp from './modules/auth/SignUp';
 
 
 function App(): JSX.Element {
