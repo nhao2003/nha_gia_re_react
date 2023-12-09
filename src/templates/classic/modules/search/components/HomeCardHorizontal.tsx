@@ -1,12 +1,12 @@
 import { Avatar, Divider, Pagination, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
-import CUSTOM_COLOR from '../../../constants/colors'
-import { FacilityTag } from '../../../components/FacilityTag'
 import bedroom from '../../../assets/images/bedroom.svg'
 import bathroom from '../../../assets/images/bathroom.svg'
 import area from '../../../assets/images/area.svg'
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import CUSTOM_COLOR from '../../../constants/colors';
+import { FacilityTag } from '../../../components/FacilityTag';
 
 
 interface PrivateProps {

@@ -3,9 +3,9 @@ import tom_rumble from '../../assets/images/tom_rumble.jpg'
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import EastIcon from '@mui/icons-material/East';
-import CUSTOM_COLOR from '../../constants/colors';
 import { Area } from './components/Area';
 import { HomeCard } from '../../components/HomeCard';
+import CUSTOM_COLOR from '../../constants/colors';
 
 function HomePage(): JSX.Element {
 

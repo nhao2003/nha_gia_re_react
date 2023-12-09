@@ -6,11 +6,11 @@ import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import CropIcon from '@mui/icons-material/Crop';
 import TuneIcon from '@mui/icons-material/Tune';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import CUSTOM_COLOR from '../../../constants/colors';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import React from 'react';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
-import addressUtils from '../../../utils/addressUtils';
+import CUSTOM_COLOR from '../../../constants/colors';
+import addressUtils from '../../../../../utils/addressUtils';
 
 export const HeaderSearch = () => {
 

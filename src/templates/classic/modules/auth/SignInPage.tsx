@@ -12,13 +12,13 @@ import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Copyright from '../../components/Copytight'
 import { useRef, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCredentials } from '../../features/authSlice'
-import { useLoginMutation } from '../../features/authApiSlice'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
+import Copyright from '../../components/Copytight'
+import { useLoginMutation } from '../../../../features/authApiSlice'
+import { setCredentials } from '../../../../features/authSlice'
 
 const defaultTheme = createTheme()
 

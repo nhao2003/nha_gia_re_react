@@ -5,7 +5,6 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
-import CUSTOM_COLOR from "../../constants/colors";
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import WcIcon from '@mui/icons-material/Wc';
@@ -21,7 +20,8 @@ import EastIcon from '@mui/icons-material/East';
 import React, { useState } from "react";
 import { url } from "inspector";
 import { TileIcon } from "./components/TileIcon";
-import { HomeCard } from "../../components/HomeCard";
+import { HomeCard } from "../../../../templates/classic/components/HomeCard";
+import CUSTOM_COLOR from "../../constants/colors";
 
 function DetailPage(): JSX.Element {
 

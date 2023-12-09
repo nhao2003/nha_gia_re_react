@@ -1,10 +1,9 @@
 import { Stack, Typography } from '@mui/material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import CUSTOM_COLOR from '../../../constants/colors'
 import bedroom from '../../../assets/images/bedroom.svg'
 import bathroom from '../../../assets/images/bathroom.svg'
 import area from '../../../assets/images/area.svg'
-import { FacilityTag } from '../../../components/FacilityTag'
+import CUSTOM_COLOR from '../../../constants/colors'
 
 
 interface PrivateProps {

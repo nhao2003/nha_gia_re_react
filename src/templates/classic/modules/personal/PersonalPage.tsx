@@ -1,33 +1,18 @@
-import { ThemeProvider } from '@emotion/react'
 import {
     Avatar,
     Badge,
     Box,
     Button,
     Container,
-    FormControl,
-    FormControlLabel,
     Grid,
-    InputLabel,
     List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Radio,
-    RadioGroup,
-    Select,
     Stack,
-    TextField,
     Typography,
     createTheme,
     styled,
 } from '@mui/material'
-import { ComponentType } from 'react'
-import { green, red } from '@mui/material/colors'
 import * as React from 'react'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
-import Icon from '@mui/material/Icon'
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -37,15 +22,11 @@ import { SelectedTab } from './components/SelectedTab'
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { Tile } from './components/Tile'
-import { TextFieldTitle } from './components/TextFieldTitle'
-import { SelectAddress } from './components/SelectAddress'
 import { PersonalInformationPage } from './pages/PersonalInformationPage'
 import { ChangePasswordPage } from './pages/ChangePasswordPage'
-import { HomeCard } from '../../components/HomeCard'
-import { LovedNews } from './pages/LovedNews'
 import CUSTOM_COLOR from '../../constants/colors'
+import { LovedNews } from './pages/LovedNews'
 
 const defaultTheme = createTheme()
 

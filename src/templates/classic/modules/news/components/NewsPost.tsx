@@ -1,5 +1,5 @@
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
-import CUSTOM_COLOR from "../../../constants/colors"
+import CUSTOM_COLOR from "../../../constants/colors";
 
 interface PrivateProps {
     image: string

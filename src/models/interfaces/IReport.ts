@@ -1,4 +1,4 @@
-import type { ReportStatus, ReportType, ReportContentType } from '../../constants/enums';
+import type { ReportStatus, ReportType, ReportContentType } from '../../templates/classic/constants/enums';
 
 interface IReport {
   id: string;

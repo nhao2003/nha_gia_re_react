@@ -1,8 +1,8 @@
 import { Avatar, Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { Tile } from './components/Tile';
 import AddIcon from '@mui/icons-material/Add';
-import CUSTOM_COLOR from '../../constants/colors';
 import { NewsPostedPage } from './pages/NewsPostedPage';
+import CUSTOM_COLOR from '../../constants/colors';
 
 export function OthersInformation(): JSX.Element {
     return (

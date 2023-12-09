@@ -1,5 +1,4 @@
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
-import CUSTOM_COLOR from "../../constants/colors"
 import { NewsPost } from "./components/NewsPost"
 import { NewsTag } from "./components/NewsTag";
 
