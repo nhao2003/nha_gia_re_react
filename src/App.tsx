@@ -1,13 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import './assets/styles/App.css';
-import SignInPage from './modules/auth/SignInPage';
 
 import AuthRequire from './features/authRequire';
 import WelcomePage from './features/Welcome';
-import DashboardPage from './pages/DashboardPage';
-import { PersonalPage } from './pages/personal/PersonalPage';
-import SignIn from './pages/auth/SignIn';
-import SignUp from './pages/auth/SignUp';
+import DashboardPage from './modules/DashboardPage';
+import { PersonalPage } from './modules/personal/PersonalPage';
+import SignIn from './modules/auth/SignIn';
+import SignUp from './modules/auth/SignUp';
 
 function App(): JSX.Element {
   return (
