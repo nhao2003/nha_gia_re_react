@@ -49,6 +49,11 @@ const provinceList: Province[] = [
   },
 ];
 
+const handleProvinceClick = (provinceName: string) => {
+  console.log(`Province clicked: ${provinceName}`);
+  // Add logic specific to the clicked province
+};
+
 export const ProvinceListComponent: React.FC = () => {
   return (
     <Stack alignContent={'center'} justifyContent={'center'} marginTop={2} marginBottom={2}>
@@ -62,6 +67,7 @@ export const ProvinceListComponent: React.FC = () => {
               }}
               province={province.name}
               background={province.background}
+              onClick={() => handleProvinceClick(province.name)}
             />
           </Grid>
         ))}

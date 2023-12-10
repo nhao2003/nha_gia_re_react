@@ -1,31 +1,48 @@
-import { Stack, Typography } from '@mui/material';
+import { ButtonBase, Stack, Typography } from '@mui/material';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 
 interface PrivateProps {
   sx: object;
   background: string;
   province: string;
+  onClick?: () => void; // Thêm onClick callback
 }
 
-export const ProvinceComponent = ({ sx, background, province }: PrivateProps) => {
+export const ProvinceComponent = ({ sx, background, province, onClick }: PrivateProps) => {
+  const handleButtonClick = () => {
+    if (onClick !== null && onClick !== undefined) {
+      onClick();
+    }
+  };
+
   return (
-    <Stack
-      direction={'column'}
+    <ButtonBase
+      role='button' // Set role to 'button' for accessibility
+      tabIndex={0} // Make the component focusable
       sx={{
         ...sx,
         backgroundImage: `url(${background})`,
-        backgroundSize: 'cover', // Adjust as needed
-        backgroundPosition: 'center', // Adjust as needed
-        backgroundRepeat: 'no-repeat', // Adjust as needed
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         borderRadius: '10px',
-        width: '100%', // Đặt chiều rộng là 100%
-        height: '150px', // Đặt chiều cao theo ý muốn
+        width: '100%',
+        height: '150px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', // Canh giữa theo chiều dọc
-        justifyContent: 'flex-end', // Canh chữ dưới cùng theo chiều ngang
+        alignItems: 'center',
+        justifyContent: 'flex-end',
         padding: '5px',
+        transition: 'transform 0.3s ease-in-out', // Add a transition for the transform property
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          transform: 'scale(1.05)', // Scale up on hover
+        },
+        '&:active': {
+          transform: 'scale(0.95)', // Scale down on click
+        },
       }}
+      onClick={handleButtonClick}
     >
       <Typography
         sx={{
@@ -39,6 +56,6 @@ export const ProvinceComponent = ({ sx, background, province }: PrivateProps) =>
       >
         {province}
       </Typography>
-    </Stack>
+    </ButtonBase>
   );
 };
