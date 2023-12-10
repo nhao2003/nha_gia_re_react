@@ -1,18 +1,23 @@
-import { Route, Routes } from "react-router-dom";
-import { ModernDashboardPage } from "./modern/modules/ModernDashboardPage";
-import { ModernHomePage } from "./modern/modules/home/modern_home_page";
-import { ProfilePage } from "./modern/modules/profile/profile_page";
+import { Route, Routes } from 'react-router-dom';
+import { ModernDashboardPage } from './modern/modules/ModernDashboardPage';
+import { ModernHomePage } from './modern/modules/home/ModernHomePage';
+import { ProfilePage } from './modern/modules/profile/profile_page';
 
 function App(): JSX.Element {
   return (
     <Routes>
-
-<Route path='/' element={<ModernDashboardPage><ProfilePage /></ModernDashboardPage>} />
+      <Route
+        path='/'
+        element={
+          <ModernDashboardPage>
+            <ModernHomePage />
+          </ModernDashboardPage>
+        }
+      />
       {/* public route */}
 
-    <Route path='/' element={<ModernHomePage />} />
-    <Route path='/profile' element={<ProfilePage />} />
-
+      <Route path='/' element={<ModernHomePage />} />
+      <Route path='/profile' element={<ProfilePage />} />
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
