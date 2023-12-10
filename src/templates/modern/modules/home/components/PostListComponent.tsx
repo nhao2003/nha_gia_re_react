@@ -2,6 +2,7 @@ import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import EastIcon from '@mui/icons-material/East';
 import { HomeCard } from '../../../../classic/components/HomeCard';
+import { PostNewCard } from './PostNewCard';
 
 interface PostListComponentProps {
   title: string;
@@ -48,16 +49,13 @@ const PostListComponent = ({ title }: PostListComponentProps) => {
         {Array.from(Array(6))
           .slice(0, endSlice)
           .map((_, index) => (
-            <HomeCard
+            <PostNewCard
               key={index}
-              image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
+              image='https://static.asianpaints.com/content/dam/asian_paints/blog/wood/benefits-of-wooden-furniture/image-1-asian-paints-m.jpeg'
               title='Căn hộ cao cấp sân vườn full nội thất'
-              price={'6 tỷ 599 triệu'}
-              loved={true}
+              price={'11.900.000đ/căn'}
               address='Q5, TP. Hồ Chí Minh'
-              bedrooms={2}
-              bathrooms={2}
-              areas={234}
+              time='1 ngày trước'
               sx={{
                 overflow: 'hidden',
               }}
