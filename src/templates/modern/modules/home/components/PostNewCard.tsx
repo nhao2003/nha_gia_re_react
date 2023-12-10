@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { ButtonBase, Stack, Typography } from '@mui/material';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import { IconText } from './IconText';
 import moneyIcon from '../../../assets/images/currency-dollar.svg';
@@ -17,7 +17,8 @@ interface PrivateProps {
 
 export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateProps) => {
   return (
-    <Stack
+    <ButtonBase
+      component={Stack}
       direction={'column'}
       sx={{
         ...sx,
@@ -25,6 +26,14 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
         height: 'fit-content',
         borderRadius: '10px',
         backgroundColor: CUSTOM_COLOR.backgroundCard,
+        transition: 'transform 0.3s ease-in-out', // Add a transition for the transform property
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          transform: 'scale(1.05)', // Scale up on hover
+        },
+        '&:active': {
+          transform: 'scale(0.95)', // Scale down on click
+        },
       }}
     >
       <img
@@ -33,6 +42,7 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
           height: '150px',
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
+          width: '100%',
           objectFit: 'cover',
         }}
       />
@@ -96,6 +106,6 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
           color={CUSTOM_COLOR.textTitle}
         />
       </Stack>
-    </Stack>
+    </ButtonBase>
   );
 };
