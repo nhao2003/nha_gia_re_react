@@ -1,21 +1,7 @@
-import {
-  Grid,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import { Area } from '../../../classic/modules/home/components/Area';
-import { ProvinceComponent } from './components/ProvinceComponent';
 import { ProvinceListComponent } from './components/ProvinceListComponent';
-import CUSTOM_COLOR from '../../../classic/constants/colors';
-import EastIcon from '@mui/icons-material/East';
-import { HomeCard } from '../../../classic/components/HomeCard';
 import PostListComponent from './components/PostListComponent';
 
 export function ModernHomePage() {
@@ -26,10 +12,6 @@ export function ModernHomePage() {
   const handleClick = () => {
     navigate('/search');
   };
-
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up(950));
-  const endSlice = matches ? 4 : 2;
 
   return (
     <Stack alignItems={'center'}>
@@ -52,8 +34,8 @@ export function ModernHomePage() {
           }}
           style={{ marginTop: '30px' }}
           placeholder={'Tìm kiếm trên nhà giá rẻ'}
-          endAdornment={
-            <InputAdornment position='end'>
+          startAdornment={
+            <InputAdornment position='start'>
               <IconButton edge='end'>
                 <SearchIcon />
               </IconButton>
