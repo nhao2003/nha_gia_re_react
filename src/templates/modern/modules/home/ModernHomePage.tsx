@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { ProvinceListComponent } from './components/ProvinceListComponent';
 import PostListComponent from './components/PostListComponent';
+import { Carousel } from './components/Carousel';
 
 export function ModernHomePage() {
   const navigate = useNavigate();
-
-  const advertisement = 'https://akenda.vn/wp-content/uploads/2022/12/banner-bat-dong-san-113.jpg';
 
   const handleClick = () => {
     navigate('/search');
@@ -23,7 +22,8 @@ export function ModernHomePage() {
           minWidth: '390px',
         }}
       >
-        <img src={advertisement} height={'400px'} style={{ borderRadius: '10px' }} />
+        {/* <img src={advertisement} height={'400px'} style={{ borderRadius: '10px' }} /> */}
+        <Carousel />
         {/* Text file tìm kiếm */}
         <OutlinedInput
           onClick={handleClick}
