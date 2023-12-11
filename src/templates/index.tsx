@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import { ModernDashboardPage } from './modern/modules/ModernDashboardPage';
 import { ModernHomePage } from './modern/modules/home/ModernHomePage';
 import { ProfilePage } from './modern/modules/profile/profile_page';
+import HomePage from './classic/modules/home/HomePage';
+import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
 
 function App(): JSX.Element {
   return (
@@ -15,9 +17,15 @@ function App(): JSX.Element {
         }
       />
       {/* public route */}
-
-      <Route path='/' element={<ModernHomePage />} />
       <Route path='/profile' element={<ProfilePage />} />
+      <Route
+        path='/details'
+        element={
+          <ModernDashboardPage>
+            <ModernDetailPage />
+          </ModernDashboardPage>
+        }
+      />
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>

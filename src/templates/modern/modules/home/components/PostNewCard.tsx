@@ -5,6 +5,7 @@ import moneyIcon from '../../../assets/images/currency-dollar.svg';
 import homeIcon from '../../../assets/images/home.svg';
 import timeIcon from '../../../assets/images/tabler_clock.svg';
 import { time } from 'console';
+import { useNavigate } from 'react-router-dom';
 
 interface PrivateProps {
   image: string;
@@ -16,10 +17,17 @@ interface PrivateProps {
 }
 
 export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/details');
+  };
+
   return (
     <ButtonBase
       component={Stack}
       direction={'column'}
+      onClick={handleClick}
       sx={{
         ...sx,
         width: '280px',
