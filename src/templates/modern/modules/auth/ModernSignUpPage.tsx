@@ -10,7 +10,7 @@ const ModernSignUpPage = () => {
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate('/');
+    navigate('/signin');
   }
 
   return (

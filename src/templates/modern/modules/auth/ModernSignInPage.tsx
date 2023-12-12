@@ -12,7 +12,7 @@ const ModernSignInPage = () => {
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate('/');
+    navigate('/auth-update-profile');
   }
 
   return (
@@ -23,7 +23,7 @@ const ModernSignInPage = () => {
         <form onSubmit={submitHandler}>
           <InputField type='email' placeholder='Nhập email' />
           <InputField type='password' placeholder='Nhập mật khẩu' />
-          <Link to='/'>Quên mật khẩu?</Link>
+          <Link to='/forgot-password'>Quên mật khẩu?</Link>
           <SubmitButton type='submit'>Đăng nhập</SubmitButton>
         </form>
         <span>Hoặc đăng nhập với</span>
