@@ -1,9 +1,6 @@
 import React from 'react';
 import styles from '../assets/css/Header.module.css';
 
-
-
-
 const Header: React.FC = () => {
   const headerItems = [
     { href: '/', label: 'Mua bán' },
@@ -11,8 +8,8 @@ const Header: React.FC = () => {
     { href: '/blog', label: 'Blog' },
     { href: '/dang-tin', label: 'Đăng tin' },
     { href: '/quan-ly-tin', label: 'Quản lý tin' },
-    { href: '/dang-ky', label: 'Đăng ký' },
-    { href: '/dang-nhap', label: 'Đăng nhập' },
+    { href: '/signup', label: 'Đăng ký' },
+    { href: '/signin', label: 'Đăng nhập' },
   ];
 
   return (
@@ -28,4 +25,4 @@ const Header: React.FC = () => {
   );
 };
 
-export  {Header};
+export { Header };

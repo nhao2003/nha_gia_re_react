@@ -4,6 +4,10 @@ import { ModernHomePage } from './modern/modules/home/ModernHomePage';
 import { ProfilePage } from './modern/modules/profile/profile_page';
 import HomePage from './classic/modules/home/HomePage';
 import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
+import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
+import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
+import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
+import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
 
 function App(): JSX.Element {
   return (
@@ -26,6 +30,12 @@ function App(): JSX.Element {
           </ModernDashboardPage>
         }
       />
+
+      <Route path='/profile' element={<ProfilePage />} />
+      <Route path='/signin' element={<ModernSignInPage />} />
+      <Route path='/signup' element={<ModernSignUpPage />} />
+      <Route path='/forgot-password' element={<ModernForgotPassword />} />
+      <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
