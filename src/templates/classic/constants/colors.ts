@@ -9,6 +9,7 @@ const CUSTOM_COLOR = {
   starkWhite: '#EADBC8',
   backgroundCard: '#F6F6F6',
   textTitle: '#6A6A6A',
+  green: '#026D4D',
 };
 
 export default CUSTOM_COLOR;

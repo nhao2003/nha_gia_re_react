@@ -12,6 +12,24 @@ export function ModernHomePage() {
     navigate('/search');
   };
 
+  const slides = [
+    {
+      id: 1,
+      src: 'https://akenda.vn/wp-content/uploads/2022/12/banner-bat-dong-san-113.jpg',
+      alt: 'Image 1 for carousel',
+    },
+    {
+      id: 2,
+      src: 'https://bdsweb.com.vn/upload_images/images/bbds/banner-bat-dong-san-00.jpg',
+      alt: 'Image 2 for carousel',
+    },
+    {
+      id: 3,
+      src: 'https://img.pikbest.com/origin/06/43/34/25WpIkbEsTbZ9.jpg!w700wp',
+      alt: 'Image 3 for carousel',
+    },
+  ];
+
   return (
     <Stack alignItems={'center'}>
       <Stack
@@ -23,7 +41,7 @@ export function ModernHomePage() {
         }}
       >
         {/* <img src={advertisement} height={'400px'} style={{ borderRadius: '10px' }} /> */}
-        <Carousel />
+        <Carousel slides={slides} />
         {/* Text file tìm kiếm */}
         <OutlinedInput
           onClick={handleClick}

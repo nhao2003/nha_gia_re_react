@@ -18,11 +18,13 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import EastIcon from '@mui/icons-material/East';
 import React, { useState } from 'react';
-import { url } from 'inspector';
 import { HomeCard } from '../../../../templates/classic/components/HomeCard';
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
+import { Carousel } from '../home/components/Carousel';
+import PostListComponent from '../home/components/PostListComponent';
+import Grid from '@mui/material/Grid';
 
 export function ModernDetailPage(): JSX.Element {
   const navigate = useNavigate();
@@ -37,31 +39,38 @@ export function ModernDetailPage(): JSX.Element {
   const listImage = [
     {
       id: 0,
-      url: 'https://thanhvietcorp.vn/uploads/images/Bao%20chi/cac-mau-nha-vuon-dep.jpg',
+      src: 'https://thanhvietcorp.vn/uploads/images/Bao%20chi/cac-mau-nha-vuon-dep.jpg',
+      alt: 'Image 1 for carousel',
     },
     {
       id: 1,
-      url: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
+      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
+      alt: 'Image 2 for carousel',
     },
     {
       id: 2,
-      url: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
+      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
+      alt: 'Image 3 for carousel',
     },
     {
       id: 3,
-      url: 'https://media.tapchitaichinh.vn/w1480/images/upload/phunganhtuan/2015_07_13/phong-thuy-cho-nha-o-8_CLCV.jpg',
+      src: 'https://media.tapchitaichinh.vn/w1480/images/upload/phunganhtuan/2015_07_13/phong-thuy-cho-nha-o-8_CLCV.jpg',
+      alt: 'Image 4 for carousel',
     },
     {
       id: 4,
-      url: 'https://longvan.com.vn/wp-content/uploads/2020/11/mau-nha-cap-3-thiet-ke-dep-nhat-nam-31.jpg',
+      src: 'https://longvan.com.vn/wp-content/uploads/2020/11/mau-nha-cap-3-thiet-ke-dep-nhat-nam-31.jpg',
+      alt: 'Image 5 for carousel',
     },
     {
       id: 5,
-      url: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
+      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
+      alt: 'Image 6 for carousel',
     },
     {
       id: 6,
-      url: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
+      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
+      alt: 'Image 7 for carousel',
     },
   ];
 
@@ -136,13 +145,12 @@ export function ModernDetailPage(): JSX.Element {
         >
           <Stack
             sx={{
-              width: '70%',
+              width: matches ? '70%' : '100%',
             }}
             spacing={2}
             alignItems={'center'}
           >
-            <img width={'90%'} src={listImage[selectImage].url} />
-
+            <Carousel slides={listImage} style={{ width: '95%' }} />
             <Stack
               direction={'row'}
               spacing={1}
@@ -167,7 +175,7 @@ export function ModernDetailPage(): JSX.Element {
                       overflow: 'hidden',
                       objectFit: 'cover',
                     }}
-                    src={image.url}
+                    src={image.src}
                   />
                 </Stack>
               ))}
@@ -203,7 +211,6 @@ export function ModernDetailPage(): JSX.Element {
                     }}
                   />
                 </Stack>
-
                 <Stack
                   height={'30px'}
                   width={'30px'}
@@ -228,7 +235,11 @@ export function ModernDetailPage(): JSX.Element {
               </Stack>
             </Stack>
 
-            <Stack direction={'column'} spacing={1}>
+            <Stack
+              direction={'column'}
+              spacing={1}
+              style={{ backgroundColor: CUSTOM_COLOR.backgroundCard, padding: '20px', borderRadius: '10px' }}
+            >
               <Typography
                 width={'100%'}
                 marginLeft={'20px'}
@@ -243,7 +254,7 @@ export function ModernDetailPage(): JSX.Element {
               </Typography>
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
-                <Typography fontSize={'18px'} fontWeight={'600'}>
+                <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
                   {home.price} tỷ - {home.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
@@ -306,13 +317,14 @@ export function ModernDetailPage(): JSX.Element {
 
               <Typography
                 marginLeft={'20px'}
+                marginTop={'50px'}
                 sx={{
                   width: '100%',
                   fontWeight: 'bold',
                   fontSize: '18px',
                 }}
               >
-                Đặt điểm bất động sản
+                Chi tiết bất động sản
               </Typography>
 
               <Stack direction={matches ? 'row' : 'column'}>
@@ -399,11 +411,11 @@ export function ModernDetailPage(): JSX.Element {
 
           <Stack
             sx={{
-              backgroundColor: 'ButtonFace',
-              width: '30%',
+              backgroundColor: CUSTOM_COLOR.backgroundCard,
+              width: matches ? '30%' : '100%',
               height: 'fit-content',
               padding: '10px',
-              boxShadow: '2px 2px 5px 0px rgba(0, 0, 0, 0.5)',
+              borderRadius: '10px',
             }}
           >
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
@@ -423,11 +435,11 @@ export function ModernDetailPage(): JSX.Element {
               sx={{
                 marginTop: 1,
                 width: '100%',
-                backgroundColor: CUSTOM_COLOR.primary,
+                backgroundColor: CUSTOM_COLOR.green,
               }}
               endIcon={<ChevronRightIcon />}
             >
-              Xem trang
+              Xem Hồ Sơ
             </Button>
           </Stack>
         </Stack>
@@ -445,47 +457,7 @@ export function ModernDetailPage(): JSX.Element {
         }}
       >
         <Stack direction={'row'} marginBottom={1} justifyContent={'space-between'}>
-          <Typography
-            variant='h6'
-            sx={{
-              fontWeight: '600',
-              fontSize: '24px',
-            }}
-          >
-            Tin đăng tương tự
-          </Typography>
-          <Stack
-            direction={'row'}
-            spacing={1}
-            alignItems={'center'}
-            sx={{
-              color: CUSTOM_COLOR.primary,
-            }}
-          >
-            <Typography>Xem thêm</Typography>
-            <EastIcon />
-          </Stack>
-        </Stack>
-
-        <Stack direction={'row'} spacing={2}>
-          {Array.from(Array(6))
-            .slice(0, 4)
-            .map((_, index) => (
-              <HomeCard
-                key={index}
-                image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
-                title='Căn hộ cao cấp sân vườn full nội thất'
-                price={'6 tỷ 599 triệu'}
-                loved={true}
-                address='Q5, TP. Hồ Chí Minh'
-                bedrooms={2}
-                bathrooms={2}
-                areas={234}
-                sx={{
-                  overflow: 'hidden',
-                }}
-              />
-            ))}
+          <PostListComponent title={'Bài đăng tương tự'} />
         </Stack>
       </Stack>
     </Stack>
