@@ -20,8 +20,9 @@ export const NewsPost = ({ image, time, user, title, content }: PrivateProps) =>
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('detail_blog');
+        navigate('/news/detail_blog');
     };
+
 
 
     return (
@@ -44,6 +45,7 @@ export const NewsPost = ({ image, time, user, title, content }: PrivateProps) =>
                     width: '40%',
                     borderRadius: '10px'
                 }}
+
             />
 
             <Stack
