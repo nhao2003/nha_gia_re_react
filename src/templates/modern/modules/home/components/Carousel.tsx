@@ -2,22 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs';
 import './Carousel.css';
 
-const slides = [
-  {
-    src: 'https://akenda.vn/wp-content/uploads/2022/12/banner-bat-dong-san-113.jpg',
-    alt: 'Image 1 for carousel',
-  },
-  {
-    src: 'https://bdsweb.com.vn/upload_images/images/bbds/banner-bat-dong-san-00.jpg',
-    alt: 'Image 2 for carousel',
-  },
-  {
-    src: 'https://img.pikbest.com/origin/06/43/34/25WpIkbEsTbZ9.jpg!w700wp',
-    alt: 'Image 3 for carousel',
-  },
-];
+interface carouselInterface {
+  slides: Array<{
+    id: number;
+    src: string;
+    alt: string;
+  }>;
+  style?: React.CSSProperties; // Thêm thuộc tính style
+}
 
-export const Carousel = () => {
+export const Carousel = ({ slides, style }: carouselInterface) => {
   const [slide, setSlide] = useState(0);
 
   const nextSlide = () => {
@@ -39,11 +33,17 @@ export const Carousel = () => {
   }, [slide]); // Thêm slide vào dependency để đảm bảo effect chỉ chạy khi slide thay đổi
 
   return (
-    <div className='carousel'>
+    <div className='carousel' style={style}>
       <BsArrowLeftCircleFill onClick={prevSlide} className='arrow arrow-left' />
       {slides.map((item, idx) => {
         return (
-          <img src={item.src} alt={item.alt} key={idx} className={slide === idx ? 'slide' : 'slide slide-hidden'} />
+          <img
+            src={item.src}
+            alt={item.alt}
+            key={idx}
+            className={slide === idx ? 'slide' : 'slide slide-hidden'}
+            style={{ objectFit: 'cover' }}
+          />
         );
       })}
       <BsArrowRightCircleFill onClick={nextSlide} className='arrow arrow-right' />
