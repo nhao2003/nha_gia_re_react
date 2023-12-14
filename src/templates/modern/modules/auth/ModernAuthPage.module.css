@@ -34,7 +34,7 @@
   color: #026d4d;
 }
 
-form {
+.container form {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -42,7 +42,7 @@ form {
   margin: 1rem 0;
 }
 
-a {
+.container a {
   font-size: medium;
   color: #026d4d;
   text-decoration: none;
@@ -50,7 +50,7 @@ a {
   align-self: flex-end;
 }
 
-span {
+.container span {
   font-size: medium;
   text-decoration: none;
   margin-bottom: 1rem;
