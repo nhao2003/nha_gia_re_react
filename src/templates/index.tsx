@@ -1,7 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
-import { ModernDashboardPage } from './modern/modules/ModernDashboardPage';
-import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import { ProfilePage } from './modern/modules/profile/profile_page';
+import { Route, Routes } from "react-router-dom";
+import { ModernDashboardPage } from "./modern/modules/ModernDashboardPage";
+import { ProfilePage } from './modern/modules/profile/profilePage';
+import { ModernHomePage } from "./modern/modules/home/ModernHomePage";
+
 
 function App(): JSX.Element {
   return (
@@ -10,15 +11,15 @@ function App(): JSX.Element {
         path='/'
         element={
           <ModernDashboardPage>
-            <ModernHomePage />
+            <ProfilePage
+
+            />
           </ModernDashboardPage>
         }
       />
       {/* public route */}
-
-      <Route path='/' element={<ModernHomePage />} />
-      <Route path='/profile' element={<ProfilePage />} />
-
+      <Route path="/" element={<ModernHomePage />} />
+      <Route path="/profile" element={<ProfilePage/>} />
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
