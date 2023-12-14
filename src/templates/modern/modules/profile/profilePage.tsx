@@ -23,9 +23,11 @@ import {
   ExpandMore as ExpandMoreIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
-import { ChangePassword } from '../../components/ChangePassword';
+import { ChangePassword } from '../../components/Profile/ChangePassword';
+import PostManagement from '../../components/Profile/PostManagement';
+import PostCreate from '../../components/Profile/PostCreate';
 
-const drawerWidth = 340;
+const drawerWidth = '20%';
 
 interface MenuItem {
   key: string;
@@ -97,7 +99,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
 
 
 export const ProfilePage: React.FC = () => {
-  const title = 'Profile';
   const items: MenuItem[] = [
     {
       title: 'Quản lý tài khoản',
@@ -274,17 +275,13 @@ export const ProfilePage: React.FC = () => {
             <h1>Profile</h1>
           </div>
         ) : selectedItemKey === 'change-password' ? (
-          <ChangePassword onConfirm={function (currentPassword: string, newPassword: string, confirmPassword: string): void {
+          <ChangePassword onConfirm={function (currentPassword: string, newPassword: string): void {
             throw new Error('Function not implemented.');
           }} />
         ) : selectedItemKey === 'my-post' ? (
-          <div>
-            <h1>My post</h1>
-          </div>
+          <PostManagement />
         ) : selectedItemKey === 'saved-post' ? (
-          <div>
-            <h1>Saved post</h1>
-          </div>
+          <PostCreate />
         ) : selectedItemKey === 'logout' ? (
           <div>
             <h1>Logout</h1>
