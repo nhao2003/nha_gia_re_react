@@ -1,6 +1,6 @@
 import { InputBase, alpha, colors, styled } from '@mui/material';
 
-const MuiInput = styled(InputBase)(({ theme }) => ({
+const MuiInputField = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     borderRadius: 4,
     border: '2px solid',
@@ -13,7 +13,10 @@ const MuiInput = styled(InputBase)(({ theme }) => ({
       boxShadow: '#026d4d 0 0 0 0.05rem',
       borderColor: '#026d4d',
     },
+    '&:hover': {
+      borderColor: '#026d4d',
+    },
   },
 }));
 
-export default MuiInput;
+export default MuiInputField;

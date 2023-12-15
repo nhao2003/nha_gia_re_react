@@ -2,12 +2,40 @@ import React from 'react';
 import classes from './ModernUpdateProfile.module.css';
 
 import avatar from './../../../assets/images/user.png';
-import { Avatar, Box, FormControl, InputAdornment, TextField } from '@mui/material';
-import { Camera } from '@mui/icons-material';
-import MuiInput from '../components/MuiInputField';
+import { Avatar, Box, FormControl, InputAdornment, MenuItem, Popper, Select, TextField } from '@mui/material';
+import { CalendarMonth, Camera } from '@mui/icons-material';
+import MuiInputField from '../components/MuiInputField';
 import SubmitButton from '../components/SubmitButton';
+import type { Dayjs } from 'dayjs';
+import { MobileDatePicker, DatePicker, LocalizationProvider, PickersDay } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+
+const newTheme = (theme: any) =>
+  createTheme({
+    ...theme,
+
+    components: {
+      MuiDateCalendar: {
+        styleOverrides: {
+          root: {
+            color: '#026d4d',
+            backgroundColor: '#fff',
+          },
+        },
+      },
+    },
+  });
 
 const ModernUpdateProfile = () => {
+  const [value, setValue] = React.useState<Dayjs | null>(null);
+  const [gender, setGender] = React.useState('');
+
+  const handleGenderChange = (event: { target: { value: string } }) => {
+    setGender(event.target.value);
+  };
+
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
@@ -37,16 +65,16 @@ const ModernUpdateProfile = () => {
               >
                 <div className={classes.input}>
                   <label htmlFor='ho'>Họ</label>
-                  <MuiInput id='ho' placeholder='Họ' />
+                  <MuiInputField id='ho' placeholder='Họ' />
                 </div>
                 <div className={classes.input}>
                   <label htmlFor='ten'>Tên</label>
-                  <MuiInput id='ten' placeholder='Tên' />
+                  <MuiInputField id='ten' placeholder='Tên' />
                 </div>
               </Box>
               <div className={classes.input}>
                 <label htmlFor='phone'>Số điện thoại</label>
-                <MuiInput
+                <MuiInputField
                   fullWidth
                   id='phone'
                   placeholder='Số điện thoại'
@@ -55,7 +83,7 @@ const ModernUpdateProfile = () => {
               </div>
               <div className={classes.input}>
                 <label htmlFor='email'>Email</label>
-                <MuiInput fullWidth id='email' placeholder='Email' />
+                <MuiInputField fullWidth id='email' placeholder='Email' />
               </div>
               <Box
                 sx={{
@@ -66,16 +94,89 @@ const ModernUpdateProfile = () => {
               >
                 <div className={classes.input}>
                   <label htmlFor='birthday'>Ngày sinh</label>
-                  <MuiInput id='birthday' placeholder='Ngày sinh' />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <ThemeProvider theme={newTheme}>
+                      <MobileDatePicker
+                        format='DD/MM/YYYY'
+                        value={value}
+                        onChange={(newValue: any) => {
+                          setValue(newValue);
+                        }}
+                        slots={{
+                          textField: (props) => (
+                            <TextField
+                              {...props}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position='start'>
+                                    <CalendarMonth />
+                                  </InputAdornment>
+                                ),
+                              }}
+                              sx={{
+                                '& .MuiInputBase-root': {
+                                  padding: 0,
+                                  paddingTop: 1.5,
+                                  paddingBottom: 1.5,
+                                },
+                                '& .MuiButtonBase-root': {
+                                  padding: 0,
+                                  marginRight: 1.5,
+                                },
+                                '& .MuiInputBase-input': {
+                                  padding: 0,
+                                  paddingLeft: 1.5,
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                  '& fieldset': {
+                                    fontSize: 16,
+                                    borderRadius: 1,
+                                    border: '2px solid',
+                                    borderColor: '#79747E',
+                                    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+                                  },
+                                  '&:hover fieldset': {
+                                    borderColor: '#026d4d',
+                                  },
+                                  '&.Mui-focused fieldset': {
+                                    boxShadow: '#026d4d 0 0 0 0.05rem',
+                                    borderColor: '#026d4d',
+                                  },
+                                },
+                              }}
+                            />
+                          ),
+                        }}
+                        slotProps={{
+                          field: {},
+                        }}
+                        showDaysOutsideCurrentMonth
+                      />
+                    </ThemeProvider>
+                  </LocalizationProvider>
                 </div>
                 <div className={classes.input}>
                   <label htmlFor='gender'>Giới tính</label>
-                  <MuiInput id='gender' placeholder='Giới tính' />
+                  {/* <MuiInputField id='gender' placeholder='Giới tính' /> */}
+                  <Select
+                    id='gender'
+                    value={gender}
+                    onChange={handleGenderChange}
+                    input={<MuiInputField />}
+                    displayEmpty
+                    sx={{ width: '100%', textAlign: 'left' }}
+                  >
+                    <MenuItem value=''>
+                      <em>Giới tính</em>
+                    </MenuItem>
+                    <MenuItem value={'Nam'}>Nam</MenuItem>
+                    <MenuItem value={'Nữ'}>Nữ</MenuItem>
+                  </Select>
                 </div>
               </Box>
               <div className={classes.input}>
                 <label htmlFor='location'>Địa chỉ</label>
-                <MuiInput fullWidth id='location' placeholder='Địa chỉ' />
+                <MuiInputField fullWidth id='location' placeholder='Địa chỉ' />
               </div>
               <SubmitButton type='submit'>Lưu</SubmitButton>
             </Box>
