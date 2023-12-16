@@ -6,9 +6,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 4rem 0;
 }
 
-.container {
+.card {
   width: 28rem;
   height: fit-content;
   padding: 1rem 8rem;
@@ -21,18 +22,31 @@
   text-align: center;
 }
 
-.container span {
-  margin-bottom: 0;
+.card button {
+  cursor: pointer;
 }
 
-.avatar {
+.card button:hover {
+  opacity: 0.8;
+}
+
+.card button span {
+  font-size: medium;
+  font-weight: bold;
+  color: #026d4d;
+}
+
+.card .avatar {
   width: 8rem;
   height: 8rem;
 }
 
+.card .date {
+  padding-top: 0;
+}
+
 .change-avatar {
   margin-top: 1rem;
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
   background-color: transparent;
@@ -42,10 +56,34 @@
   align-items: center;
 }
 
-form {
+.card form {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   width: 100%;
   margin: 1rem 0;
+}
+
+.card form .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.card form .input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.card form .input label {
+  color: #026d4d;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.card form .input .select {
+  display: flex;
+  justify-content: left;
 }
