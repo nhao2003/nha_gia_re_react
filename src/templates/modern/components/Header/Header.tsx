@@ -11,7 +11,8 @@ const Header: React.FC = () => {
     { href: '/dang-tin', label: 'Đăng tin' },
     { href: '/signup', label: 'Đăng ký' },
     { href: '/signin', label: 'Đăng nhập' },
-    { href: '/profile', label: 'Hồ sơ'}
+    { href: '/profile', label: 'Hồ sơ'},
+    { href: '/blogs', label: 'Blogs'}
   ];
 
   return (

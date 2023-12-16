@@ -9,6 +9,8 @@ import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modern/modules/profile/profilePage';
 import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
+import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
+import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
@@ -39,6 +41,8 @@ function App(): JSX.Element {
         <Route path='/forgot-password' element={<ModernForgotPassword />} />
         <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
         <Route path='/post-management' element={<ModernPostManagement />} />
+        <Route path='/blogs' element={<MordernBlogPage/>} />
+        <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
 
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>
