@@ -1,5 +1,6 @@
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import CUSTOM_COLOR from "../../../constants/colors";
+import { useNavigate } from "react-router-dom";
 
 interface PrivateProps {
     image: string
@@ -16,11 +17,17 @@ export const NewsPost = ({ image, time, user, title, content }: PrivateProps) =>
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/news/detail_blog');
+    };
 
 
 
     return (
         <Stack
+            onClick={handleClick}
             direction={'row'}
             sx={{
                 width: '100%',
@@ -38,6 +45,7 @@ export const NewsPost = ({ image, time, user, title, content }: PrivateProps) =>
                     width: '40%',
                     borderRadius: '10px'
                 }}
+
             />
 
             <Stack
