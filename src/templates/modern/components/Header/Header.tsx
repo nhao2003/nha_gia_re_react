@@ -10,6 +10,7 @@ const Header: React.FC = () => {
     { href: '/quan-ly-tin', label: 'Quản lý tin' },
     { href: '/signup', label: 'Đăng ký' },
     { href: '/signin', label: 'Đăng nhập' },
+    { href: '/profile', label: 'Hồ sơ'}
   ];
 
   return (
