@@ -8,7 +8,14 @@ interface PrivateProps {
 
 const ModernDashboardPage = ({ children }: PrivateProps) => {
   return (
-    <div>
+    <div style={
+      {
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        position: 'relative'
+      }
+    }>
       <Header  />
       {/* Your dashboard content goes here */}
       {children}

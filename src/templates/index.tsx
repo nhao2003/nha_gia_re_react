@@ -8,42 +8,44 @@ import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modern/modules/profile/profilePage';
-
+import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
 function App(): JSX.Element {
   return (
-    <Routes>
-      <Route
-        path='/'
-        element={
-          <ModernDashboardPage>
-            <ProfilePage
+    <ModernDashboardPage>
+      <Routes>
+        <Route
+          path='/'
+          element={
 
+            <ModernHomePage
             />
-          </ModernDashboardPage>
-        }
-      />
-      {/* public route */}
-      <Route path='/profile' element={<ProfilePage />} />
-      <Route
-        path='/details'
-        element={
-          <ModernDashboardPage>
-            <ModernDetailPage />
-          </ModernDashboardPage>
-        }
-      />
 
-      <Route path='/profile' element={<ProfilePage />} />
-      <Route path='/signin' element={<ModernSignInPage />} />
-      <Route path='/signup' element={<ModernSignUpPage />} />
-      <Route path='/forgot-password' element={<ModernForgotPassword />} />
-      <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
+          }
+        />
+        {/* public route */}
+        <Route path='/profile' element={<ProfilePage />} />
+        <Route
+          path='/details'
+          element={
+            <ModernDashboardPage>
+              <ModernDetailPage />
+            </ModernDashboardPage>
+          }
+        />
 
-      {/* protected route */}
-      {/* <Route element={<AuthRequire />}>
+        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/signin' element={<ModernSignInPage />} />
+        <Route path='/signup' element={<ModernSignUpPage />} />
+        <Route path='/forgot-password' element={<ModernForgotPassword />} />
+        <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
+        <Route path='/post-management' element={<ModernPostManagement />} />
+
+        {/* protected route */}
+        {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
       </Route> */}
-    </Routes>
+      </Routes>
+    </ModernDashboardPage>
   );
 }
 

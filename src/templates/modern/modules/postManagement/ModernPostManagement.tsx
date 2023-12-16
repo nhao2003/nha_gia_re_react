@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SwipeableViews from 'react-swipeable-views';
 import { Card, Grid } from '@mui/material';
-import PostCard from './PostCard ';
+import PostCard from './components/PostCard ';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -86,7 +86,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function PostManagement() {
+export default function ModernPostManagement() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -207,3 +207,4 @@ export default function PostManagement() {
     </Box>
   );
 }
+
