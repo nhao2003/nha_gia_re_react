@@ -18,13 +18,12 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import EastIcon from '@mui/icons-material/East';
 import React, { useState } from 'react';
-import { HomeCard } from '../../../../templates/classic/components/HomeCard';
 import { useNavigate } from 'react-router-dom';
-import CUSTOM_COLOR from '../../../classic/constants/colors';
-import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
 import { Carousel } from '../home/components/Carousel';
 import PostListComponent from '../home/components/PostListComponent';
 import Grid from '@mui/material/Grid';
+import CUSTOM_COLOR from '../../../classic/constants/colors';
+import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
 
 export function ModernDetailPage(): JSX.Element {
   const navigate = useNavigate();
