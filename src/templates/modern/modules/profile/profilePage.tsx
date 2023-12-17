@@ -24,7 +24,7 @@ import {
   Menu as MenuIcon,
 } from '@mui/icons-material';
 import { ChangePassword } from '../../components/Profile/ChangePassword';
-import PostManagement from '../../components/Profile/PostManagement';
+import ModernPostManagement from '../postManagement/ModernPostManagement';
 import PostCreate from '../../components/Profile/PostCreate';
 
 const drawerWidth = '20%';
@@ -155,7 +155,12 @@ export const ProfilePage: React.FC = () => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
 
   const drawer = (
-    <div>
+    <Box sx={
+      {
+        flexDirection: 'column',
+        display: 'flex',
+      }
+    }>
       <UserProfile username="Nguyễn Văn A" posts={10} followers={222} joinDate="01/01/2021" />
       <Divider />
       <List>
@@ -200,18 +205,18 @@ export const ProfilePage: React.FC = () => {
           )
         ))}
       </List>
-    </div>
+    </Box>
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      {/* <CssBaseline /> */}
       <AppBar
-        position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           display: { xs: 'flex', sm: 'none' }, // Hide on small screens
+          position: 'fixed',
         }}
       >
         <Toolbar>
@@ -249,25 +254,22 @@ export const ProfilePage: React.FC = () => {
         >
           {drawer}
         </Drawer>
-        <Drawer
-          variant="permanent"
+        <Box
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
-          open
         >
           {drawer}
-        </Drawer>
+        </Box>
       </Box>
-
+      <Divider orientation="vertical" flexItem />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          // Adjusted margin for the main content
         }}
       >
         {selectedItemKey === 'profile' ? (
@@ -279,7 +281,7 @@ export const ProfilePage: React.FC = () => {
             throw new Error('Function not implemented.');
           }} />
         ) : selectedItemKey === 'my-post' ? (
-          <PostManagement />
+          <ModernPostManagement />
         ) : selectedItemKey === 'saved-post' ? (
           <PostCreate />
         ) : selectedItemKey === 'logout' ? (

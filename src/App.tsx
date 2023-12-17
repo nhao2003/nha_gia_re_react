@@ -10,6 +10,7 @@ import { PersonalPage } from './templates/classic/modules/personal/PersonalPage'
 import { SearchPage } from './templates/classic/modules/search/pages/SearchPage'
 import SignIn from './templates/classic/modules/auth/SignIn'
 import SignUp from './templates/classic/modules/auth/SignUp'
+import DetailBlog from './templates/classic/modules/news/DetailBlog'
 
 
 
@@ -26,8 +27,9 @@ function App(): JSX.Element {
       <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
       <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
+      <Route path='/news/detail_blog' element={<DashboardPage><DetailBlog /></DashboardPage>} />
 
-      
+
       <Route path='login' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
 

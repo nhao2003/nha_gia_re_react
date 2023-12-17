@@ -5,6 +5,7 @@ import bedroom from '../assets/images/bedroom.svg'
 import bathroom from '../assets/images/bathroom.svg'
 import area from '../assets/images/area.svg'
 import { FacilityTag } from './FacilityTag'
+import { useNavigate } from 'react-router-dom'
 
 
 interface PrivateProps {
@@ -22,8 +23,16 @@ interface PrivateProps {
 
 
 export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathrooms, areas, sx }: PrivateProps) => {
+    const navigate = useNavigate()
+
+    const handlDetailHome = () => {
+        navigate('/details');
+    };
+
+
     return (
         <Stack
+            onClick={handlDetailHome}
             direction={'column'}
             sx={{
                 ...sx,

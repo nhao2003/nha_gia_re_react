@@ -16,6 +16,17 @@ interface CreatePosData {
   videos: string[];
   is_pro_seller: boolean;
 }
+interface GetProps {
+  page?: number | null;
+  queryParams?: Record<string, any> | null;
+  headers?: Record<string, any> | null;
+}
+interface AppResponse {
+  status: 'success' | 'error' | 'fail';
+  message: string;
+  num_of_pages: number | null;
+  result: any;
+}
 class PostService {
   private static instance: PostService;
   private readonly api: ApiServiceBuilder;
@@ -31,15 +42,16 @@ class PostService {
     return PostService.instance;
   }
 
-  async getAllPosts(): Promise<{
-    status: 'success' | 'error' | 'fail';
-    message: string;
-    result: any;
-  } > {
+  async getAllPosts({ page = 1, queryParams = null, headers = null }: GetProps): Promise<AppResponse> {
     try {
-      const response = await this.api.withUrl('/posts').build().get();
-      return response.data as any
-    } catch (error : any) {
+      const response = await this.api
+        .withUrl('/posts')
+        .withParams({ page, ...(queryParams ?? {}) })
+        .withHeaders(headers ?? {})
+        .build()
+        .get();
+      return response.data as any;
+    } catch (error: any) {
       return error.response.data;
     }
   }
@@ -60,13 +72,3 @@ class PostService {
 }
 
 export default PostService;
-
-PostService.getInstance()
-  .getAllPosts()
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error.message);
-    console.log(error.response.data);
-  });
