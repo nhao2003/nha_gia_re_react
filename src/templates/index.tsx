@@ -1,47 +1,55 @@
 import { Route, Routes } from 'react-router-dom';
 import { ModernDashboardPage } from './modern/modules/ModernDashboardPage';
 import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import { ProfilePage } from './modern/modules/profile/profile_page';
 import HomePage from './classic/modules/home/HomePage';
 import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
 import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
 import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
-
+import { ProfilePage } from './modern/modules/profile/profilePage';
+import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
+import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
+import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 function App(): JSX.Element {
   return (
-    <Routes>
-      <Route
-        path='/'
-        element={
-          <ModernDashboardPage>
-            <ModernHomePage />
-          </ModernDashboardPage>
-        }
-      />
-      {/* public route */}
-      <Route path='/profile' element={<ProfilePage />} />
-      <Route
-        path='/details'
-        element={
-          <ModernDashboardPage>
-            <ModernDetailPage />
-          </ModernDashboardPage>
-        }
-      />
+    <ModernDashboardPage>
+      <Routes>
+        <Route
+          path='/'
+          element={
 
-      <Route path='/profile' element={<ProfilePage />} />
-      <Route path='/signin' element={<ModernSignInPage />} />
-      <Route path='/signup' element={<ModernSignUpPage />} />
-      <Route path='/forgot-password' element={<ModernForgotPassword />} />
-      <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
+            <ModernHomePage
+            />
 
-      {/* protected route */}
-      {/* <Route element={<AuthRequire />}>
+          }
+        />
+        {/* public route */}
+        <Route path='/profile' element={<ProfilePage />} />
+        <Route
+          path='/details'
+          element={
+            <ModernDashboardPage>
+              <ModernDetailPage />
+            </ModernDashboardPage>
+          }
+        />
+
+        <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/signin' element={<ModernSignInPage />} />
+        <Route path='/signup' element={<ModernSignUpPage />} />
+        <Route path='/forgot-password' element={<ModernForgotPassword />} />
+        <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
+        <Route path='/post-management' element={<ModernPostManagement />} />
+        <Route path='/blogs' element={<MordernBlogPage/>} />
+        <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
+
+        {/* protected route */}
+        {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
       </Route> */}
-    </Routes>
+      </Routes>
+    </ModernDashboardPage>
   );
 }
 

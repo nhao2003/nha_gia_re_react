@@ -1,5 +1,7 @@
 import React from 'react';
-import styles from '../assets/css/Header.module.css';
+import { AppBar, Toolbar, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
+import styles from './Header.module.css';
 
 const Header: React.FC = () => {
   const headerItems = [
@@ -7,21 +9,22 @@ const Header: React.FC = () => {
     { href: '/cho-thue', label: 'Cho thuê' },
     { href: '/blog', label: 'Blog' },
     { href: '/dang-tin', label: 'Đăng tin' },
-    { href: '/quan-ly-tin', label: 'Quản lý tin' },
     { href: '/signup', label: 'Đăng ký' },
     { href: '/signin', label: 'Đăng nhập' },
+    { href: '/profile', label: 'Hồ sơ'},
+    { href: '/blogs', label: 'Blogs'}
   ];
 
   return (
-    <header className={styles.header}>
-      <nav className={styles.nav}>
+    <AppBar position="static" className={styles.appBar}>
+      <Toolbar>
         {headerItems.map((item) => (
-          <a key={item.href} href={item.href} className={styles.headerItem}>
+          <Button key={item.href} component={Link} to={item.href} color="inherit">
             {item.label}
-          </a>
+          </Button>
         ))}
-      </nav>
-    </header>
+      </Toolbar>
+    </AppBar>
   );
 };
 

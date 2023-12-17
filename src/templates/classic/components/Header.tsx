@@ -1,7 +1,7 @@
 // Header.tsx
 import React, { useState } from 'react'
 import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer } from '@mui/material'
-import { Link, } from 'react-router-dom'
+import { Link, useNavigate, } from 'react-router-dom'
 import logo from '../assets/images/logo.svg'
 import CUSTOM_COLOR from '../constants/colors'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -27,6 +27,15 @@ const Header: React.FC = () => {
     setOpenDrawer(!openDrawer);
   }
 
+  const navigate = useNavigate();
+
+  const handleNews = () => {
+    navigate('/news');
+  };
+
+  const handleHome = () => {
+    navigate('/');
+  };
 
   return (
     // <AppBar position='static'>
@@ -80,6 +89,7 @@ const Header: React.FC = () => {
             height: '80px',
             display: matches1440 ? 'block' : 'none',
           }}
+          onClick={handleHome}
         />
 
         <Button variant="text"
@@ -108,6 +118,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none'
           }}
+          onClick={handleNews}
         >Tin tức</Button>
 
         <Button variant="text"

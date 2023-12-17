@@ -1,4 +1,4 @@
-import type Address from '../address';
+import type Address from './address';
 
 interface RealEstatePost {
   id: string;
@@ -10,7 +10,7 @@ interface RealEstatePost {
   title: string;
   description: string;
   area: number;
-  address: Address; // Define an appropriate type for your address JSON
+  address: Address;
   address_point: string | null;
   price: number;
   deposit: number | null;
@@ -22,7 +22,7 @@ interface RealEstatePost {
   is_pro_seller: boolean;
   info_message: string | null | undefined;
   display_priority_point: number;
-  features: any; // Define an appropriate type for your features JSON
+  features: any;
   post_approval_priority_point: number;
   update_count: number;
   is_active: boolean;
