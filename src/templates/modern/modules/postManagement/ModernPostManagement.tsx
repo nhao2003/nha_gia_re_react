@@ -6,62 +6,39 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SwipeableViews from 'react-swipeable-views';
-import { Card, Grid } from '@mui/material';
+import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import PostCard from './components/PostCard ';
+import type RealEstatePost from '../../../../models/RealEstatePost';
+import PostService from '../../../../services/post.service';
 
+
+async function getPost(status?: 'approved' | 'pending' | 'rejected' | 'expired', page: number = 1) {
+  const queryParams: Record<string, any> = {
+    'post_status[eq]': `'${status}'`,
+  };
+  if (status === 'expired') {
+    queryParams['post_expiry_date[lt]'] = `'${new Date().toISOString()}'`;
+  } else if (status !== 'approved') {
+    queryParams['post_expiry_date[gt]'] = `'${new Date().toISOString()}'`;
+  }
+  return await PostService.getInstance().getAllPosts(
+    {
+      page,
+      queryParams: {
+        'post_status[eq]': `'${status}'`,
+        ...queryParams,
+      },
+    }
+  );
+}
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
   index: number;
   value: number;
 }
-const sampleData = [
-  {
-    image: 'https://picsum.photos/200/300?random=1',
-    status: 'approved',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=2',
-    status: 'pending',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=3',
-    status: 'rejected',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=4',
-    status: 'approved',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=5',
-    status: 'pending',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=6',
-    status: 'rejected',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  },
-  {
-    image: 'https://picsum.photos/200/300?random=7',
-    status: 'approved',
-    title: 'Trọ quận Tân Bình giá rẻ, 2 tầng',
-    address: '449/58 Trường Chinh, P14, Tân Bình, TP. HCM',
-  }
-];
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -86,6 +63,12 @@ function a11yProps(index: number) {
   };
 }
 
+interface PaginationProps {
+  page: number;
+  numOfPages: number;
+  data: RealEstatePost[];
+}
+
 export default function ModernPostManagement() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -97,9 +80,124 @@ export default function ModernPostManagement() {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
+  const [isLoading, setIsLoading] = React.useState(false);
 
+
+  function handleGetPost(type: 'approved' | 'pending' | 'rejected' | 'expired', page: number = 1) {
+    setIsLoading(true);
+    getPost(type, page).then((res) => {
+      const data = res.result as RealEstatePost[];
+      console.log(res);
+      const numOfPages = Number(res.num_of_pages);
+      switch (type) {
+        case 'approved':
+          setApprovedPagination({
+            page,
+            numOfPages,
+            data: [...approvedPagination.data, ...data],
+          });
+          break;
+        case 'pending':
+          setPendingPagination({
+            page,
+            numOfPages,
+            data: [...pendingPagination.data, ...data],
+          });
+          break;
+        case 'rejected':
+          setRejectedPagination({
+            page,
+            numOfPages,
+            data: [...rejectedPagination.data, ...data],
+          });
+          break;
+        case 'expired':
+          setExpiredPagination({
+            page,
+            numOfPages,
+            data: [...expiredPagination.data, ...data],
+          });
+          break;
+      }
+    }).catch((err) => {
+      alert(err);
+    }).finally(() => {
+      setIsLoading(false);
+    });
+  }
+  const [approvedPagination, setApprovedPagination] = React.useState<PaginationProps>({
+    page: 1,
+    numOfPages: 1,
+    data: [],
+  });
+
+  const [pendingPagination, setPendingPagination] = React.useState<PaginationProps>({
+    page: 1,
+    numOfPages: 1,
+    data: [],
+  });
+
+  const [rejectedPagination, setRejectedPagination] = React.useState<PaginationProps>({
+    page: 1,
+    numOfPages: 1,
+    data: [],
+  });
+
+  const [expiredPagination, setExpiredPagination] = React.useState<PaginationProps>({
+    page: 1,
+    numOfPages: 1,
+    data: [],
+  });
+
+  function checkCanLoadMore(type: number): boolean {
+    switch (type) {
+      case 0:
+        return pendingPagination.page < pendingPagination.numOfPages;
+      case 1:
+        return approvedPagination.page < approvedPagination.numOfPages;
+      case 2:
+        return rejectedPagination.page < rejectedPagination.numOfPages;
+      case 3:
+        return expiredPagination.page < expiredPagination.numOfPages;
+      default:
+        return false;
+    }
+  }
+
+  function handleLoadMore(type: number) {
+    console.log(type);
+    switch (type) {
+      case 0:
+        if (pendingPagination.page < pendingPagination.numOfPages)
+          handleGetPost('pending', pendingPagination.page + 1);
+        else {
+
+          alert('Đã hết bài đăng: ' + pendingPagination.page + ' / ' + pendingPagination.numOfPages);
+        }
+        break;
+      case 1:
+        if (approvedPagination.page < approvedPagination.numOfPages)
+          handleGetPost('approved', approvedPagination.page + 1);
+        break;
+      case 2:
+        if (rejectedPagination.page < rejectedPagination.numOfPages)
+          handleGetPost('rejected', rejectedPagination.page + 1);
+        break;
+      case 3:
+        if (expiredPagination.page < expiredPagination.numOfPages)
+          handleGetPost('expired', expiredPagination.page + 1);
+        break;
+    }
+  }
+
+  React.useEffect(() => {
+    handleGetPost('pending');
+    handleGetPost('approved');
+    handleGetPost('rejected');
+    handleGetPost('expired');
+  }, []);
   return (
-    <Box sx={{ bgcolor: 'background.paper', width: '100%', padding: '0px', margin: '0px'}}>
+    <Box sx={{ bgcolor: 'background.paper', width: '100%', padding: '0px', margin: '0px' }}>
       <AppBar position="static">
         <Tabs
           value={value}
@@ -126,36 +224,32 @@ export default function ModernPostManagement() {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <Grid container spacing={2}>
-            {sampleData.map((item, index) => (
-              item.status === 'pending' ?
-                <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
-                  <PostCard
-                    image={item.image}
-                    status={item.status as 'approved' | 'pending' | 'rejected'}
-                    title={item.title}
-                    address={item.address}
-                    expiredDate={new Date()}
-                  />
-                </Grid>
-                : null
+            {pendingPagination.data.map((item, index) => (
+              <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
+                <PostCard
+                  image={item.images[0]}
+                  status={item.status as 'approved' | 'pending' | 'rejected'}
+                  title={item.title}
+                  address={item.address.detail ?? "Rỗng"}
+                  expiredDate={new Date()}
+                />
+              </Grid>
             ))}
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           {
             <Grid container spacing={2}>
-              {sampleData.map((item, index) => (
-                item.status === 'approved' ?
-                  <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
-                    <PostCard
-                      image={item.image}
-                      status={item.status as 'approved' | 'pending' | 'rejected'}
-                      title={item.title}
-                      address={item.address}
-                      expiredDate={new Date()}
-                    />
-                  </Grid>
-                  : null
+              {approvedPagination.data.map((item, index) => (
+                <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
+                  <PostCard
+                    image={item.images[0]}
+                    status={item.status as 'approved' | 'pending' | 'rejected'}
+                    title={item.title}
+                    address={item.address.detail ?? "Rỗng"}
+                    expiredDate={new Date()}
+                  />
+                </Grid>
 
               ))
               }
@@ -165,18 +259,16 @@ export default function ModernPostManagement() {
         <TabPanel value={value} index={2} dir={theme.direction}>
           {
             <Grid container spacing={2}>
-              {sampleData.map((item, index) => (
-                item.status === 'rejected' ?
-                  <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
-                    <PostCard
-                      image={item.image}
-                      status={item.status as 'approved' | 'pending' | 'rejected'}
-                      title={item.title}
-                      address={item.address}
-                      expiredDate={new Date()}
-                    />
-                  </Grid>
-                  : null
+              {rejectedPagination.data.map((item, index) => (
+                <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
+                  <PostCard
+                    image={item.images[0]}
+                    status={item.status as 'approved' | 'pending' | 'rejected'}
+                    title={item.title}
+                    address={item.address.detail ?? "Rỗng"}
+                    expiredDate={new Date()}
+                  />
+                </Grid>
               ))
               }
             </Grid>
@@ -186,24 +278,29 @@ export default function ModernPostManagement() {
           {
             <Grid container spacing={2}>
               {
-                sampleData.map((item, index) => (
-                  item.status === 'approved' ?
-                    <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
-                      <PostCard
-                        image={item.image}
-                        status={item.status as 'approved' | 'pending' | 'rejected'}
-                        title={item.title}
-                        address={item.address}
-                        expiredDate={new Date()}
-                      />
-                    </Grid>
-                    : null
+                expiredPagination.data.map((item, index) => (
+                  <Grid item key={index} xs={12} sm={6} md={6} lg={6}>
+                    <PostCard
+                      image={item.images[0]}
+                      status={item.status as 'approved' | 'pending' | 'rejected'}
+                      title={item.title}
+                      address={item.address.detail ?? "Rỗng"}
+                      expiredDate={new Date()}
+                    />
+                  </Grid>
                 ))
               }
             </Grid>
           }
-            </TabPanel>
+        </TabPanel>
       </SwipeableViews>
+      {/* Xem thêm */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CircularProgress sx={{ display: isLoading  ? 'block' : 'none' }} />
+        <Button variant='text' sx={{ display: isLoading || !checkCanLoadMore(value) ? 'none' : 'block' }} onClick={() => {
+          handleLoadMore(value);
+        }}>Xem thêm</Button>
+      </Box>
     </Box>
   );
 }
