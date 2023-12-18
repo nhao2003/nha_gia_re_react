@@ -5,6 +5,7 @@
   "main": "index.tsx",
   "type": "module",
   "dependencies": {
+    "react-horizontal-scrolling-menu": "2.7.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.12",
@@ -12,7 +13,6 @@
     "@mui/material": "^5.14.12",
     "@mui/styles": "^5.15.0",
     "@mui/x-date-pickers": "^6.16.3",
-    "@ramirezcgn/react-horizontal-scrolling-menu": "^4.1.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
