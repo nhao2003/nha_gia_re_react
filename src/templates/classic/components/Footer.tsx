@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
       sx={{
         backgroundColor: CUSTOM_COLOR.orrellBrown,
         width: '100%',
-        height: '400px'
+        height: '400px',
       }}
       spacing={10}
       justifyContent={'center'}

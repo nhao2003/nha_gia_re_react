@@ -1,6 +1,6 @@
 
 import { Route, Routes } from 'react-router-dom'
-import './assets/styles/App.css'
+
 import DashboardPage from './modules/DashboardPage'
 import DetailPage from './modules/Detail/DetailPage'
 import HomePage from './modules/home/HomePage'
@@ -11,6 +11,9 @@ import { SearchPage } from './modules/search/pages/SearchPage'
 import SignIn from './modules/auth/SignIn'
 import SignUp from './modules/auth/SignUp'
 import DetailBlog from './modules/news/DetailBlog'
+import PostManagement from './modules/postManagement/postManagement'
+import PostCreate from './modules/postManagement/PostCreate'
+
 
 
 
@@ -27,7 +30,10 @@ function App(): JSX.Element {
       <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
       <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
-      <Route path='/news/detail_blog' element={<DashboardPage><DetailBlog /></DashboardPage>} />
+      <Route path='/news/:id' element={<DashboardPage><DetailBlog /></DashboardPage>} />
+      <Route path='/post_management' element={<DashboardPage><PostManagement /></DashboardPage>} />
+      <Route path='/post_create' element={<DashboardPage><PostCreate /></DashboardPage>} />
+      
 
 
       <Route path='login' element={<SignIn />} />

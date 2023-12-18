@@ -22,6 +22,7 @@ function ModernDetailBlogPage(): JSX.Element {
     }
 
     React.useEffect(() => {
+
         if (blog === null)
          fetchBlog().then((response) => {
             console.log(response);
@@ -29,6 +30,7 @@ function ModernDetailBlogPage(): JSX.Element {
         }).catch((error) => {
             console.log(error);
         });
+
     }, []);
 
     const newstags = [
@@ -58,7 +60,7 @@ function ModernDetailBlogPage(): JSX.Element {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100vh'
-        
+
         }}>
             <CircularProgress />
         </Box>) :
