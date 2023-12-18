@@ -37,6 +37,14 @@ const Header: React.FC = () => {
     navigate('/');
   };
 
+  const handlePostManagement = () => {
+    navigate('/post_management');
+  };
+
+  const handlePostCreate = () => {
+    navigate('/post_create');
+  };
+
   return (
     // <AppBar position='static'>
     //   <Toolbar>
@@ -62,7 +70,7 @@ const Header: React.FC = () => {
         backgroundColor: CUSTOM_COLOR.orrellBrown,
         width: '100%',
         height: '80px',
-          
+
       }}
     >
       <Stack direction={'row'}
@@ -219,6 +227,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
+            onClick={handlePostManagement}
           >Quản lý tin</Button>
 
           <Button variant="text"
@@ -228,6 +237,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
+            onClick={handlePostCreate}
           >Đăng tin</Button>
 
 
@@ -279,6 +289,7 @@ const Header: React.FC = () => {
             display: matches ? 'inherit' : 'none'
           }}
           startIcon={<NewspaperIcon />}
+          onClick={handlePostManagement}
         >Quản lý tin</Button>
 
         <Button variant="contained"
@@ -296,6 +307,7 @@ const Header: React.FC = () => {
             display: matches ? 'inherit' : 'none'
           }}
           startIcon={<NewspaperIcon />}
+          onClick={handlePostCreate}
         >Đăng tin</Button>
 
         <Button variant="text"

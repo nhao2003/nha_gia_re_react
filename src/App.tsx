@@ -1,6 +1,6 @@
 
 import { Route, Routes } from 'react-router-dom'
-import './templates/classic/assets/styles/App.css'
+
 import DashboardPage from './templates/classic/modules/DashboardPage'
 import DetailPage from './templates/classic/modules/Detail/DetailPage'
 import HomePage from './templates/classic/modules/home/HomePage'
@@ -12,6 +12,7 @@ import SignIn from './templates/classic/modules/auth/SignIn'
 import SignUp from './templates/classic/modules/auth/SignUp'
 import DetailBlog from './templates/classic/modules/news/DetailBlog'
 import PostManagement from './templates/classic/modules/postManagement/postManagement'
+import PostCreate from './templates/classic/modules/postManagement/PostCreate'
 
 
 
@@ -30,6 +31,8 @@ function App(): JSX.Element {
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
       <Route path='/news/:id' element={<DashboardPage><DetailBlog /></DashboardPage>} />
       <Route path='/post_management' element={<DashboardPage><PostManagement /></DashboardPage>} />
+      <Route path='/post_create' element={<DashboardPage><PostCreate /></DashboardPage>} />
+      
 
 
       <Route path='login' element={<SignIn />} />
