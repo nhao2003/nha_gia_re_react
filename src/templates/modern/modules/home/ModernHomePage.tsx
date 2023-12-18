@@ -1,11 +1,14 @@
-import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { ProvinceListComponent } from './components/ProvinceListComponent';
 import PostListComponent from './components/PostListComponent';
 import { Carousel } from './components/Carousel';
+import { ApiServiceBuilder } from '../../../../services/api.service';
+import React from 'react';
+import type RealEstatePost from '../../../../models/RealEstatePost';
 
-export function ModernHomePage() {
+export function ModernHomePage(): JSX.Element {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -30,6 +33,43 @@ export function ModernHomePage() {
     },
   ];
 
+  // fetch Api
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [posts, setPosts] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page') ?? '1';
+  async function fetchPosts() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts')
+      .withParams({
+        page: page,
+      })
+      .build();
+    const response = await query.get();
+    return response.data as any;
+  }
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchPosts()
+      .then((response) => {
+        setPosts({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [page]);
+
   return (
     <Stack alignItems={'center'}>
       <Stack
@@ -40,7 +80,6 @@ export function ModernHomePage() {
           minWidth: '390px',
         }}
       >
-        {/* <img src={advertisement} height={'400px'} style={{ borderRadius: '10px' }} /> */}
         <Carousel slides={slides} />
         {/* Text file tìm kiếm */}
         <OutlinedInput
@@ -73,11 +112,52 @@ export function ModernHomePage() {
           </Typography>
           <ProvinceListComponent />
         </Stack>
-
         {/* Gần bạn */}
-        <PostListComponent title={'Gần bạn'} />
-        <PostListComponent title={'Mua bán'} />
-        <PostListComponent title={'Cho thuê'} />
+        {isLoading ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PostListComponent title={'Gần bạn'} posts={posts.posts} />
+        )}
+        {isLoading ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PostListComponent title={'Mua bán'} posts={posts.posts} />
+        )}
+        {isLoading ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PostListComponent title={'Cho thuê'} posts={posts.posts} />
+        )}
       </Stack>
     </Stack>
   );

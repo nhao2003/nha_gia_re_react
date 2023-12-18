@@ -456,7 +456,7 @@ export function ModernDetailPage(): JSX.Element {
         }}
       >
         <Stack direction={'row'} marginBottom={1} justifyContent={'space-between'}>
-          <PostListComponent title={'Bài đăng tương tự'} />
+          <PostListComponent title={'Bài đăng tương tự'} posts={[]} />
         </Stack>
       </Stack>
     </Stack>

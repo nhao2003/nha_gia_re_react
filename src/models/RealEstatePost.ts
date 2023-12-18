@@ -26,5 +26,6 @@ interface RealEstatePost {
   post_approval_priority_point: number;
   update_count: number;
   is_active: boolean;
+  address_detail: string | null;
 }
 export default RealEstatePost;

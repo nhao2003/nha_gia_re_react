@@ -1,14 +1,15 @@
 import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import EastIcon from '@mui/icons-material/East';
-import { HomeCard } from '../../../../classic/components/HomeCard';
 import { PostNewCard } from './PostNewCard';
+import type RealEstatePost from '../../../../../models/RealEstatePost';
 
 interface PostListComponentProps {
   title: string;
+  posts: RealEstatePost[];
 }
 
-const PostListComponent = ({ title }: PostListComponentProps) => {
+const PostListComponent = ({ title, posts }: PostListComponentProps) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up(950));
   const endSlice = matches ? 4 : 2;
@@ -46,21 +47,19 @@ const PostListComponent = ({ title }: PostListComponentProps) => {
       </Stack>
 
       <Stack direction={'row'} spacing={2}>
-        {Array.from(Array(6))
-          .slice(0, endSlice)
-          .map((_, index) => (
-            <PostNewCard
-              key={index}
-              image='https://static.asianpaints.com/content/dam/asian_paints/blog/wood/benefits-of-wooden-furniture/image-1-asian-paints-m.jpeg'
-              title='Căn hộ cao cấp sân vườn full nội thất'
-              price={'11.900.000đ/căn'}
-              address='Q5, TP. Hồ Chí Minh'
-              time='1 ngày trước'
-              sx={{
-                overflow: 'hidden',
-              }}
-            />
-          ))}
+        {posts.map((post, index) => (
+          <PostNewCard
+            key={index}
+            image={post.images[0]}
+            title={post.title}
+            price={`${post.price}đ/$m2`}
+            address={post.address_detail ?? 'Chưa cập nhật'}
+            time='1 ngày trước'
+            sx={{
+              overflow: 'hidden',
+            }}
+          />
+        ))}
       </Stack>
     </Stack>
   );
