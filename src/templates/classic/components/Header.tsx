@@ -61,7 +61,8 @@ const Header: React.FC = () => {
       sx={{
         backgroundColor: CUSTOM_COLOR.orrellBrown,
         width: '100%',
-        height: '80px'
+        height: '80px',
+          
       }}
     >
       <Stack direction={'row'}

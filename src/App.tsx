@@ -11,6 +11,7 @@ import { SearchPage } from './templates/classic/modules/search/pages/SearchPage'
 import SignIn from './templates/classic/modules/auth/SignIn'
 import SignUp from './templates/classic/modules/auth/SignUp'
 import DetailBlog from './templates/classic/modules/news/DetailBlog'
+import PostManagement from './templates/classic/modules/postManagement/postManagement'
 
 
 
@@ -27,7 +28,8 @@ function App(): JSX.Element {
       <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
       <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
-      <Route path='/news/detail_blog' element={<DashboardPage><DetailBlog /></DashboardPage>} />
+      <Route path='/news/:id' element={<DashboardPage><DetailBlog /></DashboardPage>} />
+      <Route path='/post_management' element={<DashboardPage><PostManagement /></DashboardPage>} />
 
 
       <Route path='login' element={<SignIn />} />

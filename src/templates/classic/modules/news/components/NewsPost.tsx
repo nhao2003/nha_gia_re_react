@@ -3,31 +3,29 @@ import CUSTOM_COLOR from "../../../constants/colors";
 import { useNavigate } from "react-router-dom";
 
 interface PrivateProps {
+    id: string
     image: string
     time: any,
     user: string,
     title: string,
-    content: string
+    content: string,
+    onClick?: (id: string) => void;
 }
 
 
 
-export const NewsPost = ({ image, time, user, title, content }: PrivateProps) => {
+export const NewsPost = ({ id, image, time, user, title, content, onClick }: PrivateProps) => {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate('/news/detail_blog');
-    };
-
 
 
     return (
         <Stack
-            onClick={handleClick}
+            onClick={() => { onClick !== undefined && onClick(id); }}
             direction={'row'}
             sx={{
                 width: '100%',
@@ -58,7 +56,7 @@ export const NewsPost = ({ image, time, user, title, content }: PrivateProps) =>
 
                     <Typography sx={{
                         color: CUSTOM_COLOR.grayScorpion
-                    }}>{time}</Typography>
+                    }}>{new Date(time).toLocaleDateString()}</Typography>
                     <Typography sx={{
                         color: CUSTOM_COLOR.grayScorpion
                     }}>{user}</Typography>
