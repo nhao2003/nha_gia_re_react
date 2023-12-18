@@ -9,15 +9,16 @@ import './globalStyles.css';
 import React from 'react';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import usePreventBodyScroll from './usePreventBodyScroll';
+import { useNavigate } from 'react-router-dom';
 
 interface PostListComponentProps {
   title: string;
   posts: RealEstatePost[];
 }
 
-
 const PostListComponent = ({ title, posts }: PostListComponentProps) => {
   const { disableScroll, enableScroll } = usePreventBodyScroll();
+  const navigate = useNavigate();
 
   return (
     <Stack
@@ -66,6 +67,11 @@ const PostListComponent = ({ title, posts }: PostListComponentProps) => {
                   time='1 ngày trước'
                   sx={{
                     overflow: 'hidden',
+                  }}
+                  onClick={() => {
+                    navigate(`/details/${post.id}`, {
+                      state: post,
+                    });
                   }}
                 />
               </div>

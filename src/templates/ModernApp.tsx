@@ -8,7 +8,7 @@ import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modern/modules/profile/components/profilePage';
-import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
+import ModernPostManagement from './modern/modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 import PostCreate from './modern/modules/createpost/PostCreate';
@@ -16,25 +16,10 @@ function App(): JSX.Element {
   return (
     <ModernDashboardPage>
       <Routes>
-        <Route
-          path='/'
-          element={
-
-            <ModernHomePage
-            />
-
-          }
-        />
+        <Route path='/' element={<ModernHomePage />} />
         {/* public route */}
         <Route path='/profile' element={<ProfilePage />} />
-        <Route
-          path='/details'
-          element={
-            <ModernDashboardPage>
-              <ModernDetailPage />
-            </ModernDashboardPage>
-          }
-        />
+        <Route path='/details/:id' element={<ModernDetailPage />} />
 
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/signin' element={<ModernSignInPage />} />
@@ -42,9 +27,9 @@ function App(): JSX.Element {
         <Route path='/forgot-password' element={<ModernForgotPassword />} />
         <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
         <Route path='/post-management' element={<ModernPostManagement />} />
-        <Route path='/blogs' element={<MordernBlogPage/>} />
-        <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
-        <Route path='/create-post' element={<PostCreate/>} />
+        <Route path='/blogs' element={<MordernBlogPage />} />
+        <Route path='/blogs/:id' element={<ModernDetailBlogPage />} />
+        <Route path='/create-post' element={<PostCreate />} />
 
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>

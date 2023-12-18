@@ -16,25 +16,21 @@ interface PrivateProps {
   price: any;
   address: string;
   time: string;
+  onClick?: () => void;
   sx?: object;
 }
 
-export const PostNewCard = ({ itemId, image, price, title, address, time, sx }: PrivateProps) => {
-  const navigate = useNavigate();
+export const PostNewCard = ({ itemId, image, price, title, address, time, onClick, sx }: PrivateProps) => {
 
   const visibility = React.useContext(VisibilityContext);
 
   visibility.isItemVisible(itemId);
 
-  const handleClick = () => {
-    navigate('/details');
-  };
-
   return (
     <ButtonBase
       component={Stack}
       direction={'column'}
-      onClick={handleClick}
+      onClick={onClick}
       sx={{
         ...sx,
         width: '280px',
