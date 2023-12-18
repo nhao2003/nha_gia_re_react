@@ -15,9 +15,9 @@ import {
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { type SxProps, type Theme } from '@mui/system';
-import { ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes, apartmentTypeToString, directionEnumToString, furnitureStatusToString, houseTypeToString, landTypeToString, legalDocumentStatusToString, officeTypeToString } from '../../../../constants/enums';
-import ModernAddressDialog from '../Dialog/ModernAddressDialog';
-import addressUtils from '../../../../utils/addressUtils';
+import { ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes, apartmentTypeToString, directionEnumToString, furnitureStatusToString, houseTypeToString, landTypeToString, legalDocumentStatusToString, officeTypeToString } from '../../../../../constants/enums';
+import ModernAddressDialog from '../../../components/Dialog/ModernAddressDialog';
+import addressUtils from '../../../../../utils/addressUtils';
 export interface FormValues {
     purposeType: string;
     apartmentType: string;

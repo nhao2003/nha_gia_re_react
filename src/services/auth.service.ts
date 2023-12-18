@@ -65,9 +65,6 @@ class AuthService {
 
   private async getAccessToken(): Promise<string | null> {
     const accessToken = localStorage.getItem('access_token');
-    if (accessToken === null) {
-      return null;
-    }
     return accessToken;
   }
 
@@ -94,6 +91,42 @@ class AuthService {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+
+  public async changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<{
+    status: boolean;
+    message: string;
+  }> {
+    // Change password
+    const accessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImFlZmM4MTU5LTcwMjItNDBjMS05MTE1LWRiMTVkYzcwN2Y4ZiIsImlhdCI6MTcwMjg3OTMxMCwiZXhwIjoxNzAyOTY1NzEwfQ.VMudaCGdkZwIUNKS2RlrD6RBaXIwZeqj4WGqGEZ8dVg';
+    const changePassword = this.api
+      .withUrl('/auth/change-password')
+      .withBody({
+        old_password: currentPassword,
+        new_password: newPassword,
+        confirm_new_password: newPassword,
+      })
+      .withHeaders({
+        Authorization: `Bearer ${accessToken}`,
+      })
+      .build();
+    try {
+      const response = await changePassword.post();
+      return {
+        status: true,
+        message: 'Thay đổi mật khẩu thành công',
+      };
+    } catch (error: any) {
+      const message = error.response.data.code === 108 ? 'Mật khẩu hiện tại không đúng' : 'Thay đổi mật khẩu thất bại';
+      return {
+        status: false,
+        message,
+      };
     }
   }
 }
