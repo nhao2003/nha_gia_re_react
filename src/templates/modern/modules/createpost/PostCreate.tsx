@@ -23,6 +23,7 @@ import ModernAddressDialog from '../../components/Dialog/ModernAddressDialog';
 import addressUtils from '../../../../utils/addressUtils';
 import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../services/CreatePostData';
 import PostService from '../../../../services/post.service';
+import { LoadingButton } from '@mui/lab';
 export interface FormValues {
     purposeType: string;
     apartmentType: string;
@@ -258,23 +259,18 @@ const PostCreate: React.FC = () => {
 
 
     // Upload image
-    const [selectedImages, setSelectedImages] = useState<string[]>([]);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
-
-        if (files != null) {
-            const selectedImageUrls = Array.from(files).map((file) =>
-                URL.createObjectURL(file)
-            );
-            setSelectedImages((prevImages) => [...prevImages, ...selectedImageUrls]);
+        if (files !== null) {
+            const newImages = Array.from(files);
+            setSelectedImages((prevImages) => [...prevImages, ...newImages]);
         }
     };
 
     const handleRemoveImage = (imageUrl: string) => {
-        setSelectedImages((prevImages) =>
-            prevImages.filter((image) => image !== imageUrl)
-        );
+        setSelectedImages((prevImages) => prevImages.filter((image) => image.name !== imageUrl));
     };
 
     function getMotelFeatures(): MotelFeatures {
@@ -577,26 +573,30 @@ const PostCreate: React.FC = () => {
                                         </Box>
                                     ) :
                                         <Grid container spacing={2}>
-                                            {selectedImages.map((imageUrl) => (
-                                                <Grid item key={imageUrl}>
-                                                    <Paper elevation={3} sx={{ maxWidth: '100px' }}>
-                                                        <Box position="relative" >
-                                                            <img
-                                                                src={imageUrl}
-                                                                alt="Selected"
-                                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                            />
-                                                            <IconButton
-                                                                onClick={() => { handleRemoveImage(imageUrl); }}
-                                                                style={{ position: 'absolute', top: 0, right: 0 }}
-                                                            >
-                                                                <Typography>X</Typography>
-                                                            </IconButton>
-                                                        </Box>
-                                                    </Paper>
+                                            {selectedImages.map((image) => {
+                                                const imageUrl = URL.createObjectURL(image);
 
-                                                </Grid>
-                                            ))}
+                                                return (
+                                                    <Grid item key={imageUrl}>
+                                                        <Paper elevation={3} sx={{ maxWidth: '100px' }}>
+                                                            <Box position="relative" >
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt="Selected"
+                                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                                />
+                                                                <IconButton
+                                                                    onClick={() => { handleRemoveImage(imageUrl); }}
+                                                                    style={{ position: 'absolute', top: 0, right: 0 }}
+                                                                >
+                                                                    <Typography>X</Typography>
+                                                                </IconButton>
+                                                            </Box>
+                                                        </Paper>
+
+                                                    </Grid>
+                                                )
+                                            })}
                                         </Grid>
                                 }
                             </Box>
@@ -987,14 +987,15 @@ const PostCreate: React.FC = () => {
                             />} label="Mặt tiền" />
                         }
                     </CustomCard>
-                    <Button
+                    <LoadingButton
                         variant="contained"
                         onClick={() => { onSubmit(); }}
                         sx={{ backgroundColor: '#026D4D', color: '#FFFFFF' }}
                         fullWidth
+                        loading={loading}
                     >
                         Đăng bài
-                    </Button>
+                    </LoadingButton>
                 </>
             }
         </Box>
