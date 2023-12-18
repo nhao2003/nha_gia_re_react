@@ -11,6 +11,7 @@ import { ProfilePage } from './modern/modules/profile/components/profilePage';
 import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
+import PostCreate from './modern/modules/createpost/PostCreate';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
@@ -43,6 +44,7 @@ function App(): JSX.Element {
         <Route path='/post-management' element={<ModernPostManagement />} />
         <Route path='/blogs' element={<MordernBlogPage/>} />
         <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
+        <Route path='/create-post' element={<PostCreate/>} />
 
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>

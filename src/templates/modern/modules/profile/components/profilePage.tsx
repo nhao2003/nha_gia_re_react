@@ -25,7 +25,7 @@ import {
 } from '@mui/icons-material';
 import { ChangePassword } from './ChangePassword';
 import ModernPostManagement from '../../postManagement/ModernPostManagement';
-import PostCreate from './PostCreate';
+import PostCreate from '../../createpost/PostCreate';
 
 const drawerWidth = '20%';
 

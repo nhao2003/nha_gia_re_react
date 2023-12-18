@@ -22,13 +22,15 @@ function ModernDetailBlogPage(): JSX.Element {
     }
 
     React.useEffect(() => {
-        if (blog == null)
-            fetchBlog().then((response) => {
-                console.log(response);
-                setBlog(response.result[0]);
-            }).catch((error) => {
-                console.log(error);
-            });
+
+        if (blog === null)
+         fetchBlog().then((response) => {
+            console.log(response);
+            setBlog(response.result[0]);
+        }).catch((error) => {
+            console.log(error);
+        });
+
     }, []);
 
     const newstags = [

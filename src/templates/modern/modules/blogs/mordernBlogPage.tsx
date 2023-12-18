@@ -166,7 +166,6 @@ function ModernBlogPage(): JSX.Element {
                                     padding: '5px',
                                     paddingLeft: '10px',
                                     paddingRight: '10px'
-
                                 }}
                             >
 

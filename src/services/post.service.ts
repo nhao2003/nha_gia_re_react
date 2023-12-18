@@ -1,21 +1,9 @@
+import { FurnitureStatus } from '../constants/enums';
 import type Address from '../models/address';
 import { type PropertyFeatures } from '../models/features';
 import { ApiServiceBuilder } from './api.service';
-interface CreatePosData {
-  type_id: string;
-  status: string;
-  title: string;
-  description: string;
-  features: PropertyFeatures;
-  area: number;
-  address: Address; // Define an appropriate type for your address JSON
-  price: number;
-  deposit: number | null;
-  is_lease: boolean;
-  images: string[];
-  videos: string[];
-  is_pro_seller: boolean;
-}
+import type { PropertyListing } from './CreatePostData';
+import mediaServices from './media.services';
 interface GetProps {
   page?: number | null;
   queryParams?: Record<string, any> | null;
@@ -56,12 +44,25 @@ class PostService {
     }
   }
 
-  async createPost(post: CreatePosData) {
-    const response = await this.api.withUrl('/posts/create').withBody(post).build().post();
+  async createPost(post: PropertyListing) {
+    const accessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImFlZmM4MTU5LTcwMjItNDBjMS05MTE1LWRiMTVkYzcwN2Y4ZiIsImlhdCI6MTcwMjg3OTMxMCwiZXhwIjoxNzAyOTY1NzEwfQ.VMudaCGdkZwIUNKS2RlrD6RBaXIwZeqj4WGqGEZ8dVg';
+
+    const images = post.images;
+    const uploadImages = await mediaServices.uploadFiles(images);
+    post.images = uploadImages;
+    const response = await this.api
+      .withUrl('/posts/create')
+      .withBody(post)
+      .withHeaders({
+        Authorization: `Bearer ${accessToken}`,
+      })
+      .build()
+      .post();
     return response.data ?? null;
   }
 
-  async updatePost(id: string, post: Partial<CreatePosData>) {
+  async updatePost(id: string, post: Partial<PropertyListing>) {
     const response = await this.api
       .withUrl('/posts/' + id)
       .withBody(post)
@@ -72,3 +73,34 @@ class PostService {
 }
 
 export default PostService;
+
+// PostService.getInstance()
+//   .createPost({
+//     type_id: 'motel',
+//     title: 'Trọ quận 7 gia re cho sinh viên',
+//     description: 'Phòng trọ trong nhà nguyên căn ,k chung chủ , giờ giấc tự đo.diện 3,5k chữ , nước 50k người',
+//     price: 2000000,
+//     deposit: 20000,
+//     area: 25,
+//     images: [
+//       'https://picsum.photos/200/300?random=112',
+//       'https://picsum.photos/200/300?random=214',
+//       'https://picsum.photos/200/300?random=3124',
+//       'https://picsum.photos/200/300?random=144',
+//     ],
+//     address: {
+//       province_code: 1,
+//       district_code: 1,
+//       ward_code: 1,
+//       detail: '123 Main Street',
+//     },
+//     features: {
+//       water_price: 3500,
+//       electric_price: 2000,
+//       furniture_status: FurnitureStatus.empty,
+//     },
+//     is_lease: true,
+//     is_pro_seller: false,
+//   })
+//   .then((res) => console.log(res))
+//   .catch((err) => console.log(err));

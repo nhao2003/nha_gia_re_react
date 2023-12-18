@@ -1,18 +1,19 @@
 
 import { Route, Routes } from 'react-router-dom'
 
-import DashboardPage from './templates/classic/modules/DashboardPage'
-import DetailPage from './templates/classic/modules/Detail/DetailPage'
-import HomePage from './templates/classic/modules/home/HomePage'
-import NewsPage from './templates/classic/modules/news/NewPage'
-import { OthersInformation } from './templates/classic/modules/personal/OthersInformation'
-import { PersonalPage } from './templates/classic/modules/personal/PersonalPage'
-import { SearchPage } from './templates/classic/modules/search/pages/SearchPage'
-import SignIn from './templates/classic/modules/auth/SignIn'
-import SignUp from './templates/classic/modules/auth/SignUp'
-import DetailBlog from './templates/classic/modules/news/DetailBlog'
-import PostManagement from './templates/classic/modules/postManagement/postManagement'
-import PostCreate from './templates/classic/modules/postManagement/PostCreate'
+import DashboardPage from './modules/DashboardPage'
+import DetailPage from './modules/Detail/DetailPage'
+import HomePage from './modules/home/HomePage'
+import NewsPage from './modules/news/NewPage'
+import { OthersInformation } from './modules/personal/OthersInformation'
+import { PersonalPage } from './modules/personal/PersonalPage'
+import { SearchPage } from './modules/search/pages/SearchPage'
+import SignIn from './modules/auth/SignIn'
+import SignUp from './modules/auth/SignUp'
+import DetailBlog from './modules/news/DetailBlog'
+import PostManagement from './modules/postManagement/postManagement'
+import PostCreate from './modules/postManagement/PostCreate'
+
 
 
 
