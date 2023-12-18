@@ -140,8 +140,10 @@ export function ModernDetailPage(): JSX.Element {
       .withUrl('/posts')
       .withParams({
         page: page,
+        search: post?.title,
       })
       .build();
+    console.log(query);
     const response = await query.get();
     return response.data as any;
   }
