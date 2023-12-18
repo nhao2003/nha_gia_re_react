@@ -18,11 +18,11 @@ import {
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { type SxProps, type Theme } from '@mui/system';
-import { ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes, apartmentTypeToString, directionEnumToString, furnitureStatusToString, houseTypeToString, landTypeToString, legalDocumentStatusToString, officeTypeToString } from '../../../../../constants/enums';
-import ModernAddressDialog from '../../../components/Dialog/ModernAddressDialog';
-import addressUtils from '../../../../../utils/addressUtils';
-import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../../services/CreatePostData';
-import PostService from '../../../../../services/post.service';
+import { ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes, apartmentTypeToString, directionEnumToString, furnitureStatusToString, houseTypeToString, landTypeToString, legalDocumentStatusToString, officeTypeToString } from '../../../../constants/enums';
+import ModernAddressDialog from '../../components/Dialog/ModernAddressDialog';
+import addressUtils from '../../../../utils/addressUtils';
+import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../services/CreatePostData';
+import PostService from '../../../../services/post.service';
 export interface FormValues {
     purposeType: string;
     apartmentType: string;
@@ -394,7 +394,7 @@ const PostCreate: React.FC = () => {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingX: '20px', minHeight: '100vh' }}>
             <Snackbar open={state.open} autoHideDuration={3000} anchorOrigin={{ vertical: state.vertical, horizontal: state.horizontal }} onClose={() => { setSnackBar(''); }}>
                 <Alert onClose={() => {
                     setState({ ...state, open: false });

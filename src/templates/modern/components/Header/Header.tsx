@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     { id: 'chothue', href: '/cho-thue', label: 'Cho thuê' },
     { id: 'blogs', href: '/blogs', label: 'Blogs' },
     { id: 'blog', href: '/blog', label: 'Blog' },
-    { id: 'dangtin', href: '/dang-tin', label: 'Đăng tin' },
+    { id: 'dangtin', href: '/create-post', label: 'Đăng tin' },
     { id: 'profile', href: '/profile', label: 'Hồ sơ' },
     { id: 'signin', href: '/signin', label: 'Đăng nhập' },
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
