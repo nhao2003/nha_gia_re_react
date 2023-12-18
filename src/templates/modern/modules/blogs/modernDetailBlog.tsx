@@ -22,7 +22,8 @@ function ModernDetailBlogPage(): JSX.Element {
     }
 
     React.useEffect(() => {
-        fetchBlog().then((response) => {
+        if (blog === null)
+         fetchBlog().then((response) => {
             console.log(response);
             setBlog(response.result[0]);
         }).catch((error) => {
