@@ -68,6 +68,90 @@ export enum FurnitureStatus {
   high_end = 'high_end',
 }
 
+export function propertyTypeToString(e: PropertyTypes) {
+  switch (e) {
+    case PropertyTypes.apartment:
+      return 'Căn hộ';
+    case PropertyTypes.land:
+      return 'Đất';
+    case PropertyTypes.office:
+      return 'Văn phòng';
+    case PropertyTypes.motel:
+      return 'Nhà trọ';
+    case PropertyTypes.house:
+      return 'Nhà phố';
+  }
+}
+
+export function apartmentTypeToString(e: ApartmentTypes) {
+  switch (e) {
+    case ApartmentTypes.apartment:
+      return 'Căn hộ';
+    case ApartmentTypes.duplex:
+      return 'Duplex';
+    case ApartmentTypes.officetel:
+      return 'Officetel';
+    case ApartmentTypes.service:
+      return 'Service';
+    case ApartmentTypes.dormitory:
+      return 'Ký túc xá';
+    case ApartmentTypes.penhouse:
+      return 'Penhouse';
+  }
+}
+
+export function landTypeToString(e: LandTypes) {
+  switch (e) {
+    case LandTypes.residential:
+      return 'Đất ở';
+    case LandTypes.commercial:
+      return 'Đất thương mại';
+    case LandTypes.industrial:
+      return 'Đất công nghiệp';
+    case LandTypes.agricultural:
+      return 'Đất nông nghiệp';
+  }
+}
+
+export function officeTypeToString(e: OfficeTypes) {
+  switch (e) {
+    case OfficeTypes.office:
+      return 'Văn phòng';
+    case OfficeTypes.officetel:
+      return 'Officetel';
+    case OfficeTypes.shophouse:
+      return 'Shophouse';
+    case OfficeTypes.comercialspace:
+      return 'Không gian thương mại';
+  }
+}
+
+export function houseTypeToString(e: HouseTypes) {
+  switch (e) {
+    case HouseTypes.townhouse:
+      return 'Nhà phố';
+    case HouseTypes.villa:
+      return 'Biệt thự';
+    case HouseTypes.alleyhouse:
+      return 'Nhà ngõ';
+    case HouseTypes.frontagehouse:
+      return 'Nhà mặt phố';
+  }
+}
+
+export function furnitureStatusToString(e: FurnitureStatus) {
+  switch (e) {
+    case FurnitureStatus.empty:
+      return 'Trống';
+    case FurnitureStatus.basic:
+      return 'Cơ bản';
+    case FurnitureStatus.full:
+      return 'Đầy đủ';
+    case FurnitureStatus.high_end:
+      return 'Sang trọng';
+  }
+}
+
 export enum Direction {
   east = 'east',
   west = 'west',
@@ -78,11 +162,42 @@ export enum Direction {
   south_east = 'south_east',
   south_west = 'south_west',
 }
+export function directionEnumToString(e: Direction) {
+  switch (e) {
+    case Direction.east:
+      return 'Đông';
+    case Direction.west:
+      return 'Tây';
+    case Direction.south:
+      return 'Nam';
+    case Direction.north:
+      return 'Bắc';
+    case Direction.north_east:
+      return 'Đông Bắc';
+    case Direction.north_west:
+      return 'Tây Bắc';
+    case Direction.south_east:
+      return 'Đông Nam';
+    case Direction.south_west:
+      return 'Tây Nam';
+  }
+}
 
 export enum LegalDocumentStatus {
   waiting_for_certificates = 'waiting_for_certificates',
   have_certificates = 'have_certificates',
   other_documents = 'other_documents',
+}
+
+export function legalDocumentStatusToString(e: LegalDocumentStatus) {
+  switch (e) {
+    case LegalDocumentStatus.waiting_for_certificates:
+      return 'Chờ giấy tờ';
+    case LegalDocumentStatus.have_certificates:
+      return 'Đã có giấy tờ';
+    case LegalDocumentStatus.other_documents:
+      return 'Giấy tờ khác';
+  }
 }
 
 export enum MessageTypes {

@@ -1,0 +1,31 @@
+.header {
+  background-color: #1d3557;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerItem {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+.headerItem:hover {
+  background-color: #29487d;
+}
+
+.headerItem.active {
+  background-color: #29487d;
+  font-weight: 700;
+}

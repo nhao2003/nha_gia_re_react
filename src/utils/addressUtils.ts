@@ -97,7 +97,7 @@ class AddressUtils {
   }
 
   public getWards(provinceCode: number, districtCode: number): Ward[] {
-    return Object.values((this.wards[provinceCode] ?? null)[districtCode] ?? {});
+    return Object.values(this.wards[provinceCode]?.[districtCode] ?? {});
   }
 
   public getDetailedAddress(provinceCode: number, districtCode: number, wardCode: number): string | null {

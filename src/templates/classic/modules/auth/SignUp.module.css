@@ -1,0 +1,150 @@
+.signup {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+}
+
+.form {
+  width: 50%;
+  max-width: 40rem;
+  margin: 0.5rem 10%;
+  padding: 0 1rem;
+}
+.form h2 {
+  margin: 0;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.image-cover {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.control {
+  margin: 1rem 0 0;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.control label,
+.control input {
+  display: block;
+}
+
+.control label {
+  font-size: large;
+  font-weight: 600;
+  flex: 1;
+  color: #464646;
+  margin-bottom: 0.5rem;
+}
+
+.control input {
+  flex: 3;
+  font: inherit;
+  padding: 0.8rem 0.8rem;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+}
+
+.control input:focus {
+  outline: none;
+  border-color: #0f2c59;
+  background: #e0e8f5;
+}
+
+.control.invalid input {
+  border-color: red;
+  background: #fbdada;
+}
+
+.control a {
+  align-self: flex-end;
+  font-family: inherit;
+  font-size: medium;
+  font-weight: 500;
+  text-decoration: none;
+  color: #2555ff;
+  margin-bottom: 0.5rem;
+}
+
+.control span {
+  align-self: center;
+  font-family: inherit;
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  text-align: center;
+}
+
+.actions button {
+  width: 100%;
+  height: 3rem;
+  font-family: inherit;
+  font-size: large;
+  font-weight: 600;
+  color: white;
+  background-color: #0f2c59;
+  border-radius: 12px;
+  border-style: none;
+}
+
+.actions button:hover {
+  background-color: #264574;
+  cursor: pointer;
+}
+
+.social-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.social-button button {
+  width: 12rem;
+  height: 3rem;
+  font-family: inherit;
+  font-size: medium;
+  font-weight: 600;
+  color: black;
+  background-color: transparent;
+  border-radius: 12px;
+  border-color: #b8b7b7;
+  border-style: solid;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-button button img {
+  margin-right: 0.5rem;
+}
+
+.social-button button:hover {
+  background-color: #e6e6e6;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .form {
+    width: 100%;
+    max-width: 40rem;
+    margin: 1rem auto;
+    padding: 2rem;
+  }
+
+  .image-cover {
+    width: 0%;
+  }
+}
