@@ -1,5 +1,6 @@
 import React from 'react';
-
+import EastIcon from '@mui/icons-material/East';
+import WestIcon from '@mui/icons-material/West';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 interface ArrowProps {
@@ -21,6 +22,8 @@ function Arrow({ children, disabled, onClick }: ArrowProps): JSX.Element {
         right: '1%',
         opacity: disabled ? '0' : '1',
         userSelect: 'none',
+        padding: '0px',
+        marginLeft: '10px',
       }}
     >
       {children}
@@ -42,7 +45,7 @@ export function LeftArrow() {
 
   return (
     <Arrow disabled={disabled} onClick={() => scrollPrev()}>
-      Left
+      <WestIcon />
     </Arrow>
   );
 }
@@ -62,7 +65,7 @@ export function RightArrow() {
 
   return (
     <Arrow disabled={disabled} onClick={() => scrollNext()}>
-      Right
+      <EastIcon />
     </Arrow>
   );
 }

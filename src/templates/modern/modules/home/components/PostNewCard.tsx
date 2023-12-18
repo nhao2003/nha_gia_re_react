@@ -6,8 +6,11 @@ import homeIcon from '../../../assets/images/home.svg';
 import timeIcon from '../../../assets/images/tabler_clock.svg';
 import { time } from 'console';
 import { useNavigate } from 'react-router-dom';
+import { VisibilityContext } from 'react-horizontal-scrolling-menu';
+import React from 'react';
 
 interface PrivateProps {
+  itemId: string;
   image: string;
   title: string;
   price: any;
@@ -16,8 +19,12 @@ interface PrivateProps {
   sx?: object;
 }
 
-export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateProps) => {
+export const PostNewCard = ({ itemId, image, price, title, address, time, sx }: PrivateProps) => {
   const navigate = useNavigate();
+
+  const visibility = React.useContext(VisibilityContext);
+
+  visibility.isItemVisible(itemId);
 
   const handleClick = () => {
     navigate('/details');

@@ -5,48 +5,18 @@ import { PostNewCard } from './PostNewCard';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
 import './arrowsOnBottomOrTop.css';
 import './hideScrollbar.css';
-import { LeftArrow, RightArrow } from './arrows';
 import './globalStyles.css';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import usePreventBodyScroll from './usePreventBodyScroll';
-import { Card } from './card';
 
 interface PostListComponentProps {
   title: string;
   posts: RealEstatePost[];
 }
 
-const elemPrefix = 'test';
-const getId = (index: number) => `${elemPrefix}${index}`;
-
-const getItems = () =>
-  Array(20)
-    .fill(0)
-    .map((_, ind) => ({ id: getId(ind) }));
-
-function onWheel(apiObj: any, ev: React.WheelEvent<Element>) {
-  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
-
-  if (isThouchpad) {
-    ev.stopPropagation();
-    return;
-  }
-
-  if (ev.deltaY < 0) {
-    apiObj.scrollNext();
-  } else if (ev.deltaY > 0) {
-    apiObj.scrollPrev();
-  }
-}
 
 const PostListComponent = ({ title, posts }: PostListComponentProps) => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up(950));
-  const endSlice = matches ? 4 : 2;
-
-  const [items] = React.useState(getItems);
   const { disableScroll, enableScroll } = usePreventBodyScroll();
 
   return (
@@ -81,31 +51,24 @@ const PostListComponent = ({ title, posts }: PostListComponentProps) => {
         </Stack>
       </Stack>
 
-      {/* <Stack direction={'row'} spacing={2}>
-        {posts.map((post, index) => (
-          <PostNewCard
-            key={index}
-            image={post.images[0]}
-            title={post.title}
-            price={`${post.price}đ/$m2`}
-            address={post.address_detail ?? 'Chưa cập nhật'}
-            time='1 ngày trước'
-            sx={{
-              overflow: 'hidden',
-            }}
-          />
-        ))}
-      </Stack> */}
-
-      <div className='example' style={{ paddingTop: '100px', height: '150vh' }}>
+      <div className='posts' style={{ paddingTop: '10px' }}>
         <div onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
-          <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} onWheel={onWheel}>
-            {items.map(({ id }) => (
-              <Card
-                title={id}
-                itemId={id} // NOTE: itemId is required for track items
-                key={id}
-              />
+          <ScrollMenu onWheel={onWheel}>
+            {posts.map((post, index) => (
+              <div key={index} style={{ padding: '10px' }}>
+                <PostNewCard
+                  key={index}
+                  itemId={post.id}
+                  image={post.images[0]}
+                  title={post.title}
+                  price={`${post.price}VNĐ/m2`}
+                  address={post.address_detail ?? 'Chưa cập nhật'}
+                  time='1 ngày trước'
+                  sx={{
+                    overflow: 'hidden',
+                  }}
+                />
+              </div>
             ))}
           </ScrollMenu>
         </div>
@@ -115,3 +78,18 @@ const PostListComponent = ({ title, posts }: PostListComponentProps) => {
 };
 
 export default PostListComponent;
+
+function onWheel(apiObj: any, ev: React.WheelEvent<Element>) {
+  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+
+  if (isThouchpad) {
+    ev.stopPropagation();
+    return;
+  }
+
+  if (ev.deltaY < 0) {
+    apiObj.scrollNext();
+  } else if (ev.deltaY > 0) {
+    apiObj.scrollPrev();
+  }
+}

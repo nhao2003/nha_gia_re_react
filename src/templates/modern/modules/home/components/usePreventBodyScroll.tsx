@@ -1,12 +1,7 @@
 import React from 'react';
 
 const preventDefault = (ev: WheelEvent) => {
-  // if (ev.preventDefault) {
-
-  // }
-
   ev.preventDefault();
-  // ev.returnValue = false;
 };
 
 const enableBodyScroll = () => {
