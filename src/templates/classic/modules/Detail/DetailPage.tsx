@@ -538,13 +538,13 @@ function DetailPage(): JSX.Element {
                     direction={'row'}
                     spacing={2}
                 >
-                    {
+                    {/* {
                         Array.from(Array(6)).slice(0, 4).map((_, index) => (
                             <HomeCard
                                 key={index}
                                 image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
                                 title='Căn hộ cao cấp sân vườn full nội thất'
-                                price={'6 tỷ 599 triệu'}
+                               price={'6 tỷ 599 triệu'}
                                 loved={true}
                                 address='Q5, TP. Hồ Chí Minh'
                                 bedrooms={2}
@@ -555,8 +555,8 @@ function DetailPage(): JSX.Element {
                                 }}
                             />
                         ))
-                    }
-                </Stack>
+                    } */}
+                </Stack> 
 
 
             </Stack>
