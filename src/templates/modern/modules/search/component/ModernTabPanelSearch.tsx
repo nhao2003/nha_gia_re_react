@@ -74,6 +74,11 @@ export function ModernTabPanelSearch(): JSX.Element {
             avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
             name={post.user.first_name + ' ' + post.user.last_name}
             time={dateUtils.getTimeAgoVi(post.posted_date)}
+            onClick={() => {
+              navigate(`/details/${post.id}`, {
+                state: post,
+              });
+            }}
           />
         </Grid>
       ))}

@@ -2,7 +2,7 @@ import { Avatar, Box, Button, CircularProgress, Grid, Stack, Typography } from '
 import AddIcon from '@mui/icons-material/Add';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import { Tile } from './component/Tile';
-import { NewsPostedPage } from './component/NewsPostedPage';
+import { ModernNewsPostedPage } from './component/ModernNewsPostedPage';
 import React from 'react';
 import type { User } from '../../../../models/User';
 import { useLocation } from 'react-router';
@@ -143,7 +143,7 @@ export function ModernOthersInformation(): JSX.Element {
         </Stack>
       </Stack>
 
-      <NewsPostedPage />
+      <ModernNewsPostedPage user={user} />
     </Stack>
   );
 }
