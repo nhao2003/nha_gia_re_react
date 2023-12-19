@@ -30,8 +30,8 @@ const Header: React.FC = () => {
     { id: 'blog', href: '/blog', label: 'Blog' },
     { id: 'dangtin', href: '/create-post', label: 'Đăng tin' },
     { id: 'profile', href: '/profile', label: 'Hồ sơ' },
-    { id: 'signin', href: '/signin', label: 'Đăng nhập' },
-    { id: 'signup', href: '/signup', label: 'Đăng ký' },
+    { id: 'signup', href: '/signin', label: 'Đăng nhập' },
+    { id: 'signin', href: '/signup', label: 'Đăng ký' },
   ];
 
   const handleNavigate = (idRoute: string) => {

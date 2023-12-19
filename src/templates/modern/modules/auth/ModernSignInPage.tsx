@@ -23,7 +23,7 @@ const ModernSignInPage = () => {
   const [emailError, setEmailError] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
-  const [error, setError] = React.useState(null);
+  const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState(null);
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -46,12 +46,14 @@ const ModernSignInPage = () => {
 
   function emailChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.target.value);
-    setError(null);
+    setEmailError('');
+    setError('');
   }
 
   function passwordChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     setPassword(event.target.value);
-    setError(null);
+    setPasswordError('');
+    setError('');
   }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -85,7 +87,7 @@ const ModernSignInPage = () => {
 
           // navigate('/auth-update-profile');
         } else if (response.status === 'fail') {
-          setError(response.message);
+          setError('Email hoặc mật khẩu không đúng');
           setIsLoading(false);
         }
       })
@@ -109,7 +111,7 @@ const ModernSignInPage = () => {
         <img src={icon} alt='icon' />
         <h1>Đăng nhập</h1>
 
-        {error !== null && (
+        {error !== '' && (
           <Alert
             sx={{
               width: '100%',
@@ -123,7 +125,15 @@ const ModernSignInPage = () => {
         <form onSubmit={submitHandler}>
           <div className={classes.input}>
             <label htmlFor='email'>Email</label>
-            <InputField id='email' value={email} type='email' placeholder='Nhập email' onChange={emailChangeHandler} />
+            <InputField
+              id='email'
+              value={email}
+              type='email'
+              placeholder='Nhập email'
+              onChange={emailChangeHandler}
+              isError={emailError !== ''}
+            />
+            {emailError !== '' && <label htmlFor='email'>{emailError}</label>}
           </div>
           <div className={classes.input}>
             <label htmlFor='password'>Password</label>
@@ -133,7 +143,13 @@ const ModernSignInPage = () => {
               type='password'
               placeholder='Nhập mật khẩu'
               onChange={passwordChangeHandler}
+              isError={passwordError !== ''}
             />
+            {passwordError !== '' && (
+              <label className={classes.error} htmlFor='password'>
+                {passwordError}
+              </label>
+            )}
           </div>
 
           <Link to='/forgot-password'>Quên mật khẩu?</Link>

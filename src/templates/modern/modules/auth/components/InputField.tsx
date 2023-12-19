@@ -6,6 +6,7 @@ interface InputProps {
   type: string;
   placeholder: string;
   value?: string | number | readonly string[] | undefined;
+  isError?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
@@ -14,7 +15,7 @@ const InputField: React.FC<InputProps> = (props) => {
     <>
       <input
         id={props.id}
-        className={classes.input}
+        className={`${classes.input} ${props.isError !== undefined && props.isError ? classes.invalid : ''}`}
         type={props.type}
         placeholder={props.placeholder}
         value={props.value}
