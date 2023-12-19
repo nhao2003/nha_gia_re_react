@@ -10,26 +10,32 @@ import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import PostCard from './components/PostCard ';
 import type RealEstatePost from '../../../../models/RealEstatePost';
 import PostService from '../../../../services/post.service';
+import addressUtils from '../../../../utils/addressUtils';
 
 
 async function getPost(status?: 'approved' | 'pending' | 'rejected' | 'expired', page: number = 1) {
+  const queryStatus = status === 'expired' ? 'approved' : status;
   const queryParams: Record<string, any> = {
-    'post_status[eq]': `'${status}'`,
+    'post_status[eq]': `'${queryStatus}'`,
   };
   if (status === 'expired') {
     queryParams['post_expiry_date[lt]'] = `'${new Date().toISOString()}'`;
-  } else if (status !== 'approved') {
+  } else if (status === 'approved') {
     queryParams['post_expiry_date[gt]'] = `'${new Date().toISOString()}'`;
   }
-  return await PostService.getInstance().getAllPosts(
+  const data = await PostService.getInstance().getAllPosts(
     {
       page,
       queryParams: {
-        'post_status[eq]': `'${status}'`,
+        'post_status[eq]': queryStatus,
+        'post_is_active[eq]': true,
         ...queryParams,
       },
     }
   );
+  console.log('queryStatus', queryStatus);
+  console.log('data', data);
+  return data;
 }
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -230,8 +236,8 @@ export default function ModernPostManagement() {
                   image={item.images[0]}
                   status={item.status as 'approved' | 'pending' | 'rejected'}
                   title={item.title}
-                  address={item.address.detail ?? "Rỗng"}
-                  expiredDate={new Date()}
+                  address={item.address !== null ? addressUtils.getDetail(item.address)??'' : ''}
+                  expiredDate={new Date(item.expiry_date)}
                   info_message={item.info_message}
                 />
               </Grid>
@@ -247,8 +253,8 @@ export default function ModernPostManagement() {
                     image={item.images[0]}
                     status={item.status as 'approved' | 'pending' | 'rejected'}
                     title={item.title}
-                    address={item.address.detail ?? "Rỗng"}
-                    expiredDate={new Date()}
+                    address={item.address !== null ? addressUtils.getDetail(item.address)??'' : ''}
+                    expiredDate={new Date(item.expiry_date)}
                   />
                 </Grid>
 
@@ -266,8 +272,8 @@ export default function ModernPostManagement() {
                     image={item.images[0]}
                     status={item.status as 'approved' | 'pending' | 'rejected'}
                     title={item.title}
-                    address={item.address.detail ?? "Rỗng"}
-                    expiredDate={new Date()}
+                    address={item.address !== null ? addressUtils.getDetail(item.address)??'' : ''}
+                    expiredDate={new Date(item.expiry_date)}
                   />
                 </Grid>
               ))
@@ -285,8 +291,8 @@ export default function ModernPostManagement() {
                       image={item.images[0]}
                       status={item.status as 'approved' | 'pending' | 'rejected'}
                       title={item.title}
-                      address={item.address.detail ?? "Rỗng"}
-                      expiredDate={new Date()}
+                      address={item.address !== null ? addressUtils.getDetail(item.address)??'' : ''}
+                      expiredDate={new Date(item.expiry_date)}
                     />
                   </Grid>
                 ))
@@ -297,7 +303,7 @@ export default function ModernPostManagement() {
       </SwipeableViews>
       {/* Xem thêm */}
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CircularProgress sx={{ display: isLoading  ? 'block' : 'none' }} />
+        <CircularProgress sx={{ display: isLoading ? 'block' : 'none' }} />
         <Button variant='text' sx={{ display: isLoading || !checkCanLoadMore(value) ? 'none' : 'block' }} onClick={() => {
           handleLoadMore(value);
         }}>Xem thêm</Button>
