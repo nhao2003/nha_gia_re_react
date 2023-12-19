@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   IconButton,
   InputAdornment,
@@ -14,24 +13,26 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import LocalAtmIcon from '@mui/icons-material/LocalAtm';
-import CropIcon from '@mui/icons-material/Crop';
-import TuneIcon from '@mui/icons-material/Tune';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import addressUtils from '../../../../../utils/addressUtils';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ModernHeaderSearch = () => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
 
-  const [search, setSearch] = React.useState('');
+  const navigate = useNavigate();
+
+  const searchParams = new URLSearchParams(location.search);
+  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
+
+  const [search, setSearch] = React.useState(searchTerm ?? '');
 
   const handleSearch = () => {
-    console.log(search);
+    navigate(`/search?q=${encodeURIComponent(search)}`);
+    navigate(0);
   };
 
   return (
@@ -58,8 +59,14 @@ export const ModernHeaderSearch = () => {
               },
               height: '45px',
             }}
+            defaultValue={searchTerm}
             placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
             endAdornment={
               <InputAdornment position='end'>
                 <IconButton edge='end' onClick={() => handleSearch()}>
