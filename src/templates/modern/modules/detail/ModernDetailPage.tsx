@@ -33,8 +33,7 @@ export function ModernDetailPage(): JSX.Element {
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
-
-  const navigate = useNavigate();
+  
   // Get state
   const [post, setPost] = React.useState<RealEstatePost | null>(useLocation().state as RealEstatePost | null);
   const id = useLocation().pathname.split('/')[2];
@@ -202,89 +201,6 @@ export function ModernDetailPage(): JSX.Element {
             alignItems={'center'}
           >
             <Carousel slides={listImage} style={{ width: '95%' }} />
-            <Stack
-              direction={'row'}
-              spacing={1}
-              width={'100%'}
-              justifyContent={'center'}
-              sx={{
-                position: 'relative',
-              }}
-            >
-              {listImage.slice(indexImage, indexImage + 4).map((image, index) => (
-                <Stack
-                  key={index}
-                  sx={{
-                    width: '23%',
-
-                    border: selectImage === image.id ? '3px solid #000' : null,
-                  }}
-                  onClick={() => handlerSelectImage(index)}
-                >
-                  <img
-                    style={{
-                      overflow: 'hidden',
-                      objectFit: 'cover',
-                      height: '150px',
-                    }}
-                    src={image.src}
-                  />
-                </Stack>
-              ))}
-
-              <Stack
-                sx={{
-                  width: '100%',
-                  position: 'absolute',
-                  top: '40%',
-                }}
-                direction={'row'}
-                justifyContent={'space-between'}
-              >
-                <Stack
-                  height={'30px'}
-                  width={'30px'}
-                  sx={{
-                    borderRadius: '20px',
-                    backgroundColor: '#B8B7B7BB',
-                    marginLeft: '20px',
-                    '&:hover': {
-                      backgroundColor: '#8E8C8C',
-                    },
-                  }}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  onClick={previousImage}
-                >
-                  <KeyboardArrowLeftIcon
-                    sx={{
-                      color: CUSTOM_COLOR.white,
-                    }}
-                  />
-                </Stack>
-                <Stack
-                  height={'30px'}
-                  width={'30px'}
-                  sx={{
-                    borderRadius: '20px',
-                    backgroundColor: '#B8B7B7BB',
-                    marginRight: '20px',
-                    '&:hover': {
-                      backgroundColor: '#8E8C8C',
-                    },
-                  }}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  onClick={nextImage}
-                >
-                  <KeyboardArrowRightIcon
-                    sx={{
-                      color: CUSTOM_COLOR.white,
-                    }}
-                  />
-                </Stack>
-              </Stack>
-            </Stack>
 
             <Stack
               direction={'column'}
