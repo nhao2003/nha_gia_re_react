@@ -228,7 +228,6 @@ export function ModernDetailPage(): JSX.Element {
               <Stack
                 sx={{
                   width: '100%',
-
                   position: 'absolute',
                   top: '40%',
                 }}
@@ -300,7 +299,7 @@ export function ModernDetailPage(): JSX.Element {
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
-                  {post.price} tỷ - {post.area} <span>m</span>
+                  {post.price} VNĐ - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
