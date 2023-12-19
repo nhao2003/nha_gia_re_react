@@ -16,7 +16,7 @@ const ModernForgotPassword = () => {
 
   let formContent = (
     <>
-      <InputField type='email' placeholder='Nhập email' />
+      <InputField id='email' type='email' placeholder='Nhập email' />
       <SubmitButton type='submit'>Tiếp tục</SubmitButton>
     </>
   );
@@ -24,8 +24,8 @@ const ModernForgotPassword = () => {
   if (isEmailEntered) {
     formContent = (
       <>
-        <InputField type='password' placeholder='Nhập mật khẩu mới' />
-        <InputField type='password' placeholder='Nhập lại mật khẩu mới' />
+        <InputField id='password' type='password' placeholder='Nhập mật khẩu mới' />
+        <InputField id='confirm-password' type='password' placeholder='Nhập lại mật khẩu mới' />
         <SubmitButton type='submit'>Xác nhận</SubmitButton>
       </>
     );

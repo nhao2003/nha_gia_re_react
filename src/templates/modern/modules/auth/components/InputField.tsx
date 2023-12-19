@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './InputField.module.css';
 
 interface InputProps {
+  id: string | undefined;
   type: string;
   placeholder: string;
   value?: string | number | readonly string[] | undefined;
@@ -12,6 +13,7 @@ const InputField: React.FC<InputProps> = (props) => {
   return (
     <>
       <input
+        id={props.id}
         className={classes.input}
         type={props.type}
         placeholder={props.placeholder}

@@ -19,9 +19,9 @@ const ModernSignUpPage = () => {
         <img src={icon} alt='icon' />
         <h1>Đăng ký</h1>
         <form onSubmit={submitHandler}>
-          <InputField type='email' placeholder='Nhập email' />
-          <InputField type='password' placeholder='Nhập mật khẩu' />
-          <InputField type='password' placeholder='Nhập lại mật khẩu' />
+          <InputField id='email' type='email' placeholder='Nhập email' />
+          <InputField id='password' type='password' placeholder='Nhập mật khẩu' />
+          <InputField id='confirm-password' type='password' placeholder='Nhập lại mật khẩu' />
           <SubmitButton type='submit'>Đăng ký</SubmitButton>
         </form>
         <span>

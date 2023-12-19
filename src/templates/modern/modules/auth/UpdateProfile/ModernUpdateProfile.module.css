@@ -11,9 +11,9 @@
 }
 
 .card {
-  width: 28rem;
+  width: 40rem;
   height: fit-content;
-  padding: 1rem 8rem;
+  padding: 1rem 4rem;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);

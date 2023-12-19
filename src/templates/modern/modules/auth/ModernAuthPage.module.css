@@ -9,9 +9,9 @@
 }
 
 .container {
-  width: 28rem;
+  width: 40rem;
   height: fit-content;
-  padding: 0rem 8rem;
+  padding: 0rem 4rem;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -19,6 +19,13 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.container form .input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .container img {
