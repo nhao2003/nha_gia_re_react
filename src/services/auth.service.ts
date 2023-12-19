@@ -1,9 +1,8 @@
 import { ApiServiceBuilder } from './api.service';
 class AuthService {
   private static instance: AuthService;
-  private readonly api: ApiServiceBuilder;
-  private constructor() {
-    this.api = new ApiServiceBuilder();
+  api(): ApiServiceBuilder {
+    return new ApiServiceBuilder();
   }
 
   public static getInstance(): AuthService {
@@ -23,7 +22,7 @@ class AuthService {
   }
 
   public async login(email: string, password: string): Promise<void> {
-    const response = await this.api
+    const response = await this.api()
       .withUrl('/auth/sign-in')
       .withBody({
         email,
@@ -42,7 +41,7 @@ class AuthService {
     if (this.isTokenExpired(refreshToken)) {
       throw new Error('Refresh token is expired');
     }
-    const response = await this.api
+    const response = await this.api()
       .withUrl('/auth/refresh-token')
       .withBody({
         refresh_token: refreshToken,
@@ -104,7 +103,7 @@ class AuthService {
     // Change password
     const accessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImFlZmM4MTU5LTcwMjItNDBjMS05MTE1LWRiMTVkYzcwN2Y4ZiIsImlhdCI6MTcwMjg3OTMxMCwiZXhwIjoxNzAyOTY1NzEwfQ.VMudaCGdkZwIUNKS2RlrD6RBaXIwZeqj4WGqGEZ8dVg';
-    const changePassword = this.api
+    const changePassword = this.api()
       .withUrl('/auth/change-password')
       .withBody({
         old_password: currentPassword,
