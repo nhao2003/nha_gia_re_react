@@ -53,9 +53,7 @@ const Header: React.FC = () => {
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
       }}
     >
-      <Helmet>
-        <meta name="google-adsense-account" content="ca-pub-6296322788342979" />
-      </Helmet>
+
       <Stack direction={'row'} spacing={2} marginLeft={2} alignItems={'center'}>
         <Button
           sx={{

@@ -9,10 +9,14 @@ import { store } from './stores/store';
 
 import App from './templates/classic/ClassicApp';
 import ModerApp from './templates/ModernApp';
+import { Helmet } from 'react-helmet';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
+    <Helmet>
+      <meta name="google-adsense-account" content="ca-pub-6296322788342979" />
+    </Helmet>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
