@@ -65,11 +65,11 @@ const ModernUpdateProfile = () => {
               >
                 <div className={classes.input}>
                   <label htmlFor='ho'>Họ</label>
-                  <MuiInputField id='ho' placeholder='Họ' />
+                  <MuiInputField fullWidth id='ho' placeholder='Họ' />
                 </div>
                 <div className={classes.input}>
                   <label htmlFor='ten'>Tên</label>
-                  <MuiInputField id='ten' placeholder='Tên' />
+                  <MuiInputField fullWidth id='ten' placeholder='Tên' />
                 </div>
               </Box>
               <div className={classes.input}>
@@ -97,6 +97,7 @@ const ModernUpdateProfile = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <ThemeProvider theme={newTheme}>
                       <MobileDatePicker
+                        sx={{ width: '100%' }}
                         format='DD/MM/YYYY'
                         value={value}
                         onChange={(newValue: any) => {
@@ -114,10 +115,17 @@ const ModernUpdateProfile = () => {
                                 ),
                               }}
                               sx={{
+                                '& .MuiFormControl-root': {
+                                  width: '100%',
+                                },
+                                '& .MuiTextField-root': {
+                                  width: '100%',
+                                },
                                 '& .MuiInputBase-root': {
                                   padding: 0,
                                   paddingTop: 1.5,
                                   paddingBottom: 1.5,
+                                  width: '100%',
                                 },
                                 '& .MuiButtonBase-root': {
                                   padding: 0,
@@ -129,6 +137,7 @@ const ModernUpdateProfile = () => {
                                 },
                                 '& .MuiOutlinedInput-root': {
                                   '& fieldset': {
+                                    width: '100%',
                                     fontSize: 16,
                                     borderRadius: 1,
                                     border: '2px solid',
