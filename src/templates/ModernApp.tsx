@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { ModernDashboardPage } from './modern/modules/profile/pages/ModernDashboardPage';
 import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import HomePage from './classic/modules/home/HomePage';
 import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
 import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
 import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
@@ -12,8 +11,11 @@ import ModernPostManagement from './modern/modules/postManagement/ModernPostMana
 import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 import PostCreate from './modern/modules/createpost/PostCreate';
+import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage';
+import { ModernOthersInformation } from './modern/modules/profileOther/ModernOthersInformation';
 function App(): JSX.Element {
   return (
+
     <Routes>
       <Route path='/signin' element={<ModernSignInPage />} />
       <Route path='/signup' element={<ModernSignUpPage />} />

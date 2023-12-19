@@ -37,6 +37,20 @@ class DateUtils {
     }
   }
 
+  // format date
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      console.log('Invalid date:', date);
+      throw new Error('Invalid date');
+    }
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   private static readonly instance: DateUtils = new DateUtils();
   public static getInstance(): DateUtils {
     return DateUtils.instance;

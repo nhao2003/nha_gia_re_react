@@ -10,10 +10,13 @@ import { store } from './stores/store';
 import App from './templates/classic/ClassicApp';
 import ModerApp from './templates/ModernApp';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
+    <div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6296322788342979"
+        crossOrigin="anonymous"></script>
+    </div>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
