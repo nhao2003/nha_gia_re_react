@@ -439,7 +439,13 @@ function HomePage(): JSX.Element {
           <Stack direction={'row'} spacing={2}>
 
             {isLoadingPostPurchase ? 
+             <Stack
+             width={'100%'}
+             alignItems={'center'}
+             height={'200px'}
+          >
               <CircularProgress/> 
+         </Stack>
               :
             postsPurchase.posts.slice(0, endSlice).map((post, index) =>
             {
@@ -506,7 +512,13 @@ function HomePage(): JSX.Element {
 
           <Stack direction={'row'} spacing={2}>
           {isLoadingPostRent ? 
-              <CircularProgress/> 
+              <Stack
+              width={'100%'}
+              alignItems={'center'}
+              height={'200px'}
+           >
+               <CircularProgress/> 
+          </Stack>
               :
             postsRent.posts.slice(0, endSlice).map((post, index) =>
             {

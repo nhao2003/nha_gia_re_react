@@ -66,6 +66,7 @@ function DetailPage(): JSX.Element {
     const [listImage, setListImage] = useState<string[]>(post.images);
 
     const [indexImage, setIndexImage] = useState(0)
+    const [indexSelected, setIndexSelected] = useState(0)
 
     const previousImage = () => {
         const index = indexImage - 1
@@ -83,7 +84,7 @@ function DetailPage(): JSX.Element {
 
 
     const handlerSelectImage = (index: number) => {
-        setIndexImage(index)
+        setIndexSelected(index)
     }
 
 
@@ -157,42 +158,6 @@ function DetailPage(): JSX.Element {
       }, [page]);
     
 
-    const home = {
-        title: 'Nhà Trệt Q4-CĂN GÓC 2 MẶT TIỀN- VỪA Ở VỪA KINH DOANH giá mềm 4xxx tỷ',
-        price: 4.9,
-        area: 81,
-        address: 'Tạ Quang Bửu, Phường 6, Quận 8, Tp Hồ Chí Minh',
-        time: 'Đăng 3 giờ trước',
-        news_status: 'Tin đã được kiểm duyệt',
-        status: 'Đã bàn giao',
-        price_per_m2: 28.19,
-        toilet: 2,
-        type: 'Chung cư',
-        bedroom: 2,
-        direction: 'Tây',
-        legal: 'Đã có sổ',
-        describe: `Cần bán gấp 2 căn hộ thuộc chung cư The Pegasuite 1 chất lượng và quy mô bật nhất Q. 8. 
-        \n- Căn hộ thương mại 2PN 1WC 60m² giá 2.5 tỷ - giá ***. 
-        \n- Căn hộ thương mại 2PN 2WC 68m² giá 2.6 tỷ - giá ***. 
-        \n- Căn hộ thương mại 3PN 2WC 100m² góc 2 ban công giá 3.3 tỷ - giá ***. 
-        \nNgoài ra em còn nắm một số căn Pega có sổ hồng giá tốt tại Pegasuite: 
-        \n- Căn 2PN 60m² có sổ hồng giá 2.6 tỷ. 
-        \n- Căn 2PN 68m² có sổ hồng giá 2.75 tỷ. 
-        \n- Căn 2PN 75m² có sổ hồng giá 3.2 tỷ. 
-        \n- Căn 2PN 89m² (căn góc 2 ban công View Q. 1) giá 3.6 tỷ.
-        \n- Căn góc 92m² (căn góc 2 ban công View công viên) giá 3.6 tỷ. 
-        \n- Căn góc 3PN 100m² căn góc 2 ban công có sổ hồng giá 4.1 tỷ. 
-        \nHỗ trợ vay ngân hàng theo mong muốn của khách hàng. 
-        \nChỉ cần anh chị muốn mua The Pegasuite, hãy gọi cho em - sẽ được bên em hỗ trợ mua bán giá ***, thủ tục nhanh nhất, cam kết uy tín nhất với khách hàng. 
-        \n- Luôn báo giá và làm việc trung thực, uy tín, tận tâm, tận lực. 
-        \n- Hỗ trợ thương lượng giá với chủ nhà để có giá ***. 
-        \n- Hỗ trợ pháp lý và mọi thủ tục cho khách. 
-        \n- Hỗ trợ vay ngân hàng nếu khách có nhu cầu. 
-        \nLiên hệ ngay để được hỗ trợ tư vấn ! 
-        \nLàm việc 24/24 cả ngày chủ nhật và ngày lễ) !`,
-        mohinh: 'Cá nhân'
-    }
-
     const features: any = post.features;
 
     return (
@@ -230,7 +195,7 @@ function DetailPage(): JSX.Element {
                             width={'90%'}
 
                             height={'500px'}
-                            src={listImage[indexImage]}
+                            src={listImage[indexSelected]}
                         />
 
                         <Stack
@@ -253,7 +218,7 @@ function DetailPage(): JSX.Element {
                                 sx={{
                                     width: '23%',
     
-                                    border: indexImage === listImage.indexOf(image) ? '3px solid #000' : null,
+                                    border: indexSelected === listImage.indexOf(image) ? '3px solid #000' : null,
                                 }}
                                 onClick={() => handlerSelectImage(listImage.indexOf(image))}
                                 >
@@ -645,7 +610,14 @@ function DetailPage(): JSX.Element {
                     spacing={2}
                 >
                      {isLoading ? 
-              <CircularProgress/> 
+                     <Stack
+                        width={'100%'}
+                        alignItems={'center'}
+                        height={'200px'}
+                     >
+                         <CircularProgress/> 
+                    </Stack>
+             
               :
             postsRelate.posts.slice(0, 4).map((post, index) =>
             {
