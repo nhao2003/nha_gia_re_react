@@ -384,7 +384,7 @@ function HomePage(): JSX.Element {
                 title={post.title}  
                 price={post.price}
                 loved={true}
-                address= {post.address_detail}
+                address= {post.address_detail!}
                 bedrooms={10}
                 bathrooms={100}
                 areas={post.area}
