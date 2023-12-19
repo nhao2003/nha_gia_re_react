@@ -14,9 +14,10 @@ interface PrivateProps {
   address: string;
   type: string;
   sx?: object;
+  onClick?: () => void;
 }
 
-export const HomeCard = ({ image, price, title, address, type, sx }: PrivateProps) => {
+export const HomeCard = ({ image, price, title, address, type, sx, onClick }: PrivateProps) => {
   const navigate = useNavigate();
 
   const handlDetailHome = () => {
@@ -25,12 +26,12 @@ export const HomeCard = ({ image, price, title, address, type, sx }: PrivateProp
 
   return (   
     <Stack
-      onClick={handlDetailHome}
+      onClick={onClick}
       direction={'column'}
       sx={{
         ...sx,
         width: '280px',
-        height: '480px',
+        height: '410px',
         borderRadius: '10px',
         border: '2px solid',
         borderColor: CUSTOM_COLOR.grayNobel,
@@ -49,7 +50,7 @@ export const HomeCard = ({ image, price, title, address, type, sx }: PrivateProp
         style={{
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
-          height: '250px',
+          height: '180px',
           objectFit: 'cover'
         }}
       />

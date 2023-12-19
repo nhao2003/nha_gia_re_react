@@ -28,7 +28,7 @@ function App(): JSX.Element {
 
       <Route path='/otheruser' element={<DashboardPage><OthersInformation /></DashboardPage>} />
       <Route path='/search' element={<DashboardPage><SearchPage /></DashboardPage>} />
-      <Route path='/details' element={<DashboardPage><DetailPage /></DashboardPage>} />
+      <Route path='/details/:id' element={<DashboardPage><DetailPage /></DashboardPage>} />
       <Route path='/news' element={<DashboardPage><NewsPage /></DashboardPage>} />
       <Route path='/news/:id' element={<DashboardPage><DetailBlog /></DashboardPage>} />
       <Route path='/post_management' element={<DashboardPage><PostManagement /></DashboardPage>} />

@@ -459,6 +459,11 @@ function HomePage(): JSX.Element {
                   overflow: 'hidden',
                 }}
                 type= {type}
+                onClick={() => {
+                  navigate(`/details/${post.id}`, {
+                    state: post,
+                  });
+                }}
               />
              )
             }
@@ -521,6 +526,11 @@ function HomePage(): JSX.Element {
                   overflow: 'hidden',
                 }}
                 type= {type}
+                onClick={() => {
+                  navigate(`/details/${post.id}`, {
+                    state: post,
+                  });
+                }}
               />
              )
             }
