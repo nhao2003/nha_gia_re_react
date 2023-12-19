@@ -3,11 +3,14 @@ import { Card, CardContent, CardMedia, Typography, IconButton, Box } from '@mui/
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface PostCardProps {
+    id: string;
     image: string;
     status: 'approved' | 'pending' | 'rejected';
     title: string;
     address: string;
-    expiredDate?: Date;
+    expiredDate: Date;
+    info_message?: string | null;
+    onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
@@ -15,11 +18,14 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
     const getStatusString = (post: PostCardProps) => {
         switch (post.status) {
             case 'approved':
-                return 'Hiển thị đến ' + post.expiredDate?.toLocaleDateString();
+                if (post.expiredDate > new Date())
+                    return 'Hiển thị đến ' + post.expiredDate?.toLocaleDateString();
+                else
+                    return 'Đã hết hạn từ ' + post.expiredDate?.toLocaleDateString();
             case 'pending':
                 return 'Đang chờ duyệt';
             case 'rejected':
-                return 'Bị từ chối';
+                return post?.info_message ?? 'Bị từ chối';
             default:
                 return 'Đang chờ duyệt';
         }
@@ -28,7 +34,10 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
     const getStatusBackgroundColor = (status: 'approved' | 'pending' | 'rejected') => {
         switch (status) {
             case 'approved':
-                return '#D1FAE5';
+                if (post.expiredDate > new Date())
+                    return '#D1FAE5';
+                else
+                    return '#FEF3C7';
             case 'pending':
                 return '#EDE9FE';
             case 'rejected':
@@ -41,7 +50,10 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
     const getStatusColor = (status: 'approved' | 'pending' | 'rejected') => {
         switch (status) {
             case 'approved':
-                return '#065F46';
+                if (post.expiredDate > new Date())
+                    return '#065F46';
+                else
+                    return '#92400E';
             case 'pending':
                 return '#5B21B6';
             case 'rejected':
@@ -50,7 +62,6 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
                 return '#FFC107';
         }
     }
-
     return (
         <Card sx={{ display: 'flex', padding: '16px', borderRadius: '20px', height: 'fit-content' }}>
             <Box sx={{
@@ -61,7 +72,6 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
                     sx={{ borderRadius: '10px', aspectRatio: '1/1' }}
                     image={post.image}
                     alt="green iguana"
-
                 />
             </Box>
             <CardContent sx={{ flex: '1 0 auto', width: '25%', padding: '0px 0px 0px 0px' }}>
@@ -80,9 +90,12 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
                         color: getStatusColor(post.status),
 
                     }}>{getStatusString(post)}</Typography>
-                    <IconButton aria-label="more">
+                    <IconButton aria-label="more"
+                        onClick={post.onClick}
+                    >
                         <MoreVertIcon />
                     </IconButton>
+  
                 </div>
                 <Typography variant="h6" gutterBottom sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }} >
                     {post.title}

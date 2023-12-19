@@ -6,11 +6,15 @@ import type {
   MotelFeatures,
   OfficeFeatures,
 } from '../services/CreatePostData';
+
+import type { User } from './User';
+
 import type Address from './address';
 
 interface RealEstatePost {
   id: string;
   user_id: string;
+  user: User;
   project_id: string;
   type_id: PropertyTypes;
   unit_id: string;

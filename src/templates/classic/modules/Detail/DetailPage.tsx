@@ -1,4 +1,4 @@
-import { Avatar, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Avatar, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import ReplyIcon from '@mui/icons-material/Reply';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -22,47 +22,51 @@ import { url } from "inspector";
 import { TileIcon } from "./components/TileIcon";
 import { HomeCard } from "../../../../templates/classic/components/HomeCard";
 import CUSTOM_COLOR from "../../constants/colors";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ApiServiceBuilder } from "../../../../services/api.service";
+import type RealEstatePost from "../../../../models/RealEstatePost";
+import { Direction, LegalDocumentStatus, PropertyTypes, legalDocumentStatusToString } from "../../../../constants/enums";
+
+
+interface ImageInfo {
+    id: number;
+    src: string;
+    alt: string;
+  }
+  
+  const formatImages = (images: string[]): ImageInfo[] => {
+    return images.map((image, index) => ({
+      id: index,
+      src: image,
+      alt: `Image ${index + 1} for carousel`,
+    }));
+  };
+  
+
 
 function DetailPage(): JSX.Element {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
 
+    const id = useLocation().pathname.split('/')[2];
+    const navigate = useNavigate();
 
+    const [post, setPost] = React.useState<RealEstatePost>(useLocation().state as RealEstatePost);
+    async function fetchPost() {
+        const query = new ApiServiceBuilder()
+          .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+          .withUrl("/posts?post_id[eq]='" + id + "'")
+          .build();
+        console.log(query);
+        const response = await query.get();
+        return response.data as any;
+      }
 
-    const listImage = [
-        {
-            id: 0,
-            url: 'https://thanhvietcorp.vn/uploads/images/Bao%20chi/cac-mau-nha-vuon-dep.jpg',
-        },
-        {
-            id: 1,
-            url: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-        },
-        {
-            id: 2,
-            url: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-        },
-        {
-            id: 3,
-            url: 'https://media.tapchitaichinh.vn/w1480/images/upload/phunganhtuan/2015_07_13/phong-thuy-cho-nha-o-8_CLCV.jpg',
-        },
-        {
-            id: 4,
-            url: 'https://longvan.com.vn/wp-content/uploads/2020/11/mau-nha-cap-3-thiet-ke-dep-nhat-nam-31.jpg',
-        },
-        {
-            id: 5,
-            url: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-        },
-        {
-            id: 6,
-            url: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-        },
-    ]
+    const [listImage, setListImage] = useState<string[]>(post.images);
 
-    const [selectImage, setSelectImage] = useState(0)
     const [indexImage, setIndexImage] = useState(0)
+    const [indexSelected, setIndexSelected] = useState(0)
 
     const previousImage = () => {
         const index = indexImage - 1
@@ -80,44 +84,81 @@ function DetailPage(): JSX.Element {
 
 
     const handlerSelectImage = (index: number) => {
-        setSelectImage(index + indexImage)
+        setIndexSelected(index)
     }
 
-    const home = {
-        title: 'Nhà Trệt Q4-CĂN GÓC 2 MẶT TIỀN- VỪA Ở VỪA KINH DOANH giá mềm 4xxx tỷ',
-        price: 4.9,
-        area: 81,
-        address: 'Tạ Quang Bửu, Phường 6, Quận 8, Tp Hồ Chí Minh',
-        time: 'Đăng 3 giờ trước',
-        news_status: 'Tin đã được kiểm duyệt',
-        status: 'Đã bàn giao',
-        price_per_m2: 28.19,
-        toilet: 2,
-        type: 'Chung cư',
-        bedroom: 2,
-        direction: 'Tây',
-        legal: 'Đã có sổ',
-        describe: `Cần bán gấp 2 căn hộ thuộc chung cư The Pegasuite 1 chất lượng và quy mô bật nhất Q. 8. 
-        \n- Căn hộ thương mại 2PN 1WC 60m² giá 2.5 tỷ - giá ***. 
-        \n- Căn hộ thương mại 2PN 2WC 68m² giá 2.6 tỷ - giá ***. 
-        \n- Căn hộ thương mại 3PN 2WC 100m² góc 2 ban công giá 3.3 tỷ - giá ***. 
-        \nNgoài ra em còn nắm một số căn Pega có sổ hồng giá tốt tại Pegasuite: 
-        \n- Căn 2PN 60m² có sổ hồng giá 2.6 tỷ. 
-        \n- Căn 2PN 68m² có sổ hồng giá 2.75 tỷ. 
-        \n- Căn 2PN 75m² có sổ hồng giá 3.2 tỷ. 
-        \n- Căn 2PN 89m² (căn góc 2 ban công View Q. 1) giá 3.6 tỷ.
-        \n- Căn góc 92m² (căn góc 2 ban công View công viên) giá 3.6 tỷ. 
-        \n- Căn góc 3PN 100m² căn góc 2 ban công có sổ hồng giá 4.1 tỷ. 
-        \nHỗ trợ vay ngân hàng theo mong muốn của khách hàng. 
-        \nChỉ cần anh chị muốn mua The Pegasuite, hãy gọi cho em - sẽ được bên em hỗ trợ mua bán giá ***, thủ tục nhanh nhất, cam kết uy tín nhất với khách hàng. 
-        \n- Luôn báo giá và làm việc trung thực, uy tín, tận tâm, tận lực. 
-        \n- Hỗ trợ thương lượng giá với chủ nhà để có giá ***. 
-        \n- Hỗ trợ pháp lý và mọi thủ tục cho khách. 
-        \n- Hỗ trợ vay ngân hàng nếu khách có nhu cầu. 
-        \nLiên hệ ngay để được hỗ trợ tư vấn ! 
-        \nLàm việc 24/24 cả ngày chủ nhật và ngày lễ) !`,
-        mohinh: 'Cá nhân'
-    }
+
+
+
+    // React.useEffect(() => {
+    //     if (post === null)
+    //       fetchPost()
+    //         .then((response) => {
+    //           setPost(response.result[0]);
+    //           // Explicitly specify the type of 'response.result[0]'
+    //           const firstPost = response.result[0] as RealEstatePost | undefined;
+    //           console.log('psstttt',firstPost);
+    //           if (firstPost !== undefined) {
+    //             setPost(firstPost);
+    //             setListImage(firstPost.images);
+    //           }
+
+    //           console.log('list image',listImage);
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //         });
+    //     else {
+    //       setListImage(post.images);
+    //     }
+    //   }, []);
+
+      const [isLoading, setIsLoading] = React.useState<boolean>(true);
+      const [postsRelate, setPostsRelate] = React.useState<{
+        numOfPages: number;
+        posts: RealEstatePost[];
+      }>({ numOfPages: 1, posts: [] });
+    
+      const searchParams = new URLSearchParams(location.search);
+      const page = searchParams.get('page') ?? '1';
+      async function fetchPosts() {
+        const query = new ApiServiceBuilder()
+          .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+          .withUrl('/posts')
+          .withParams({
+            page: page,
+            search: post?.title,
+          })
+          .build();
+        console.log(query);
+        const response = await query.get();
+        return response.data as any;
+      }
+      React.useEffect(() => {
+
+        console.log('posttt', post);
+
+        setListImage(post.images);
+        console.log('list image', listImage);
+
+        setIsLoading(true);
+        fetchPosts()
+          .then((response) => {
+            setPostsRelate({
+              numOfPages: response.num_of_pages,
+              posts: response.result,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }, [page]);
+    
+
+    const features: any = post.features;
 
     return (
         <Stack
@@ -153,8 +194,8 @@ function DetailPage(): JSX.Element {
                         <img
                             width={'90%'}
 
-
-                            src={listImage[selectImage].url}
+                            height={'500px'}
+                            src={listImage[indexSelected]}
                         />
 
                         <Stack
@@ -168,31 +209,31 @@ function DetailPage(): JSX.Element {
                             }}
                         >
 
-                            {
-                                listImage.slice(indexImage, indexImage + 4).map((image, index) => (
-
-                                    <Stack
-                                        key={index}
-                                        sx={{
-                                            width: '23%',
-
-                                            border: selectImage === image.id ? '3px solid #000' : null
-                                        }}
-                                        onClick={() => handlerSelectImage(index)}
-                                    >
-
-                                        <img
-
-                                            style={{
-                                                overflow: 'hidden',
-                                                objectFit: 'cover',
-                                            }}
-                                            src={image.url}
-                                        />
-                                    </Stack>
-                                ))
-                            }
-
+                        {listImage.slice(indexImage, indexImage + 4).map((image, index) =>
+                        {
+                            console.log(listImage.indexOf(image))
+                            return (
+                                <Stack
+                                key={index}
+                                sx={{
+                                    width: '23%',
+    
+                                    border: indexSelected === listImage.indexOf(image) ? '3px solid #000' : null,
+                                }}
+                                onClick={() => handlerSelectImage(listImage.indexOf(image))}
+                                >
+                                <img
+                                    style={{
+                                    overflow: 'hidden',
+                                    objectFit: 'cover',
+                                    height: '100px'
+                                    }}
+                                    src={image}
+                                />
+                                </Stack>
+                            )
+                        }
+                        )}
                             <Stack
                                 sx={{
                                     width: '100%',
@@ -257,6 +298,7 @@ function DetailPage(): JSX.Element {
                         <Stack
                             direction={'column'}
                             spacing={1}
+                            width={'100%'}
                         >
                             <Typography
                                 width={'100%'}
@@ -269,7 +311,7 @@ function DetailPage(): JSX.Element {
 
                                 }}
 
-                            >{home.title}</Typography>
+                            >{post.title}</Typography>
 
                             <Stack
                                 direction={'row'}
@@ -281,7 +323,7 @@ function DetailPage(): JSX.Element {
                                 <Typography
                                     fontSize={'18px'}
                                     fontWeight={'600'}
-                                >{home.price} tỷ - {home.area} <span>m</span><sup style={{ fontSize: '12px' }}>2</sup></Typography>
+                                >{post.price} VND - {post.area} <span>m</span><sup style={{ fontSize: '12px' }}>2</sup></Typography>
 
                                 <Stack
                                     direction={'row'}
@@ -310,11 +352,11 @@ function DetailPage(): JSX.Element {
                                 }}
                             >
                                 <LocationOnOutlinedIcon />
-                                <Typography>{home.address}</Typography>
+                                <Typography>{post.address_detail}</Typography>
 
                             </Stack>
 
-                            <Stack
+                            {/* <Stack
                                 direction={'row'}
                                 alignSelf={'start'}
                                 width={'100%'}
@@ -327,7 +369,7 @@ function DetailPage(): JSX.Element {
                                 <AccessTimeOutlinedIcon />
                                 <Typography>{home.time}</Typography>
 
-                            </Stack>
+                            </Stack> */}
 
                             <Stack
                                 direction={'row'}
@@ -340,7 +382,7 @@ function DetailPage(): JSX.Element {
                                 }}
                             >
                                 <BeenhereOutlinedIcon />
-                                <Typography>{home.news_status}</Typography>
+                                <Typography>Tin đã được kiểm duyệt</Typography>
 
                             </Stack>
 
@@ -363,28 +405,42 @@ function DetailPage(): JSX.Element {
                                     }}
                                     spacing={1}
                                 >
-                                    <TileIcon
-                                        icon={HomeWorkIcon}
-                                        title="Tình trạng bất động sản"
-                                        value={home.status}
-                                    />
+         
+                            {                  
+                                features?.is_hand_over !== null ??
+                                       <TileIcon
+                                       icon={HomeWorkIcon}
+                                       title="Tình trạng bàn giao"
+                                       value={features.is_hand_over === true ? "Đã bàn giao" : "Chưa bàn giao"}
+                                   />
+                            }
 
                                     <TileIcon
                                         icon={MonetizationOnOutlinedIcon}
                                         title="Giá"
-                                        value={home.price_per_m2}
-                                        unit={<><span>triệu/m</span><sup style={{ fontSize: '12px' }}>2</sup></>}
+                                        value={post.price / post.area}
+                                        unit={<><span>VND/m</span><sup style={{ fontSize: '12px' }}>2</sup></>}
                                     />
-                                    <TileIcon
+                                    {
+                                       
+                                        <TileIcon
                                         icon={WcIcon}
                                         title="Số phòng vệ sinh"
-                                        value={home.toilet}
-                                        unit={'phòng'}
-                                    />
+                                        value={features?.num_of_toilets ?? "Không có"}
+                                        unit={"phòng"}
+                                        />
+                                       
+                                    }
+                                    
                                     <TileIcon
                                         icon={LocationCityIcon}
                                         title="Loại hình căn hộ"
-                                        value={home.type}
+                                        value={post.type_id === PropertyTypes.apartment ? "Căn hộ" : 
+                                        post.type_id === PropertyTypes.house ? "Nhà ở" :
+                                        post.type_id === PropertyTypes.land ? "Đất" :
+                                        post.type_id === PropertyTypes.motel ? "Nhà trọ" :
+                                        "Văn phòng"
+                                    }
                                     />
                                 </Stack>
 
@@ -400,28 +456,43 @@ function DetailPage(): JSX.Element {
                                     <TileIcon
                                         icon={CropIcon}
                                         title="Diện tích"
-                                        value={home.area}
+                                        value={post.area}
                                         unit={<><span>m</span><sup style={{ fontSize: '12px' }}>2</sup></>}
                                     />
 
                                     <TileIcon
                                         icon={BedroomParentOutlinedIcon}
                                         title="Số phòng ngủ"
-                                        value={home.bedroom}
-                                        unit={<><span>triệu/m</span><sup style={{ fontSize: '12px' }}>2</sup></>}
+                                        value={features?.num_of_bed_rooms ?? "Không có"}
+                                        unit={"phòng"}
                                     />
-                                    <TileIcon
+                                    {
+                                        features?.main_door_direction ??
+
+                                        <TileIcon
                                         icon={MeetingRoomOutlinedIcon}
-                                        title="Hướng của chính"
-                                        value={home.direction}
-                                        unit={'phòng'}
+                                        title="Hướng cửa chính"
+                                        value={features.main_door_direction === Direction.north ? "Bắc" :
+                                        features.main_door_direction === Direction.south ? "Nam" :
+                                        features.main_door_direction === Direction.west ? "Tây" : "Đông"
+                                        }
+                                       
                                     />
-                                    <TileIcon
+                                    }
+                                    
+                                    {
+                                         features?.legal_document_status ??
+                                         <TileIcon
                                         icon={ReceiptLongOutlinedIcon}
                                         title="Giấy tờ pháp lý"
-                                        value={home.legal}
-                                    />
+                                        value={ features.legal_document_status === LegalDocumentStatus.have_certificates ? "Đã có giấy tờ" :
+                                        features.legal_document_status === LegalDocumentStatus.waiting_for_certificates ? "Chờ giấy tờ" : "Giấy tờ khác" 
+                                    }
+                                        />
 
+
+                                    }
+                                    
                                 </Stack>
 
                             </Stack>
@@ -438,7 +509,7 @@ function DetailPage(): JSX.Element {
 
                             <React.Fragment>
                                 <Typography variant="body1" paragraph>
-                                    {home.describe}
+                                    {post.description}
                                 </Typography>
 
                             </React.Fragment>
@@ -472,8 +543,8 @@ function DetailPage(): JSX.Element {
                             <Stack>
                                 <Typography variant='h6'>Đào Xuân Huy</Typography>
                                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                                    {home.mohinh === 'cá nhân' ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
-                                    <Typography>{home.mohinh === 'cá nhân' ? 'Cá nhân' : 'Môi giới'}</Typography>
+                                    {post.is_pro_seller ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
+                                    <Typography>{post.is_pro_seller ? 'Cá nhân' : 'Môi giới'}</Typography>
                                 </Stack>
 
                             </Stack>
@@ -538,25 +609,45 @@ function DetailPage(): JSX.Element {
                     direction={'row'}
                     spacing={2}
                 >
-                    {
-                        Array.from(Array(6)).slice(0, 4).map((_, index) => (
-                            <HomeCard
-                                key={index}
-                                image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
-                                title='Căn hộ cao cấp sân vườn full nội thất'
-                                price={'6 tỷ 599 triệu'}
-                                loved={true}
-                                address='Q5, TP. Hồ Chí Minh'
-                                bedrooms={2}
-                                bathrooms={2}
-                                areas={234}
-                                sx={{
-                                    overflow: 'hidden'
-                                }}
-                            />
-                        ))
-                    }
-                </Stack>
+                     {isLoading ? 
+                     <Stack
+                        width={'100%'}
+                        alignItems={'center'}
+                        height={'200px'}
+                     >
+                         <CircularProgress/> 
+                    </Stack>
+             
+              :
+            postsRelate.posts.slice(0, 4).map((post, index) =>
+            {
+              const type = post.type_id === PropertyTypes.motel ? 'Nhà trọ' 
+                : post.type_id === PropertyTypes.house ? 'Nhà ở' 
+                : post.type_id === PropertyTypes.apartment ? 'Căn hộ' 
+                : post.type_id === PropertyTypes.land ? 'Đất' 
+                : 'Văn phòng;'
+              return (
+                <HomeCard
+                key={index}
+                image= {post.images[0]}
+                title={post.title}  
+                price={`${post.price} VND/m2`}
+                address= {post.address_detail ?? "Chưa cập nhật"}
+                sx={{
+                  overflow: 'hidden',
+                }}
+                type= {type}
+                onClick={() => {
+                  navigate(`/details/${post.id}`, {
+                    state: post,
+                  });
+                  navigate(0)
+                }}
+              />
+             )
+            }
+           )}
+                </Stack> 
 
 
             </Stack>

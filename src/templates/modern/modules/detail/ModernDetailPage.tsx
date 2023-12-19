@@ -34,6 +34,7 @@ export function ModernDetailPage(): JSX.Element {
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
 
+  const navigate = useNavigate();
   // Get state
   const [post, setPost] = React.useState<RealEstatePost | null>(useLocation().state as RealEstatePost | null);
   const id = useLocation().pathname.split('/')[2];
@@ -123,6 +124,12 @@ export function ModernDetailPage(): JSX.Element {
       \nLiên hệ ngay để được hỗ trợ tư vấn ! 
       \nLàm việc 24/24 cả ngày chủ nhật và ngày lễ) !`,
     mohinh: 'Cá nhân',
+  };
+
+  const navigate = useNavigate();
+
+  const navigateToProfile = () => {
+    if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
   };
 
   // Get API Relate
@@ -218,7 +225,7 @@ export function ModernDetailPage(): JSX.Element {
                     style={{
                       overflow: 'hidden',
                       objectFit: 'cover',
-                      height: '0px',
+                      height: '150px',
                     }}
                     src={image.src}
                   />
@@ -228,7 +235,6 @@ export function ModernDetailPage(): JSX.Element {
               <Stack
                 sx={{
                   width: '100%',
-
                   position: 'absolute',
                   top: '40%',
                 }}
@@ -300,7 +306,7 @@ export function ModernDetailPage(): JSX.Element {
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
-                  {post.price} tỷ - {post.area} <span>m</span>
+                  {post.price} VNĐ - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
@@ -464,13 +470,13 @@ export function ModernDetailPage(): JSX.Element {
             }}
           >
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
-              <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
+              <Avatar alt='Travis Howard' src={post.user.avatar ?? '/static/images/avatar/2.jpg'} />
 
               <Stack>
-                <Typography variant='h6'>Đào Xuân Huy</Typography>
+                <Typography variant='h6'>{post.user.first_name + ' ' + post.user.last_name}</Typography>
                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                  {home.mohinh === 'cá nhân' ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
-                  <Typography>{home.mohinh === 'cá nhân' ? 'Cá nhân' : 'Môi giới'}</Typography>
+                  {post.is_pro_seller ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
+                  <Typography>{post.is_pro_seller ? 'Cá nhân' : 'Môi giới'}</Typography>
                 </Stack>
               </Stack>
             </Stack>
@@ -483,6 +489,7 @@ export function ModernDetailPage(): JSX.Element {
                 backgroundColor: CUSTOM_COLOR.green,
               }}
               endIcon={<ChevronRightIcon />}
+              onClick={navigateToProfile}
             >
               Xem Hồ Sơ
             </Button>
