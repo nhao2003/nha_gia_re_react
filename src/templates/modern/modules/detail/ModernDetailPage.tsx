@@ -125,6 +125,12 @@ export function ModernDetailPage(): JSX.Element {
     mohinh: 'Cá nhân',
   };
 
+  const navigate = useNavigate();
+
+  const navigateToProfile = () => {
+    if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
+  };
+
   // Get API Relate
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [postsRelate, setPostsRelate] = React.useState<{
@@ -218,7 +224,7 @@ export function ModernDetailPage(): JSX.Element {
                     style={{
                       overflow: 'hidden',
                       objectFit: 'cover',
-                      height: '0px',
+                      height: '150px',
                     }}
                     src={image.src}
                   />
@@ -463,13 +469,13 @@ export function ModernDetailPage(): JSX.Element {
             }}
           >
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
-              <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
+              <Avatar alt='Travis Howard' src={post.user.avatar ?? '/static/images/avatar/2.jpg'} />
 
               <Stack>
-                <Typography variant='h6'>Đào Xuân Huy</Typography>
+                <Typography variant='h6'>{post.user.first_name + ' ' + post.user.last_name}</Typography>
                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                  {home.mohinh === 'cá nhân' ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
-                  <Typography>{home.mohinh === 'cá nhân' ? 'Cá nhân' : 'Môi giới'}</Typography>
+                  {post.is_pro_seller ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
+                  <Typography>{post.is_pro_seller ? 'Cá nhân' : 'Môi giới'}</Typography>
                 </Stack>
               </Stack>
             </Stack>
@@ -482,6 +488,7 @@ export function ModernDetailPage(): JSX.Element {
                 backgroundColor: CUSTOM_COLOR.green,
               }}
               endIcon={<ChevronRightIcon />}
+              onClick={navigateToProfile}
             >
               Xem Hồ Sơ
             </Button>

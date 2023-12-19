@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { ModernDashboardPage } from './modern/modules/profile/pages/ModernDashboardPage';
 import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import HomePage from './classic/modules/home/HomePage';
 import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
 import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
 import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
@@ -14,20 +13,18 @@ import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 import PostCreate from './modern/modules/createpost/PostCreate';
 import { Adsense } from '@ctrl/react-adsense';
 import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage';
+import { ModernOthersInformation } from './modern/modules/profileOther/ModernOthersInformation';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
-      <Adsense
-        client='ca-pub-6296322788342979'
-        slot='3475600179'
-      />
+      <Adsense client='ca-pub-6296322788342979' slot='3475600179' />
       <Routes>
         <Route path='/' element={<ModernHomePage />} />
         {/* public route */}
         <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/user/:id' element={<ModernOthersInformation />} />
         <Route path='/details/:id' element={<ModernDetailPage />} />
         <Route path='/search' element={<ModernSearchPage />} />
-        <Route path='/profile' element={<ProfilePage />} />
         <Route path='/signin' element={<ModernSignInPage />} />
         <Route path='/signup' element={<ModernSignUpPage />} />
         <Route path='/forgot-password' element={<ModernForgotPassword />} />
