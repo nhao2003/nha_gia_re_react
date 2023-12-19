@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {
   AppBar,
+  Avatar,
   Box,
+  CircularProgress,
   Collapse,
   CssBaseline,
   Divider,
@@ -22,10 +24,14 @@ import {
   LocalActivity,
   ExpandMore as ExpandMoreIcon,
   Menu as MenuIcon,
+  EmailOutlined,
+  Call,
 } from '@mui/icons-material';
 import { ChangePassword } from './ChangePassword';
 import ModernPostManagement from '../../postManagement/ModernPostManagement';
 import PostCreate from '../../createpost/PostCreate';
+import type { User } from '../../../../../models/User';
+import UserService from '../../../../../services/user.service';
 
 const drawerWidth = '20%';
 
@@ -40,65 +46,45 @@ interface MenuItem {
 }
 
 interface UserProfileProps {
-  username: string;
-  posts: number;
-  followers: number;
-  joinDate: string;
+  avatar: string;
+  fullname: string;
+  email: string;
+  phone: string;
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({
-  username,
-  posts,
-  followers,
-  joinDate,
+  avatar,
+  fullname,
+  email,
+  phone,
 }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
-        <Typography variant="h6" noWrap component="div">
-          {username}
-        </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="body2" noWrap component="div">
-              {posts}
-            </Typography>
-            <Typography variant="body2" noWrap component="div">
-              Bài viết
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="body2" noWrap component="div">
-              {followers}
-            </Typography>
-            <Typography variant="body2" noWrap component="div">
-              Người theo dõi
-            </Typography>
-          </Box>
-        </Box>
-        <Typography variant="body2" noWrap component="div"></Typography>
-      </Box>
-      <List>
-        <ListItem disablePadding>
-          <ListItem>
-            <CalendarToday />
-            <ListItemText primary={`Tham gia từ ${joinDate}`} />
-          </ListItem>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItem>
-            <LocalActivity />
-            <ListItemText primary={`Tham gia từ ${joinDate}`} />
-          </ListItem>
-        </ListItem>
-      </List>
+      <Avatar sx={{ width: '80%', height: '80%' }} alt={fullname} src={avatar} />
+      <Typography variant="h6" component="div">
+        {fullname}
+      </Typography>
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ alignItems: 'center' }}>
+          <EmailOutlined />
+        </ListItemIcon>
+        <ListItemText primary={email} />
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ alignItems: 'center' }}>
+          <Call />
+        </ListItemIcon>
+        <ListItemText primary={phone} />
+      </ListItem>
     </Box>
   );
 };
 
 
 export const ProfilePage: React.FC = () => {
+
+
+  const [user, setUser] = useState<User | null>(null);
   const items: MenuItem[] = [
     {
       title: 'Quản lý tài khoản',
@@ -143,6 +129,21 @@ export const ProfilePage: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  function getMyInfo() {
+    UserService.getInstance().getMyProfile().then((res: any) => {
+      if (res.status !== 'success') {
+        throw new Error(res.message);
+      }
+      setUser(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  React.useEffect(() => {
+    getMyInfo();
+  }, []);
+
   const [openCollapse, setOpenCollapse] = useState<Record<string, boolean>>({});
 
   const handleCollapseToggle = (title: string) => {
@@ -161,7 +162,8 @@ export const ProfilePage: React.FC = () => {
         display: 'flex',
       }
     }>
-      <UserProfile username="Nguyễn Văn A" posts={10} followers={222} joinDate="01/01/2021" />
+      <UserProfile fullname={user?.first_name == null || user?.last_name == null ? 'Chưa cung cấp' : user?.first_name + ' ' + user?.last_name
+      } avatar={user?.avatar ?? 'https://picsum.photos/200'} email={user?.email ?? 'Chưa cung cấp'} phone={user?.phone ?? 'Chưa cung cấp'} />
       <Divider />
       <List>
         {items.map((item, index) => (
@@ -208,90 +210,102 @@ export const ProfilePage: React.FC = () => {
     </Box>
   );
 
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      {/* <CssBaseline /> */}
-      <AppBar
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          display: { xs: 'flex', sm: 'none' }, // Hide on small screens
-          position: 'fixed',
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Your App Title
-          </Typography>
-        </Toolbar>
-      </AppBar>
+  return user === null ? (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) :
+    (
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        {/* <CssBaseline /> */}
+        <AppBar
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            display: { xs: 'flex', sm: 'none' }, // Hide on small screens
+            position: 'fixed',
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              Your App Title
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
         <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+          >
+            {drawer}
+          </Drawer>
+          <Box
+            sx={{
+              display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+          >
+            {drawer}
+          </Box>
+        </Box>
+        <Divider orientation="vertical" flexItem />
+        <Box
+          component="main"
           sx={{
-            display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          {drawer}
+          {selectedItemKey === 'profile' ? (
+            <div>
+              <h1>Profile</h1>
+            </div>
+          ) : selectedItemKey === 'change-password' ? (
+            <ChangePassword />
+          ) : selectedItemKey === 'my-post' ? (
+            <ModernPostManagement />
+          ) : selectedItemKey === 'saved-post' ? (
+            <PostCreate />
+          ) : selectedItemKey === 'logout' ? (
+            <div>
+              <h1>Logout</h1>
+            </div>
+          ) : (
+
+            <Typography>Diam kasd amet at delenit et justo ut possim feugiat commodo consequat elitr rebum sit clita. Ipsum molestie sit lorem accusam ipsum nulla cum duo commodo eos elitr diam odio quis esse. Duo consetetur clita eirmod stet. Vero sit gubergren aliquyam gubergren illum duis ut sit dolore ut. Qui stet eos duo takimata enim facer duis diam veniam no sea et labore. Aliquyam autem invidunt amet. Diam invidunt placerat ut clita accumsan nonumy justo invidunt quis et wisi ea. Consetetur ullamcorper dolor lorem invidunt ut gubergren nulla accusam stet sadipscing nobis dolor. Iusto et no lorem gubergren labore et dolore possim sanctus takimata. Voluptua dignissim sanctus vel et veniam euismod ipsum. Tempor nonumy iriure lorem ipsum et velit. Vero vero feugiat sit clita dolore sea diam vero. Magna rebum eu et illum elitr tempor sed. Ipsum nonumy nisl magna eos eirmod amet nisl. Delenit lorem euismod justo eirmod lorem clita ad consequat et dolor eos lorem consetetur.</Typography>
+
+          )}
         </Box>
       </Box>
-      <Divider orientation="vertical" flexItem />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        {selectedItemKey === 'profile' ? (
-          <div>
-            <h1>Profile</h1>
-          </div>
-        ) : selectedItemKey === 'change-password' ? (
-          <ChangePassword />
-        ) : selectedItemKey === 'my-post' ? (
-          <ModernPostManagement />
-        ) : selectedItemKey === 'saved-post' ? (
-          <PostCreate />
-        ) : selectedItemKey === 'logout' ? (
-          <div>
-            <h1>Logout</h1>
-          </div>
-        ) : (
-
-          <Typography>Diam kasd amet at delenit et justo ut possim feugiat commodo consequat elitr rebum sit clita. Ipsum molestie sit lorem accusam ipsum nulla cum duo commodo eos elitr diam odio quis esse. Duo consetetur clita eirmod stet. Vero sit gubergren aliquyam gubergren illum duis ut sit dolore ut. Qui stet eos duo takimata enim facer duis diam veniam no sea et labore. Aliquyam autem invidunt amet. Diam invidunt placerat ut clita accumsan nonumy justo invidunt quis et wisi ea. Consetetur ullamcorper dolor lorem invidunt ut gubergren nulla accusam stet sadipscing nobis dolor. Iusto et no lorem gubergren labore et dolore possim sanctus takimata. Voluptua dignissim sanctus vel et veniam euismod ipsum. Tempor nonumy iriure lorem ipsum et velit. Vero vero feugiat sit clita dolore sea diam vero. Magna rebum eu et illum elitr tempor sed. Ipsum nonumy nisl magna eos eirmod amet nisl. Delenit lorem euismod justo eirmod lorem clita ad consequat et dolor eos lorem consetetur.</Typography>
-
-        )}
-      </Box>
-    </Box>
-  );
+    );
 };

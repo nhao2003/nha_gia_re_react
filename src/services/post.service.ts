@@ -104,3 +104,7 @@ export default PostService;
 //   })
 //   .then((res) => console.log(res))
 //   .catch((err) => console.log(err));
+
+PostService.getInstance().getAllPosts({ page: 1, queryParams: {
+  'is_lease[eq]': false,
+} }).then((res) => console.log(res)).catch((err) => console.log(err));

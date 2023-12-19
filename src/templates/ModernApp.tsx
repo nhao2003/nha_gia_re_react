@@ -12,6 +12,7 @@ import ModernPostManagement from './modern/modules/postManagement/ModernPostMana
 import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 import PostCreate from './modern/modules/createpost/PostCreate';
+import { Adsense } from '@ctrl/react-adsense';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
