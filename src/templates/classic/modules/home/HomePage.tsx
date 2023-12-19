@@ -21,6 +21,8 @@ import React from 'react';
 import PostService from '../../../../services/post.service';
 import type RealEstatePost from '../../../../models/RealEstatePost';
 import { PropertyTypes } from '../../../../constants/enums';
+import AddressUtils from '../../../../utils/addressUtils'
+import { ApiServiceBuilder } from '../../../../services/api.service';
 
 function HomePage(): JSX.Element {
   const navigate = useNavigate();
@@ -59,23 +61,47 @@ function HomePage(): JSX.Element {
 
   const endSlice = matches ? 4 : 2;
 
-  const [postPurchase, setPostPurchase] = React.useState<RealEstatePost[]>([]);
+  const [postsPurchase, setPostsPurchase] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
 
-  async function fetchPosts() {
-    // Fake delay
-    try{
-      const query = await PostService.getInstance().getAllPosts({ page: 1, queryParams: {
-        'is_lease[eq]': false,
-      } });
+  const [postsRent, setPostsRent] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
 
-      console.log(query)
-      return query
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page') ?? '1';
 
-    }catch(error){
+  async function fetchPostsPurChase() {
 
-    }
-   
+      const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts?post_is_lease[eq]=' + false)
+      .withParams({
+        page: page
+      })
+      .build();
+      const response = await query.get();
+
+      return response.data as any;
     
+  }
+
+  async function fetchPostsRent() {
+
+    const query = new ApiServiceBuilder()
+    .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+    .withUrl('/posts?post_is_lease[eq]=' + true)
+    .withParams({
+      page: page
+    })
+    .build();
+    const response = await query.get();
+
+    return response.data as any;
+  
 }
 
   const handleClick = () => {
@@ -90,19 +116,57 @@ function HomePage(): JSX.Element {
     // Other styles if needed
   };
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
+  const [isLoadingPostPurchase, setIsLoadingPostPurchase] = React.useState<boolean>(true);
+  const [isLoadingPostRent, setIsLoadingPostRent] = React.useState<boolean>(true);
   React.useEffect(() =>{
-    setIsLoading(true);
-      fetchPosts().then((response : any) => {
+    setIsLoadingPostPurchase(true);
+    setIsLoadingPostRent(true);
+
+    fetchPostsPurChase()
+    .then((response) => {
+        console.log('post', response.result)
+        console.log('post12', typeof response.result)
+
+
         console.log(response);
-           setPostPurchase(response.result as RealEstatePost[])
+        setPostsPurchase({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
+        });
+        console.log('postPurchase', postsPurchase.posts)
         }).catch((error) => {
             console.log(error);
         }).finally(() => {
-            setIsLoading(false);
+          setIsLoadingPostPurchase(false);
+      });
+
+      fetchPostsRent()
+      .then((response) => {
+          console.log('post', response.result)
+          console.log('post12', typeof response.result)
+  
+  
+          console.log(response);
+          setPostsRent({
+            numOfPages: response.num_of_pages,
+            posts: response.result,
+          });
+          console.log('postPurchase', postsPurchase.posts)
+          }).catch((error) => {
+              console.log(error);
+          }).finally(() => {
+            setIsLoadingPostRent(false);
         });
-  }, []);
+
+      // fetchPostsRent().then((result : any) => {
+      //   console.log(result);
+      //      setPostRent(result )
+      //   }).catch((error) => {
+      //       console.log(error);
+      //   }).finally(() => {
+      //     setIsLoadingPostRent(false);
+      // });
+  }, [page]);
 
   return (
     <Stack alignItems={'center'}>
@@ -371,26 +435,27 @@ function HomePage(): JSX.Element {
 
           <Stack direction={'row'} spacing={2}>
 
-            {isLoading ? 
+            {isLoadingPostPurchase ? 
               <CircularProgress/> 
               :
-            postPurchase.slice(0, endSlice).map((post, index) =>
+            postsPurchase.posts.slice(0, endSlice).map((post, index) =>
             {
-            
+              const type = post.type_id === PropertyTypes.motel ? 'Nhà trọ' 
+                : post.type_id === PropertyTypes.house ? 'Nhà ở' 
+                : post.type_id === PropertyTypes.apartment ? 'Căn hộ' 
+                : post.type_id === PropertyTypes.land ? 'Đất' 
+                : 'Văn phòng'
               return (
                 <HomeCard
                 key={index}
                 image= {post.images[0]}
                 title={post.title}  
-                price={post.price}
-                loved={true}
-                address= {post.address_detail!}
-                bedrooms={10}
-                bathrooms={100}
-                areas={post.area}
+                price={`${post.price} VND/m2`}
+                address= {post.address_detail ?? "Chưa cập nhật"}
                 sx={{
                   overflow: 'hidden',
                 }}
+                type= {type}
               />
              )
             }
@@ -431,24 +496,31 @@ function HomePage(): JSX.Element {
           </Stack>
 
           <Stack direction={'row'} spacing={2}>
-            {Array.from(Array(6))
-              .slice(0, endSlice)
-              .map((_, index) => (
+          {isLoadingPostRent ? 
+              <CircularProgress/> 
+              :
+            postsRent.posts.slice(0, endSlice).map((post, index) =>
+            {
+              const type = post.type_id === PropertyTypes.motel ? 'Nhà trọ' 
+                : post.type_id === PropertyTypes.house ? 'Nhà ở' 
+                : post.type_id === PropertyTypes.apartment ? 'Căn hộ' 
+                : post.type_id === PropertyTypes.land ? 'Đất' 
+                : 'Văn phòng;'
+              return (
                 <HomeCard
-                  key={index}
-                  image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
-                  title='Căn hộ cao cấp sân vườn full nội thất'
-                  price={'6 tỷ 599 triệu'}
-                  loved={true}
-                  address='Q5, TP. Hồ Chí Minh'
-                  bedrooms={2}
-                  bathrooms={2}
-                  areas={234}
-                  sx={{
-                    overflow: 'hidden',
-                  }}
-                />
-              ))}
+                key={index}
+                image= {post.images[0]}
+                title={post.title}  
+                price={`${post.price} VND/m2`}
+                address= {post.address_detail ?? "Chưa cập nhật"}
+                sx={{
+                  overflow: 'hidden',
+                }}
+                type= {type}
+              />
+             )
+            }
+           )}
           </Stack>
         </Stack>
       </Stack>

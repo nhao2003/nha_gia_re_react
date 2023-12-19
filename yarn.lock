@@ -8675,12 +8675,12 @@ react-event-listener@^0.6.0:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
-react-horizontal-scrolling-menu@2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-horizontal-scrolling-menu/-/react-horizontal-scrolling-menu-2.7.0.tgz#aa892b89023dfa1726b0b31b2bd264e8ffac89b4"
-  integrity sha512-2Fv5rXdrJ146YWwjkCcAzmtUcMIFa6Pl4VTFs0T01eseudDQj0Kl2IxugKKfq3hgCbEV98qU5leGIC2OHXAoxQ==
+react-horizontal-scrolling-menu@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-horizontal-scrolling-menu/-/react-horizontal-scrolling-menu-4.1.1.tgz#1af2862c085b5c7baf950bfa743bec7feb278905"
+  integrity sha512-IahECLO4ovahv/JWYYJf9AkiAznx/oI7G0zKkiAj9GCJTPp+s+susIFsTSnzWxWhHrnSZ1F6flp2yEbrqoGnVg==
   dependencies:
-    smooth-scroll-into-view-if-needed "^1.1.32"
+    smooth-scroll-into-view-if-needed "~1.1"
 
 react-icons@^4.12.0:
   version "4.12.0"
@@ -9379,7 +9379,7 @@ slash@^4.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-4.0.0.tgz"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
-smooth-scroll-into-view-if-needed@^1.1.32:
+smooth-scroll-into-view-if-needed@~1.1:
   version "1.1.33"
   resolved "https://registry.yarnpkg.com/smooth-scroll-into-view-if-needed/-/smooth-scroll-into-view-if-needed-1.1.33.tgz#2c7b88c82784c69030cb0489b9df584e94e01533"
   integrity sha512-crS8NfAaoPrtVYOCMSAnO2vHRgUp22NiiDgEQ7YiaAy5xe2jmR19Jm+QdL8+97gO8ENd7PUyQIAQojJyIiyRHw==

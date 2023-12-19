@@ -11,32 +11,37 @@ interface PrivateProps {
   image: string;
   price: any;
   title: string;
-  loved: boolean;
   address: string;
-  bedrooms: number;
-  bathrooms: number;
-  areas: number;
+  type: string;
   sx?: object;
 }
 
-export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathrooms, areas, sx }: PrivateProps) => {
+export const HomeCard = ({ image, price, title, address, type, sx }: PrivateProps) => {
   const navigate = useNavigate();
 
   const handlDetailHome = () => {
     navigate('/details');
   };
 
-  return (
+  return (   
     <Stack
       onClick={handlDetailHome}
       direction={'column'}
       sx={{
         ...sx,
         width: '280px',
-        height: 'fit-content',
+        height: '480px',
         borderRadius: '10px',
         border: '2px solid',
         borderColor: CUSTOM_COLOR.grayNobel,
+        transition: 'transform 0.3s ease-in-out', // Add a transition for the transform property
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          transform: 'scale(1.05)', // Scale up on hover
+        },
+        '&:active': {
+          transform: 'scale(0.95)', // Scale down on click
+        },
       }}
     >
       <img
@@ -44,6 +49,8 @@ export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathro
         style={{
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
+          height: '250px',
+          objectFit: 'cover'
         }}
       />
 
@@ -66,32 +73,16 @@ export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathro
         >
           {price}
         </Typography>
-
-        <Stack
-          sx={{
-            border: '2px solid',
-            borderColor: CUSTOM_COLOR.grayNobel,
-            borderRadius: '50px',
-            width: '45px',
-            height: '45px',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <FavoriteBorderIcon
-            sx={{
-              height: '35px',
-              width: '35px',
-            }}
-          />
-        </Stack>
+       
       </Stack>
 
       <Stack
         sx={{
           marginLeft: '20px',
           marginRight: '20px',
-          marginTop: '10px',
+        
+          minHeight: '62px'
+      
         }}
       >
         <Typography
@@ -99,6 +90,10 @@ export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathro
             color: CUSTOM_COLOR.black,
             fontSize: '22px',
             fontWeight: 'bold',
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
           }}
         >
           {title}
@@ -109,13 +104,18 @@ export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathro
         sx={{
           marginLeft: '20px',
           marginRight: '20px',
-          marginTop: '10px',
+          minHeight: '65px'
+      
         }}
       >
         <Typography
           sx={{
             color: CUSTOM_COLOR.grayScorpion,
-            fontSize: '20px',
+            fontSize: '18px',
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
           }}
         >
           {address}
@@ -132,20 +132,16 @@ export const HomeCard = ({ image, price, title, loved, address, bedrooms, bathro
       ></Stack>
 
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-evenly'} padding={1}>
-        <FacilityTag icon={bedroom} value={bedrooms} title={'PN'} />
-
-        <FacilityTag icon={bathroom} value={bathrooms} title={'WC'} />
-
-        <FacilityTag
-          icon={area}
-          value={areas}
-          title={
-            <div>
-              <span>m</span>
-              <sup style={{ fontSize: '12px' }}>2</sup>
-            </div>
-          }
-        />
+      <Typography
+          sx={{
+            color: CUSTOM_COLOR.grayScorpion,
+            fontSize: '20px',
+            display: '-webkit-box',
+           
+          }}
+        >
+          {type}
+        </Typography>
       </Stack>
     </Stack>
   );
