@@ -34,6 +34,7 @@ export function ModernDetailPage(): JSX.Element {
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
 
+  const navigate = useNavigate();
   // Get state
   const [post, setPost] = React.useState<RealEstatePost | null>(useLocation().state as RealEstatePost | null);
   const id = useLocation().pathname.split('/')[2];
