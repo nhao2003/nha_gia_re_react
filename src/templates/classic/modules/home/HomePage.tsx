@@ -63,20 +63,18 @@ function HomePage(): JSX.Element {
 
   async function fetchPosts() {
     // Fake delay
-    try{
-      const query = await PostService.getInstance().getAllPosts({ page: 1, queryParams: {
-        'is_lease[eq]': false,
-      } });
+    try {
+      const query = await PostService.getInstance().getAllPosts({
+        page: 1,
+        queryParams: {
+          'is_lease[eq]': false,
+        },
+      });
 
-      console.log(query)
-      return query
-
-    }catch(error){
-
-    }
-   
-    
-}
+      console.log(query);
+      return query;
+    } catch (error) {}
+  }
 
   const handleClick = () => {
     navigate('/search');
@@ -92,16 +90,19 @@ function HomePage(): JSX.Element {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     setIsLoading(true);
-      fetchPosts().then((response : any) => {
+    fetchPosts()
+      .then((response: any) => {
         console.log(response);
-           setPostPurchase(response.result as RealEstatePost[])
-        }).catch((error) => {
-            console.log(error);
-        }).finally(() => {
-            setIsLoading(false);
-        });
+        setPostPurchase(response.result as RealEstatePost[]);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (
@@ -370,32 +371,28 @@ function HomePage(): JSX.Element {
           </Stack>
 
           <Stack direction={'row'} spacing={2}>
-
-            {isLoading ? 
-              <CircularProgress/> 
-              :
-            postPurchase.slice(0, endSlice).map((post, index) =>
-            {
-            
-              return (
-                <HomeCard
-                key={index}
-                image= {post.images[0]}
-                title={post.title}  
-                price={post.price}
-                loved={true}
-                address= {post.address_detail??"" }
-                bedrooms={10}
-                bathrooms={100}
-                areas={post.area}
-                sx={{
-                  overflow: 'hidden',
-                }}
-              />
-             )
-            }
-           )}
-           
+            {isLoading ? (
+              <CircularProgress />
+            ) : (
+              postPurchase.slice(0, endSlice).map((post, index) => {
+                return (
+                  <HomeCard
+                    key={index}
+                    image={post.images[0]}
+                    title={post.title}
+                    price={post.price}
+                    loved={true}
+                    address={post.address_detail ?? 'Chưa cập nhật'}
+                    bedrooms={10}
+                    bathrooms={100}
+                    areas={post.area}
+                    sx={{
+                      overflow: 'hidden',
+                    }}
+                  />
+                );
+              })
+            )}
           </Stack>
         </Stack>
 
