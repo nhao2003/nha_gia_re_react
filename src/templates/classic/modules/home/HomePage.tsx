@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -16,6 +17,10 @@ import EastIcon from '@mui/icons-material/East';
 import { Area } from './components/Area';
 import { HomeCard } from '../../components/HomeCard';
 import CUSTOM_COLOR from '../../constants/colors';
+import React from 'react';
+import PostService from '../../../../services/post.service';
+import type RealEstatePost from '../../../../models/RealEstatePost';
+import { PropertyTypes } from '../../../../constants/enums';
 
 function HomePage(): JSX.Element {
   const navigate = useNavigate();
@@ -54,6 +59,25 @@ function HomePage(): JSX.Element {
 
   const endSlice = matches ? 4 : 2;
 
+  const [postPurchase, setPostPurchase] = React.useState<RealEstatePost[]>([]);
+
+  async function fetchPosts() {
+    // Fake delay
+    try{
+      const query = await PostService.getInstance().getAllPosts({ page: 1, queryParams: {
+        'is_lease[eq]': false,
+      } });
+
+      console.log(query)
+      return query
+
+    }catch(error){
+
+    }
+   
+    
+}
+
   const handleClick = () => {
     navigate('/search');
   };
@@ -65,6 +89,20 @@ function HomePage(): JSX.Element {
     backgroundRepeat: 'no-repeat', // Adjust as needed
     // Other styles if needed
   };
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() =>{
+    setIsLoading(true);
+      fetchPosts().then((response : any) => {
+        console.log(response);
+           setPostPurchase(response.result as RealEstatePost[])
+        }).catch((error) => {
+            console.log(error);
+        }).finally(() => {
+            setIsLoading(false);
+        });
+  }, []);
 
   return (
     <Stack alignItems={'center'}>
@@ -332,24 +370,32 @@ function HomePage(): JSX.Element {
           </Stack>
 
           <Stack direction={'row'} spacing={2}>
-            {Array.from(Array(6))
-              .slice(0, endSlice)
-              .map((_, index) => (
+
+            {isLoading ? 
+              <CircularProgress/> 
+              :
+            postPurchase.slice(0, endSlice).map((post, index) =>
+            {
+            
+              return (
                 <HomeCard
-                  key={index}
-                  image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
-                  title='Căn hộ cao cấp sân vườn full nội thất'
-                  price={'6 tỷ 599 triệu'}
-                  loved={true}
-                  address='Q5, TP. Hồ Chí Minh'
-                  bedrooms={2}
-                  bathrooms={2}
-                  areas={234}
-                  sx={{
-                    overflow: 'hidden',
-                  }}
-                />
-              ))}
+                key={index}
+                image= {post.images[0]}
+                title={post.title}  
+                price={post.price}
+                loved={true}
+                address= {post.address_detail}
+                bedrooms={10}
+                bathrooms={100}
+                areas={post.area}
+                sx={{
+                  overflow: 'hidden',
+                }}
+              />
+             )
+            }
+           )}
+           
           </Stack>
         </Stack>
 

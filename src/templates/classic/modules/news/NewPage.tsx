@@ -1,11 +1,49 @@
-import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Box, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { NewsPost } from "./components/NewsPost"
 import { NewsTag } from "./components/NewsTag";
+import { ApiServiceBuilder } from '../../../../services/api.service';
+import type Blog from '../../../../models/Blog';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 
 function NewsPage(): JSX.Element {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
+    const navigate = useNavigate();
+
+    const [blogs, setBlogs] = React.useState<{
+        numOfPages: number;
+        blogs: Blog[];
+    }>({ numOfPages: 1, blogs: [] });
+
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+    const searchParams = new URLSearchParams(location.search);
+    const page = searchParams.get('page') ?? '1';
+    async function fetchBlogs() {
+        // Fake delay
+        const query = new ApiServiceBuilder().withUrl('/blogs').withParams({
+            page: page,
+        }).build();
+        const response = await query.get();
+        return (response.data as any);
+    }
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        fetchBlogs().then((response) => {
+            setBlogs({
+                numOfPages: response.num_of_pages,
+                blogs: response.result,
+            });
+        }).catch((error) => {
+            console.log(error);
+        }).finally(() => {
+            setIsLoading(false);
+        });
+    }, [page]);
 
 
     const newstags = [
@@ -29,7 +67,17 @@ function NewsPage(): JSX.Element {
         }
     ]
 
-    return (
+    return isLoading ? <Box
+        sx={{
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}
+    >
+        <CircularProgress />
+    </Box> : (
         <Stack
             width={'100%'}
             height={'fit-content'}
@@ -66,47 +114,25 @@ function NewsPage(): JSX.Element {
 
                     >
 
-                        <NewsPost
-                            image='https://cdnphoto.dantri.com.vn/YsHcZ_WkF1-lKr-en4mX_9dYKm8=/2021/04/30/dji-0788-hdr-panoa-crop-1619717280597.jpeg'
-                            time='30/07/2023 17:15'
-                            user='Nguyễn Văn A'
-                            title=' Đất Nền Giá Rẻ Tăng Giá Và Tăng Thanh Khoản Trong Quý 3/2023'
-                            content='Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá ở Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá rẻ ở'
+                        {blogs.blogs.map((blog, index) => (
+                            <NewsPost
+                                key={index}
+                                id={blog.id}
+                                image={blog.thumbnail}
+                                time={blog.created_at}
+                                user={blog.author}
+                                title={blog.title}
+                                content={blog.short_description}
+                                onClick={(id) => {
+                                    navigate(`/news/${id}`, {
+                                        state: blog,
+                                    })
+                                }}
+                            />
 
-                        />
-                        <NewsPost
-                            image='https://cdnphoto.dantri.com.vn/YsHcZ_WkF1-lKr-en4mX_9dYKm8=/2021/04/30/dji-0788-hdr-panoa-crop-1619717280597.jpeg'
-                            time='30/07/2023 17:15'
-                            user='Nguyễn Văn A'
-                            title=' Đất Nền Giá Rẻ Tăng Giá Và Tăng Thanh Khoản Trong Quý 3/2023'
-                            content='Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá ở Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá rẻ ở'
+                        ))}
 
-                        />
-                        <NewsPost
-                            image='https://cdnphoto.dantri.com.vn/YsHcZ_WkF1-lKr-en4mX_9dYKm8=/2021/04/30/dji-0788-hdr-panoa-crop-1619717280597.jpeg'
-                            time='30/07/2023 17:15'
-                            user='Nguyễn Văn A'
-                            title=' Đất Nền Giá Rẻ Tăng Giá Và Tăng Thanh Khoản Trong Quý 3/2023'
-                            content='Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá ở Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá rẻ ở'
 
-                        />
-                        <NewsPost
-                            image='https://cdnphoto.dantri.com.vn/YsHcZ_WkF1-lKr-en4mX_9dYKm8=/2021/04/30/dji-0788-hdr-panoa-crop-1619717280597.jpeg'
-                            time='30/07/2023 17:15'
-                            user='Nguyễn Văn A'
-                            title=' Đất Nền Giá Rẻ Tăng Giá Và Tăng Thanh Khoản Trong Quý 3/2023'
-                            content='Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá ở Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá rẻ ở'
-
-                        />
-
-                        <NewsPost
-                            image='https://cdnphoto.dantri.com.vn/YsHcZ_WkF1-lKr-en4mX_9dYKm8=/2021/04/30/dji-0788-hdr-panoa-crop-1619717280597.jpeg'
-                            time='30/07/2023 17:15'
-                            user='Nguyễn Văn A'
-                            title=' Đất Nền Giá Rẻ Tăng Giá Và Tăng Thanh Khoản Trong Quý 3/2023'
-                            content='Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá ở Đất nền vốn “chịu” tiếng là nặng tính đầu cơ cũng là loại hình chịu tác động mạnh nhất kể từ khi thị trường lao dốc. Tuy nhiên, cùng với những tín hiệu khởi sắc của thị trường thời gian qua, phân khúc đất nền giá rẻ ở'
-
-                        />
                     </Stack>
 
 
@@ -138,11 +164,11 @@ function NewsPage(): JSX.Element {
                                 }}
                             >Bài viết được xem nhiều nhất</Typography>
 
-                            {newstags.map((news, index) => (
+                            {blogs.blogs.map((blog, index) => (
                                 <NewsTag
                                     key={index}
-                                    index={index}
-                                    title={news.title}
+                                  
+                                    title={blog.title}
                                 />
                             ))}
 

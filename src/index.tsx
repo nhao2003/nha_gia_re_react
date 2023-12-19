@@ -6,7 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { store } from './stores/store';
-import App from './templates/index';
+
+import App from './templates/classic/ClassicApp';
+import ModerApp from './templates/ModernApp';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

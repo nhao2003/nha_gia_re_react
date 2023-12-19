@@ -2,11 +2,11 @@ import { Stack, Typography } from "@mui/material"
 
 interface PrivateProps {
     title: string
-    index: number
+   
 }
 
 
-export const NewsTag = ({ title, index }: PrivateProps) => {
+export const NewsTag = ({ title }: PrivateProps) => {
 
 
     return (
@@ -22,21 +22,13 @@ export const NewsTag = ({ title, index }: PrivateProps) => {
             }}
         >
 
-            <Stack
+          
+
+            <Typography 
                 sx={{
-                    width: '25px',
-                    height: '25px',
-                    borderRadius: '30px',
-                    backgroundColor: '#8EA9D2'
+                    fontWeight: 600
                 }}
-                alignItems={'center'}
-                justifyContent={'center'}
-            >
-                {index}
-
-            </Stack>
-
-            <Typography>{title}</Typography>
+            >{title}</Typography>
 
         </Stack>
 

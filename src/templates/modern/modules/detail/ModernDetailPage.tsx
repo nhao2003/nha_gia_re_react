@@ -1,4 +1,4 @@
-import { Avatar, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -18,61 +18,55 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import EastIcon from '@mui/icons-material/East';
 import React, { useState } from 'react';
-import { HomeCard } from '../../../../templates/classic/components/HomeCard';
-import { useNavigate } from 'react-router-dom';
-import CUSTOM_COLOR from '../../../classic/constants/colors';
-import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Carousel } from '../home/components/Carousel';
 import PostListComponent from '../home/components/PostListComponent';
 import Grid from '@mui/material/Grid';
+import CUSTOM_COLOR from '../../../classic/constants/colors';
+import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
+import type RealEstatePost from '../../../../models/RealEstatePost';
+import { ApiServiceBuilder } from '../../../../services/api.service';
+import dateUtils from '../../../../utils/dateUtils';
 
 export function ModernDetailPage(): JSX.Element {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/search');
-  };
-
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
-  const listImage = [
-    {
-      id: 0,
-      src: 'https://thanhvietcorp.vn/uploads/images/Bao%20chi/cac-mau-nha-vuon-dep.jpg',
-      alt: 'Image 1 for carousel',
-    },
-    {
-      id: 1,
-      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-      alt: 'Image 2 for carousel',
-    },
-    {
-      id: 2,
-      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-      alt: 'Image 3 for carousel',
-    },
-    {
-      id: 3,
-      src: 'https://media.tapchitaichinh.vn/w1480/images/upload/phunganhtuan/2015_07_13/phong-thuy-cho-nha-o-8_CLCV.jpg',
-      alt: 'Image 4 for carousel',
-    },
-    {
-      id: 4,
-      src: 'https://longvan.com.vn/wp-content/uploads/2020/11/mau-nha-cap-3-thiet-ke-dep-nhat-nam-31.jpg',
-      alt: 'Image 5 for carousel',
-    },
-    {
-      id: 5,
-      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-      alt: 'Image 6 for carousel',
-    },
-    {
-      id: 6,
-      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-      alt: 'Image 7 for carousel',
-    },
-  ];
+  const [listImage, setListImage] = useState<ImageInfo[]>([]);
+
+  // Get state
+  const [post, setPost] = React.useState<RealEstatePost | null>(useLocation().state as RealEstatePost | null);
+  const id = useLocation().pathname.split('/')[2];
+  async function fetchPost() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl("/posts?post_id[eq]='" + id + "'")
+      .build();
+    console.log(query);
+    const response = await query.get();
+    return response.data as any;
+  }
+
+  React.useEffect(() => {
+    if (post === null)
+      fetchPost()
+        .then((response) => {
+          setPost(response.result[0]);
+          // Explicitly specify the type of 'response.result[0]'
+          const firstPost = response.result[0] as RealEstatePost | undefined;
+
+          if (firstPost !== undefined) {
+            setPost(firstPost);
+            setListImage(formatImages(firstPost.images));
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    else {
+      setListImage(formatImages(post.images));
+    }
+  }, []);
 
   const [selectImage, setSelectImage] = useState(0);
   const [indexImage, setIndexImage] = useState(0);
@@ -131,7 +125,57 @@ export function ModernDetailPage(): JSX.Element {
     mohinh: 'Cá nhân',
   };
 
-  return (
+  // Get API Relate
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [postsRelate, setPostsRelate] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page') ?? '1';
+  async function fetchPosts() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts')
+      .withParams({
+        page: page,
+        search: post?.title,
+      })
+      .build();
+    console.log(query);
+    const response = await query.get();
+    return response.data as any;
+  }
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchPosts()
+      .then((response) => {
+        setPostsRelate({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [page]);
+
+  return post === null ? (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <Stack alignItems={'center'}>
       <Stack width={'100%'} height={'fit-content'} alignItems={'center'} marginTop={'20px'}>
         <Stack
@@ -174,6 +218,7 @@ export function ModernDetailPage(): JSX.Element {
                     style={{
                       overflow: 'hidden',
                       objectFit: 'cover',
+                      height: '0px',
                     }}
                     src={image.src}
                   />
@@ -250,12 +295,12 @@ export function ModernDetailPage(): JSX.Element {
                   fontSize: '20px',
                 }}
               >
-                {home.title}
+                {post.title}
               </Typography>
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
-                  {home.price} tỷ - {home.area} <span>m</span>
+                  {post.price} tỷ - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
@@ -284,7 +329,7 @@ export function ModernDetailPage(): JSX.Element {
                 }}
               >
                 <LocationOnOutlinedIcon />
-                <Typography>{home.address}</Typography>
+                <Typography>{post.address_detail}</Typography>
               </Stack>
 
               <Stack
@@ -298,7 +343,7 @@ export function ModernDetailPage(): JSX.Element {
                 }}
               >
                 <AccessTimeOutlinedIcon />
-                <Typography>{home.time}</Typography>
+                <Typography>{dateUtils.getTimeAgoVi(post.posted_date)}</Typography>
               </Stack>
 
               <Stack
@@ -456,10 +501,36 @@ export function ModernDetailPage(): JSX.Element {
           display: 'flex',
         }}
       >
-        <Stack direction={'row'} marginBottom={1} justifyContent={'space-between'}>
-          <PostListComponent title={'Bài đăng tương tự'} />
-        </Stack>
+        {isLoading ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PostListComponent title={'Bài đăng tương tự'} posts={postsRelate.posts} />
+        )}
       </Stack>
     </Stack>
   );
 }
+
+interface ImageInfo {
+  id: number;
+  src: string;
+  alt: string;
+}
+
+const formatImages = (images: string[]): ImageInfo[] => {
+  return images.map((image, index) => ({
+    id: index,
+    src: image,
+    alt: `Image ${index + 1} for carousel`,
+  }));
+};

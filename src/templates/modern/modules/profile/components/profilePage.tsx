@@ -23,9 +23,9 @@ import {
   ExpandMore as ExpandMoreIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
-import { ChangePassword } from '../../components/Profile/ChangePassword';
-import ModernPostManagement from '../postManagement/ModernPostManagement';
-import PostCreate from '../../components/Profile/PostCreate';
+import { ChangePassword } from './ChangePassword';
+import ModernPostManagement from '../../postManagement/ModernPostManagement';
+import PostCreate from '../../createpost/PostCreate';
 
 const drawerWidth = '20%';
 
@@ -54,7 +54,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
-      <AccountCircle sx={{ fontSize: 100 }} />
+      
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
         <Typography variant="h6" noWrap component="div">
           {username}
@@ -277,9 +277,7 @@ export const ProfilePage: React.FC = () => {
             <h1>Profile</h1>
           </div>
         ) : selectedItemKey === 'change-password' ? (
-          <ChangePassword onConfirm={function (currentPassword: string, newPassword: string): void {
-            throw new Error('Function not implemented.');
-          }} />
+          <ChangePassword />
         ) : selectedItemKey === 'my-post' ? (
           <ModernPostManagement />
         ) : selectedItemKey === 'saved-post' ? (

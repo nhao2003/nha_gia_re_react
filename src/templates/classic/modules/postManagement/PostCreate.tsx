@@ -12,12 +12,22 @@ import {
     Typography,
     Checkbox,
     FormControlLabel,
+    Stack,
+    type SnackbarOrigin,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { type SxProps, type Theme } from '@mui/system';
 import { ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes, apartmentTypeToString, directionEnumToString, furnitureStatusToString, houseTypeToString, landTypeToString, legalDocumentStatusToString, officeTypeToString } from '../../../../constants/enums';
-import ModernAddressDialog from '../Dialog/ModernAddressDialog';
+import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../services/CreatePostData';
+import AddressDialog from './components/AddressDialog';
 import addressUtils from '../../../../utils/addressUtils';
+import CUSTOM_COLOR from '../../constants/colors';
+import PostService from '../../../../services/post.service';
+import { LoadingButton } from '@mui/lab';
+
+
 export interface FormValues {
     purposeType: string;
     apartmentType: string;
@@ -71,13 +81,7 @@ interface Address {
 const PostCreate: React.FC = () => {
     const maxPrice = 1000000000;
     const minPrice = 0;
-    const minMeter = 0;
-    const maxMeter = 1000000;
-    const minNum = 0;
-    const maxNum = 100;
-
-
-
+    const [area, setArea] = useState<number | null>(null);
     const [propertyType, setPropertyType] = useState<string | null>(null);
     const [purposeType, setPurposeType] = useState<'rent' | 'sell'>('rent');
     const [userType, setUserType] = useState<'personal' | 'proseller'>('personal');
@@ -88,8 +92,8 @@ const PostCreate: React.FC = () => {
     const [furnitureStatus, setFurnitureStatus] = useState<FurnitureStatus | null>(null);
     const [legalDocumentStatus, setLegalDocumentStatus] = useState<LegalDocumentStatus | null>(null);
     const [usedArea, setUsedArea] = useState<number | null>(null);
-    const [width, setWidth] = useState<number | null>(null);
-    const [length, setLength] = useState<number | null>(null);
+    const [mWidth, setWidth] = useState<number | null>(null);
+    const [mLength, setLength] = useState<number | null>(null);
     const [electricityPrice, setElectricityPrice] = useState<number | null>(null);
     const [waterPrice, setWaterPrice] = useState<number | null>(null);
     const [price, setRentPrice] = useState<number | null>(null);
@@ -113,59 +117,47 @@ const PostCreate: React.FC = () => {
     const [block, setBlock] = useState<string>('');
     const [isHandOver, setIsHandOver] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
+    const [snackbar, setSnackBar] = useState<string>('');
     const [addressDialogOpen, setAddressDialogOpen] = useState<boolean>(false);
     const fileInputRef = useRef(null);
     const handleOpenDialog = () => {
         (fileInputRef as any).current.click();
     };
-
     // Handle Error
     const [titleError, setTitleError] = useState<string | null>(null);
     const [descriptionError, setDescriptionError] = useState<string | null>(null);
     const [addressError, setAddressError] = useState<string | null>(null);
-    const [furnitureStatusError, setFurnitureStatusError] = useState<string | null>(null);
-    const [legalDocumentStatusError, setLegalDocumentStatusError] = useState<string | null>(null);
-    const [usedAreaError, setUsedAreaError] = useState<string | null>(null);
-    const [widthError, setWidthError] = useState<string | null>(null);
-    const [lengthError, setLengthError] = useState<string | null>(null);
-    const [electricityPriceError, setElectricityPriceError] = useState<string | null>(null);
-    const [waterPriceError, setWaterPriceError] = useState<string | null>(null);
+    const [areaError, setAreaError] = useState<string | null>(null);
     const [rentPriceError, setPriceError] = useState<string | null>(null);
     const [depositError, setDepositError] = useState<string | null>(null);
     const [mainDirectionError, setMainDirectionError] = useState<string | null>(null);
-    const [isCornerError, setIsCornerError] = useState<string | null>(null);
-    const [isHemError, setIsHemError] = useState<string | null>(null);
-    const [isNoHauError, setIsNoHauError] = useState<string | null>(null);
-    const [isMatTienError, setIsMatTienError] = useState<string | null>(null);
-    const [subdivisionNameError, setSubdivisionNameError] = useState<string | null>(null);
-    const [lotNumberError, setLotNumberError] = useState<string | null>(null);
     const [landTypeError, setLandTypeError] = useState<string | null>(null);
     const [officeTypeError, setOfficeTypeError] = useState<string | null>(null);
     const [apartmentTypeError, setApartmentTypeError] = useState<string | null>(null);
     const [houseTypeError, setHouseTypeError] = useState<string | null>(null);
-    const [numberOfBedroomError, setNumberOfBedroomError] = useState<string | null>(null);
-    const [numberOfBathroomError, setNumberOfBathroomError] = useState<string | null>(null);
-    const [numberOfFloorError, setNumberOfFloorError] = useState<string | null>(null);
-    const [balconyDirectionError, setBalconyDirectionError] = useState<string | null>(null);
-    const [floorError, setFloorError] = useState<string | null>(null);
-    const [blockError, setBlockError] = useState<string | null>(null);
+    const [waterPriceError, setWaterPriceError] = useState<string | null>(null);
+    const [electricityPriceError, setElectricityPriceError] = useState<string | null>(null);
     const [isHandOverError, setIsHandOverError] = useState<string | null>(null);
-
+    interface State extends SnackbarOrigin {
+        isSuccessful: boolean;
+        open: boolean;
+        message: string;
+    }
+    const [state, setState] = React.useState<State>({
+        isSuccessful: false,
+        open: false,
+        vertical: 'top',
+        horizontal: 'center',
+        message: '',
+    });
     const handleValidate = () => {
         let isValid = true;
         if (title.trim().length === 0) {
             setTitleError('Tiêu đề không được để trống');
             isValid = false;
-        } else if (title.trim().length > 100) {
-            setTitleError('Tiêu đề không được quá 100 ký tự');
-            isValid = false;
         }
         if (description.trim().length === 0) {
             setDescriptionError('Mô tả không được để trống');
-            isValid = false;
-        } else if (description.trim().length > 500) {
-            setDescriptionError('Mô tả không được quá 500 ký tự');
             isValid = false;
         }
         if (address.trim().length === 0) {
@@ -175,43 +167,13 @@ const PostCreate: React.FC = () => {
             setAddressError('Địa chỉ không được để trống');
             isValid = false;
         }
-        if (furnitureStatus === null) {
-            setFurnitureStatusError('Tình trạng nội thất không được để trống');
+        if (area === null) {
+            setAreaError('Diện tích không được để trống');
             isValid = false;
         } else
-            setFurnitureStatusError(null);
-        if (legalDocumentStatus === null) {
-            setLegalDocumentStatusError('Tình trạng pháp lý không được để trống');
-            isValid = false;
-        } else
-            setLegalDocumentStatusError(null);
-        if (usedArea === null) {
-            setUsedAreaError('Diện tích không được để trống');
-            isValid = false;
-        } else
-            setUsedAreaError(null);
-        if (width === null) {
-            setWidthError('Chiều ngang không được để trống');
-            isValid = false;
-        } else
-            setWidthError(null);
-        if (length === null) {
-            setLengthError('Chiều dài không được để trống');
-            isValid = false;
-        } else
-            setLengthError(null);
-        if (electricityPrice === null) {
-            setElectricityPriceError('Tiền điện không được để trống');
-            isValid = false;
-        } else
-            setElectricityPriceError(null);
-        if (waterPrice === null) {
-            setWaterPriceError('Tiền nước không được để trống');
-            isValid = false;
-        } else
-            setWaterPriceError(null);
+            setAreaError(null);
         if (price === null) {
-            setPriceError('Giá thuê không được để trống');
+            setPriceError('Giá không được để trống');
             isValid = false;
         } else
             setPriceError(null);
@@ -220,83 +182,77 @@ const PostCreate: React.FC = () => {
             isValid = false;
         } else
             setDepositError(null);
-        if (mainDirection === null) {
-            setMainDirectionError('Hướng chính không được để trống');
-            isValid = false;
-        } else
-            setMainDirectionError(null);
-        if (subdivisionName.trim().length === 0) {
-            setSubdivisionNameError('Tên phân khu không được để trống');
-            isValid = false;
-        } else
-            setSubdivisionNameError(null);
-        if (lotNumber.trim().length === 0) {
-            setLotNumberError('Mã lô không được để trống');
-            isValid = false;
-        } else
-            setLotNumberError(null);
-        if (landType === null) {
+        // if (mainDirection === null && ['house', 'office', 'land'].includes(propertyType ?? '')) {
+        //     setMainDirectionError('Hướng không được để trống');
+        //     isValid = false;
+        // } else
+        //     setMainDirectionError(null);
+        if (landType === null && propertyType === 'land') {
             setLandTypeError('Loại đất không được để trống');
             isValid = false;
         } else
             setLandTypeError(null);
-        if (officeType === null) {
+        if (officeType === null && propertyType === 'office') {
             setOfficeTypeError('Loại văn phòng không được để trống');
             isValid = false;
         } else
             setOfficeTypeError(null);
-        if (apartmentType === null) {
+        if (apartmentType === null && propertyType === 'apartment') {
             setApartmentTypeError('Loại căn hộ không được để trống');
             isValid = false;
         } else
             setApartmentTypeError(null);
-        if (houseType === null) {
+        if (houseType === null && propertyType === 'house') {
             setHouseTypeError('Loại nhà không được để trống');
             isValid = false;
         } else
             setHouseTypeError(null);
-        if (numberOfBedroom === null) {
-            setNumberOfBedroomError('Số phòng ngủ không được để trống');
-            isValid = false;
-        } else
-            setNumberOfBedroomError(null);
-        if (numberOfBathroom === null) {
-            setNumberOfBathroomError('Số phòng vệ sinh không được để trống');
-            isValid = false;
-        } else
-            setNumberOfBathroomError(null);
-        if (numberOfFloor === null) {
-            setNumberOfFloorError('Số tầng không được để trống');
-            isValid = false;
-        } else
-            setNumberOfFloorError(null);
-        if (balconyDirection === null) {
-            setBalconyDirectionError('Hướng ban công không được để trống');
-            isValid = false;
-        } else
-            setBalconyDirectionError(null);
-        if (floor.trim().length === 0) {
-            setFloorError('Tầng không được để trống');
-            isValid = false;
-        } else
-            setFloorError(null);
-        if (block.trim().length === 0) {
-            setBlockError('Block/Tháp không được để trống');
-            isValid = false;
-        } else
-            setBlockError(null);
-        if (isHandOver === null) {
+        if (isHandOver === null && propertyType === 'apartment') {
             setIsHandOverError('Tình trạng bàn giao không được để trống');
             isValid = false;
         } else
             setIsHandOverError(null);
+        if (waterPrice === null && propertyType === 'motel') {
+            setWaterPriceError('Giá nước không được để trống');
+            isValid = false;
+        } else
+
+            setWaterPriceError(null);
+        if (electricityPrice === null && propertyType === 'motel') {
+            setElectricityPriceError('Giá điện không được để trống');
+            isValid = false;
+        }
+        else
+            setElectricityPriceError(null);
         return isValid;
     }
 
     const onSubmit = () => {
+        setLoading(true);
         if (handleValidate()) {
             console.log('Valid');
+            handleCreatePost().then((res) => {
+                console.log(res);
+                // Go to home page
+                if (res) {
+                    setState({ ...state, open: true, message: 'Đăng bài thành công', isSuccessful: true });
+                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                    new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
+                        window.location.href = '/';
+                    });
+                } else {
+                    setState({ ...state, open: true, message: 'Đã có lỗi xảy ra. Vui lòng thử lại sau', isSuccessful: false });
+                }
+            }).catch((err) => {
+                console.log(err);
+                setState({ ...state, open: true, message: 'Đã có lỗi xảy ra. Vui lòng thử lại sau', isSuccessful: false });
+                setLoading(false);
+            });
+
+        } else {
+            console.log('Invalid');
         }
+        setLoading(false);
     }
 
     const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>, setState: React.Dispatch<React.SetStateAction<string | null>>) => {
@@ -308,28 +264,154 @@ const PostCreate: React.FC = () => {
 
 
     // Upload image
-    const [selectedImages, setSelectedImages] = useState<string[]>([]);
-    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
-
-        if (files != null) {
-            const selectedImageUrls = Array.from(files).map((file) =>
-                URL.createObjectURL(file)
-            );
-            setSelectedImages((prevImages) => [...prevImages, ...selectedImageUrls]);
+        if (files !== null) {
+            const newImages = Array.from(files);
+            setSelectedImages((prevImages) => [...prevImages, ...newImages]);
         }
     };
 
     const handleRemoveImage = (imageUrl: string) => {
-        setSelectedImages((prevImages) =>
-            prevImages.filter((image) => image !== imageUrl)
-        );
+        setSelectedImages((prevImages) => prevImages.filter((image) => image.name !== imageUrl));
     };
 
+    function getMotelFeatures(): MotelFeatures {
+        return {
+            water_price: waterPrice,
+            electric_price: electricityPrice,
+            furniture_status: furnitureStatus ?? undefined,
+        };
+    }
+
+    function getLandFeatures(): LandFeatures {
+        const res: LandFeatures = {
+            land_type: landType as LandTypes,
+            land_lot_code: lotNumber,
+            subdivision_name: subdivisionName,
+            is_facade: isMatTien,
+            has_wide_alley: isHem,
+            is_widens_towards_the_back: isNoHau,
+            land_direction: mainDirection ?? undefined,
+            width: mWidth ?? undefined,
+            length: mLength ?? undefined,
+            legal_docment_status: legalDocumentStatus ?? undefined,
+        }
+        return res;
+    }
+
+    function getHouseFeatures(): HouseFeatures {
+        const res: HouseFeatures = {
+            house_type: houseType as HouseTypes,
+            num_of_bed_rooms: numberOfBedroom ?? undefined,
+            num_of_toilets: numberOfBathroom ?? undefined,
+            num_of_floors: numberOfFloor ?? undefined,
+            is_facade: isMatTien,
+            has_wide_alley: isHem,
+            is_widens_towards_the_back: isNoHau,
+            main_door_direction: mainDirection ?? undefined,
+            width: mWidth ?? undefined,
+            length: mLength ?? undefined,
+            area_used: usedArea ?? undefined,
+        }
+        return res;
+    }
+    function getApartmentFeatures(): AparmentFeatures {
+        const res: AparmentFeatures = {
+            furniture_status: furnitureStatus ?? undefined,
+            apartment_type: apartmentType as ApartmentTypes,
+            is_corner: isCorner,
+            is_hand_over: isHandOver,
+            num_of_bed_rooms: numberOfBedroom ?? undefined,
+            num_of_toilets: numberOfBathroom ?? undefined,
+            balcony_direction: balconyDirection ?? undefined,
+            block,
+            floor,
+            legal_document_status: legalDocumentStatus ?? undefined,
+        }
+        return res;
+    }
+
+    function getOfficeFeatures(): OfficeFeatures {
+        const res: OfficeFeatures = {
+            furniture_status: furnitureStatus ?? undefined,
+            office_type: officeType as OfficeTypes,
+            is_facade: isMatTien,
+            main_door_direction: mainDirection ?? undefined,
+            block,
+            floor,
+            legal_docment_status: legalDocumentStatus ?? undefined,
+        }
+        return res;
+    }
+
+    function getFeatures(): MotelFeatures | LandFeatures | HouseFeatures | AparmentFeatures | OfficeFeatures {
+        switch (propertyType) {
+            case 'motel':
+                return getMotelFeatures();
+            case 'land':
+                return getLandFeatures();
+            case 'house':
+                return getHouseFeatures();
+            case 'apartment':
+                return getApartmentFeatures();
+            case 'office':
+                return getOfficeFeatures();
+            default:
+                throw new Error('Invalid property type');
+        }
+    }
+
+    async function handleCreatePost() {
+        const features = getFeatures();
+        const data: PropertyListing = {
+            title,
+            description,
+            address: {
+                province_code: addressDetail?.provinceIndex ?? 1,
+                district_code: addressDetail?.districtIndex ?? 1,
+                ward_code: addressDetail?.wardIndex ?? 1,
+                detail: addressDetail?.detail,
+            },
+            images: selectedImages,
+            price: purposeType === 'rent' ? price : undefined,
+            deposit: purposeType === 'rent' ? deposit : undefined,
+            features,
+            type_id: propertyType as 'apartment' | 'house' | 'land' | 'motel' | 'office',
+            area: area ?? 0,
+            is_lease: false,
+            is_pro_seller: false
+        }
+        try {
+            const reponse = await PostService.getInstance().createPost(data);
+            console.log(reponse);
+            return reponse !== null && (reponse as any).status === 'success';
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Stack alignItems={'center'}
+            marginTop={'20px'}
+        >
+
+       
+<Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingX: '20px', minHeight: '100vh',    width: '100%',
+    maxWidth: '1200px',
+    minWidth: '390px', }}>
+            <Snackbar open={state.open} autoHideDuration={3000} anchorOrigin={{ vertical: state.vertical, horizontal: state.horizontal }} onClose={() => { setSnackBar(''); }}>
+                <Alert onClose={() => {
+                    setState({ ...state, open: false });
+                }} severity={state.isSuccessful ? 'success' : 'error'
+
+                } sx={{ width: '100%' }}>
+                    {state.message}
+                </Alert>
+            </Snackbar>
             <CustomCard>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {purposeTypes.map((option) => (
@@ -368,7 +450,7 @@ const PostCreate: React.FC = () => {
 
             </CustomCard>
             {
-                propertyType !== null &&
+              
                 <>
 
                     <CustomCard>
@@ -406,6 +488,7 @@ const PostCreate: React.FC = () => {
                             }}
                             error={titleError !== null}
                             helperText={titleError}
+                            inputProps={{ maxLength: 250 }}
                         />
                         <TextField
                             id="description"
@@ -417,6 +500,7 @@ const PostCreate: React.FC = () => {
                             onChange={(e) => { setDescription(e.target.value); setDescriptionError(null); }}
                             error={descriptionError !== null}
                             helperText={descriptionError}
+                            inputProps={{ maxLength: 1000 }}
                         />
                     </CustomCard>
                     <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
@@ -440,7 +524,7 @@ const PostCreate: React.FC = () => {
                             error={addressError !== null}
                             helperText={addressError}
                         />
-                        <ModernAddressDialog
+                        <AddressDialog
                             open={addressDialogOpen}
                             onClose={
                                 () => {
@@ -501,26 +585,30 @@ const PostCreate: React.FC = () => {
                                         </Box>
                                     ) :
                                         <Grid container spacing={2}>
-                                            {selectedImages.map((imageUrl) => (
-                                                <Grid item key={imageUrl}>
-                                                    <Paper elevation={3} sx={{ maxWidth: '100px' }}>
-                                                        <Box position="relative" >
-                                                            <img
-                                                                src={imageUrl}
-                                                                alt="Selected"
-                                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                            />
-                                                            <IconButton
-                                                                onClick={() => { handleRemoveImage(imageUrl); }}
-                                                                style={{ position: 'absolute', top: 0, right: 0 }}
-                                                            >
-                                                                <Typography>X</Typography>
-                                                            </IconButton>
-                                                        </Box>
-                                                    </Paper>
+                                            {selectedImages.map((image) => {
+                                                const imageUrl = URL.createObjectURL(image);
 
-                                                </Grid>
-                                            ))}
+                                                return (
+                                                    <Grid item key={imageUrl}>
+                                                        <Paper elevation={3} sx={{ maxWidth: '100px' }}>
+                                                            <Box position="relative" >
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt="Selected"
+                                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                                />
+                                                                <IconButton
+                                                                    onClick={() => { handleRemoveImage(imageUrl); }}
+                                                                    style={{ position: 'absolute', top: 0, right: 0 }}
+                                                                >
+                                                                    <Typography>X</Typography>
+                                                                </IconButton>
+                                                            </Box>
+                                                        </Paper>
+
+                                                    </Grid>
+                                                )
+                                            })}
                                         </Grid>
                                 }
                             </Box>
@@ -689,6 +777,7 @@ const PostCreate: React.FC = () => {
                                     onChange={(e) => {
                                         setMainDirection(e.target.value as Direction);
                                     }}
+
                                 >
                                     {Object.values(Direction).map((direction) => (
                                         <MenuItem key={direction} value={direction}>
@@ -726,6 +815,8 @@ const PostCreate: React.FC = () => {
                                     value={electricityPrice} onChange={(e) => {
                                         setElectricityPrice(Number.parseInt(e.target.value));
                                     }}
+                                    error={electricityPriceError !== null}
+                                    helperText={electricityPriceError}
                                 />
                                 <TextField id="water-price" label="Tiền nước" fullWidth
                                     type='number'
@@ -733,6 +824,8 @@ const PostCreate: React.FC = () => {
                                     value={waterPrice} onChange={(e) => {
                                         setWaterPrice(Number.parseInt(e.target.value));
                                     }}
+                                    error={waterPriceError !== null}
+                                    helperText={waterPriceError}
                                 />
                             </Box>
                         }
@@ -748,11 +841,12 @@ const PostCreate: React.FC = () => {
                                 id="area"
                                 label="Diện tích (m2)"
                                 fullWidth
-                                onChange={(e) => { setUsedArea(Number.parseInt(e.target.value)); }}
+                                onChange={(e) => { setArea(Number.parseInt(e.target.value)); }}
                                 type='number'
                                 inputProps={{ min: 0 }}
-                                error={usedAreaError !== null}
-                                helperText={usedAreaError}
+                                error={areaError !== null}
+                                helperText={areaError}
+                                value={area}
                             />
                             <TextField
                                 id="price"
@@ -788,7 +882,7 @@ const PostCreate: React.FC = () => {
                                     id="width"
                                     label="Chiều ngang (m)"
                                     fullWidth
-                                    value={width} onChange={(e) => { setWidth(Number.parseInt(e.target.value)); }}
+                                    value={mWidth} onChange={(e) => { setWidth(Number.parseInt(e.target.value)); }}
                                     type='number'
                                     inputProps={{ min: 0 }}
                                 />
@@ -905,18 +999,19 @@ const PostCreate: React.FC = () => {
                             />} label="Mặt tiền" />
                         }
                     </CustomCard>
-                    <Button
+                    <LoadingButton
                         variant="contained"
                         onClick={() => { onSubmit(); }}
                         sx={{ backgroundColor: '#026D4D', color: '#FFFFFF' }}
                         fullWidth
+                        loading={loading}
                     >
                         Đăng bài
-                    </Button>
+                    </LoadingButton>
                 </>
             }
         </Box>
+        </Stack>
     );
 };
-
 export default PostCreate;
