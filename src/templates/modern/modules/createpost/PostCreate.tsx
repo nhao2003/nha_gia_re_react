@@ -878,7 +878,7 @@ const PostCreate: React.FC = () => {
                                     id="length"
                                     label="Chiều dài (m)"
                                     fullWidth
-                                    value={length} onChange={(e) => { setLength(Number.parseInt(e.target.value)); }}
+                                    value={mLength} onChange={(e) => { setLength(Number.parseInt(e.target.value)); }}
                                     type='number'
                                     inputProps={{ min: 0 }}
 

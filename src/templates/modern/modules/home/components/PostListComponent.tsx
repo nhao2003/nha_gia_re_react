@@ -1,17 +1,24 @@
 import { Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import EastIcon from '@mui/icons-material/East';
-import { HomeCard } from '../../../../classic/components/HomeCard';
 import { PostNewCard } from './PostNewCard';
+import type RealEstatePost from '../../../../../models/RealEstatePost';
+import './arrowsOnBottomOrTop.css';
+import './hideScrollbar.css';
+import './globalStyles.css';
+import React from 'react';
+import { ScrollMenu } from 'react-horizontal-scrolling-menu';
+import usePreventBodyScroll from './usePreventBodyScroll';
+import { useNavigate } from 'react-router-dom';
 
 interface PostListComponentProps {
   title: string;
+  posts: RealEstatePost[];
 }
 
-const PostListComponent = ({ title }: PostListComponentProps) => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up(950));
-  const endSlice = matches ? 4 : 2;
+const PostListComponent = ({ title, posts }: PostListComponentProps) => {
+  const { disableScroll, enableScroll } = usePreventBodyScroll();
+  const navigate = useNavigate();
 
   return (
     <Stack
@@ -45,25 +52,50 @@ const PostListComponent = ({ title }: PostListComponentProps) => {
         </Stack>
       </Stack>
 
-      <Stack direction={'row'} spacing={2}>
-        {Array.from(Array(6))
-          .slice(0, endSlice)
-          .map((_, index) => (
-            <PostNewCard
-              key={index}
-              image='https://static.asianpaints.com/content/dam/asian_paints/blog/wood/benefits-of-wooden-furniture/image-1-asian-paints-m.jpeg'
-              title='Căn hộ cao cấp sân vườn full nội thất'
-              price={'11.900.000đ/căn'}
-              address='Q5, TP. Hồ Chí Minh'
-              time='1 ngày trước'
-              sx={{
-                overflow: 'hidden',
-              }}
-            />
-          ))}
-      </Stack>
+      <div className='posts' style={{ paddingTop: '10px' }}>
+        <div onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
+          <ScrollMenu onWheel={onWheel}>
+            {posts.map((post, index) => (
+              <div key={index} style={{ padding: '10px' }}>
+                <PostNewCard
+                  key={index}
+                  itemId={post.id}
+                  image={post.images[0]}
+                  title={post.title}
+                  price={`${post.price}VNĐ/m2`}
+                  address={post.address_detail ?? 'Chưa cập nhật'}
+                  time='1 ngày trước'
+                  sx={{
+                    overflow: 'hidden',
+                  }}
+                  onClick={() => {
+                    navigate(`/details/${post.id}`, {
+                      state: post,
+                    });
+                  }}
+                />
+              </div>
+            ))}
+          </ScrollMenu>
+        </div>
+      </div>
     </Stack>
   );
 };
 
 export default PostListComponent;
+
+function onWheel(apiObj: any, ev: React.WheelEvent<Element>) {
+  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+
+  if (isThouchpad) {
+    ev.stopPropagation();
+    return;
+  }
+
+  if (ev.deltaY < 0) {
+    apiObj.scrollNext();
+  } else if (ev.deltaY > 0) {
+    apiObj.scrollPrev();
+  }
+}
