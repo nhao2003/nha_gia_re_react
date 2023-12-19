@@ -1,4 +1,4 @@
-import type {  ApartmentTypes, Direction, FurnitureStatus, LandTypes, LegalDocumentStatus } from '../constants/enums';
+import type {  ApartmentTypes, Direction, FurnitureStatus, HouseTypes, LandTypes, LegalDocumentStatus, OfficeTypes } from '../constants/enums';
 import type Address from '../models/address';
 
 interface MotelFeatures {
@@ -22,7 +22,7 @@ interface AparmentFeatures {
 }
 interface OfficeFeatures {
   furniture_status?: FurnitureStatus;
-  office_type: string;
+  office_type: OfficeTypes;
   is_facade?: boolean;
   main_door_direction?: Direction;
   block?: string;
@@ -33,7 +33,7 @@ interface OfficeFeatures {
 }
 interface HouseFeatures {
   furniture_status?: FurnitureStatus;
-  house_type: string;
+  house_type: HouseTypes;
   is_facade?: boolean;
   has_wide_alley?: boolean;
   is_widens_towards_the_back?: boolean;

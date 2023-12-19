@@ -10,14 +10,13 @@ import { store } from './stores/store';
 import App from './templates/classic/ClassicApp';
 import ModerApp from './templates/ModernApp';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path='/*' element={<ModerApp />} />
+          <Route path='/*' element={<App />} />
         </Routes>
       </BrowserRouter>
     </Provider>
