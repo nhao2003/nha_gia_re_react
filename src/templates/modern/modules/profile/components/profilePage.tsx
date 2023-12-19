@@ -54,7 +54,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
-      <AccountCircle sx={{ fontSize: 100 }} />
+      
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
         <Typography variant="h6" noWrap component="div">
           {username}
