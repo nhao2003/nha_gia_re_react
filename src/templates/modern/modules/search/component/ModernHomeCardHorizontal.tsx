@@ -28,15 +28,26 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
         borderRadius: '10px',
       }}
     >
-      <img
-        src={image}
+      <div
         style={{
           borderRadius: '10px',
           width: '200px',
           height: '150px',
-          objectFit: 'cover',
+          overflow: 'hidden',
         }}
-      />
+      >
+        <img
+          src={image}
+          style={{
+            borderRadius: '10px',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
+          }}
+        />
+      </div>
 
       <Stack
         direction={'column'}
