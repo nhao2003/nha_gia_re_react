@@ -12,6 +12,7 @@ import ModernPostManagement from './modern/modules/postManagement/ModernPostMana
 import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
 import PostCreate from './modern/modules/createpost/PostCreate';
+import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
@@ -20,7 +21,7 @@ function App(): JSX.Element {
         {/* public route */}
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/details/:id' element={<ModernDetailPage />} />
-
+        <Route path='/search' element={<ModernSearchPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/signin' element={<ModernSignInPage />} />
         <Route path='/signup' element={<ModernSignUpPage />} />

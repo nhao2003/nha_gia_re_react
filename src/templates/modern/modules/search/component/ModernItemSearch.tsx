@@ -1,13 +1,10 @@
 import {
   Box,
   Breadcrumbs,
-  FormControl,
   Link,
   List,
   ListItemButton,
   ListItemText,
-  MenuItem,
-  Select,
   Stack,
   Tab,
   Typography,
@@ -16,13 +13,14 @@ import {
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import React from 'react';
-import { TabPanelSearch } from './TabPanelSearch';
-import { ListItemFilter } from './ListItemFilter';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import CUSTOM_COLOR from '../../../constants/colors';
+import CUSTOM_COLOR from '../../../../classic/constants/colors';
+import { ListItemFilter } from '../../../../classic/modules/search/components/ListItemFilter';
+import { ModernTabPanelSearch } from './ModernTabPanelSearch';
 
-export const ItemSearch = () => {
+export const ModernItemSearch = () => {
   const theme = useTheme();
+  const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
 
   const [open, setOpen] = React.useState(true);
@@ -84,7 +82,7 @@ export const ItemSearch = () => {
             <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label='tab dbs'>
                 <Tab
-                  label='Tất cả'
+                  label='Liên quan'
                   value='1'
                   sx={{
                     textTransform: 'none',
@@ -92,53 +90,20 @@ export const ItemSearch = () => {
                   }}
                 />
                 <Tab
-                  label='Cá nhân'
+                  label='Tin mới nhất'
                   value='2'
                   sx={{
                     textTransform: 'none',
                     fontSize: '18px',
                   }}
                 />
-                <Tab
-                  label='Môi giới'
-                  value='3'
-                  sx={{
-                    textTransform: 'none',
-                    fontSize: '18px',
-                  }}
-                />
               </TabList>
-
-              <FormControl
-                sx={{
-                  marginRight: '25px',
-                  width: '15%',
-                }}
-              >
-                <Select
-                  sx={{
-                    borderRadius: '10px',
-                    height: '45px',
-                  }}
-                  defaultValue='Tin mới nhất'
-                  displayEmpty
-                  renderValue={(value) => {
-                    console.log(value);
-                    return <Box sx={{ display: 'flex', gap: 1 }}>{value}</Box>;
-                  }}
-                >
-                  <MenuItem value={'Tin mới nhất'}>Tin mới nhất</MenuItem>
-                </Select>
-              </FormControl>
             </Stack>
             <TabPanel value='1'>
-              <TabPanelSearch />
+              <ModernTabPanelSearch />
             </TabPanel>
             <TabPanel value='2'>
-              <TabPanelSearch />
-            </TabPanel>
-            <TabPanel value='3'>
-              <TabPanelSearch />
+              <ModernTabPanelSearch />
             </TabPanel>
           </TabContext>
         </Box>
