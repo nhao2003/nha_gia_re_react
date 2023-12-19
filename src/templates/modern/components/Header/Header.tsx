@@ -5,7 +5,6 @@ import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/images/logo_app.png';
-import { Helmet } from 'react-helmet';
 
 const Header: React.FC = () => {
   const theme = useTheme();

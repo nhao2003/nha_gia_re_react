@@ -1,4 +1,5 @@
 import addressJson from '../assets/address.json';
+import type Address from '../models/address';
 
 export interface Province {
   name: string;
@@ -81,11 +82,11 @@ class AddressUtils {
   };
 
   public getDistrict(provinceCode: number, districtCode: number): District | null {
-    return (this.districts[provinceCode] ?? null)[districtCode] ?? null;
+    return this.districts[provinceCode]?.[districtCode] ?? null;
   }
 
   public getWard(provinceCode: number, districtCode: number, wardCode: number): Ward | null {
-    return ((this.wards[provinceCode] ?? null)[districtCode] ?? null)[wardCode] ?? null;
+    return this.wards[provinceCode]?.[districtCode]?.[wardCode] ?? null;
   }
 
   public getProvinces(): Province[] {
@@ -106,6 +107,14 @@ class AddressUtils {
     const ward = this.getWard(provinceCode, districtCode, wardCode);
     if (province != null && district != null && ward != null) {
       return `${ward.name}, ${district.name}, ${province.name}`;
+    }
+    return null;
+  }
+
+  public getDetail(address: Address): string | null {
+    const detailedAddress = this.getDetailedAddress(address.province_code, address.district_code, address.ward_code);
+    if (detailedAddress != null) {
+      return `${address.detail !== null && address.detail !== undefined ? address.detail + ', ' : ''} ${detailedAddress}`;
     }
     return null;
   }

@@ -11,10 +11,11 @@ interface PrivateProps {
   avatar: string;
   name: string;
   time: any;
+  onClick?: () => void;
 }
 
 export const ModernHomeCardHorizontal = (props: PrivateProps) => {
-  const { image, price, title, address, type, avatar, name, time } = props;
+  const { image, price, title, address, type, avatar, name, time, onClick } = props;
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up(800));
@@ -22,21 +23,33 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
   return (
     <Stack
       direction={'row'}
+      onClick={onClick}
       sx={{
         boxShadow: '2px 2px 5px 0px rgba(0, 0, 0, 0.5)',
         padding: '10px',
         borderRadius: '10px',
       }}
     >
-      <img
-        src={image}
+      <div
         style={{
           borderRadius: '10px',
           width: '200px',
           height: '150px',
-          objectFit: 'cover',
+          overflow: 'hidden',
         }}
-      />
+      >
+        <img
+          src={image}
+          style={{
+            borderRadius: '10px',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
+          }}
+        />
+      </div>
 
       <Stack
         direction={'column'}

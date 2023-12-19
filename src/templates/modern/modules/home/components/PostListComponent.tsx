@@ -72,6 +72,7 @@ const PostListComponent = ({ title, posts }: PostListComponentProps) => {
                     navigate(`/details/${post.id}`, {
                       state: post,
                     });
+                    navigate(0);
                   }}
                 />
               </div>

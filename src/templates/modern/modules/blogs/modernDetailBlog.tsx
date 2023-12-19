@@ -1,14 +1,10 @@
 import { CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ModernNewsTag } from './components/modernNewsTag';
-import { MordernBlogCard } from './components/modernBlogCard';
 import { Box } from '@mui/system';
-import DOMPurify from 'dompurify';
 import { HtmlContent } from './components/HtmlContent';
 import { useLocation } from 'react-router-dom';
 import type Blog from '../../../../models/Blog';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 import React from 'react';
-import { Adsense } from '@ctrl/react-adsense';
 function ModernDetailBlogPage(): JSX.Element {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -146,10 +142,6 @@ function ModernDetailBlogPage(): JSX.Element {
                             </Stack>
 
                         </Stack> */}
-                        <Adsense
-                            client='ca-pub-6296322788342979'
-                            slot='3475600179'                            
-                        />
                     </Stack>
 
                 </Stack>

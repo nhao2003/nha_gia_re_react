@@ -9,7 +9,6 @@ import { store } from './stores/store';
 
 import App from './templates/classic/ClassicApp';
 import ModerApp from './templates/ModernApp';
-import { Helmet } from 'react-helmet';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

@@ -4,10 +4,11 @@ import type RealEstatePost from '../../../../../models/RealEstatePost';
 import React from 'react';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import dateUtils from '../../../../../utils/dateUtils';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function ModernTabPanelSearch(): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [posts, setPosts] = React.useState<{
     numOfPages: number;
@@ -16,12 +17,15 @@ export function ModernTabPanelSearch(): JSX.Element {
 
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get('page') ?? '1';
+  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
+
   async function fetchPosts() {
     const query = new ApiServiceBuilder()
       .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
       .withUrl('/posts')
       .withParams({
         page: page,
+        q: searchTerm,
       })
       .build();
     const response = await query.get();
@@ -67,9 +71,14 @@ export function ModernTabPanelSearch(): JSX.Element {
             price={post.price + 'VNĐ'}
             address={post.address_detail ?? 'Chưa cập nhật'}
             type={'personal'}
-            avatar={'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
-            name={'Nguyễn Van A'}
+            avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
+            name={post.user.first_name + ' ' + post.user.last_name}
             time={dateUtils.getTimeAgoVi(post.posted_date)}
+            onClick={() => {
+              navigate(`/details/${post.id}`, {
+                state: post,
+              });
+            }}
           />
         </Grid>
       ))}
@@ -86,7 +95,8 @@ export function ModernTabPanelSearch(): JSX.Element {
           size='large'
           defaultPage={parseInt(page)}
           onChange={(event, page) => {
-            navigate(`/search?page=${page}`);
+            // navigate(`/search?page=${page}`);
+            navigate(`/search?page=${page}&q=${encodeURIComponent(searchTerm)}`);
           }}
         />
       </Stack>
