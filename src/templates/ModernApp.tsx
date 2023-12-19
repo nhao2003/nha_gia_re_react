@@ -17,6 +17,10 @@ import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage'
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
+      <Adsense
+        client='ca-pub-6296322788342979'
+        slot='3475600179'
+      />
       <Routes>
         <Route path='/' element={<ModernHomePage />} />
         {/* public route */}
