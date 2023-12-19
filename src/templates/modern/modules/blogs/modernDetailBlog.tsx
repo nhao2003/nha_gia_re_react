@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import type Blog from '../../../../models/Blog';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 import React from 'react';
+import { Adsense } from '@ctrl/react-adsense';
 function ModernDetailBlogPage(): JSX.Element {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -24,35 +25,15 @@ function ModernDetailBlogPage(): JSX.Element {
     React.useEffect(() => {
 
         if (blog === null)
-         fetchBlog().then((response) => {
-            console.log(response);
-            setBlog(response.result[0]);
-        }).catch((error) => {
-            console.log(error);
-        });
+            fetchBlog().then((response) => {
+                console.log(response);
+                setBlog(response.result[0]);
+            }).catch((error) => {
+                console.log(error);
+            });
 
     }, []);
 
-    const newstags = [
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        },
-        {
-            title: 'Thị Trường BĐS Vùng Ven Đang Ấm Trở Lại'
-        },
-        {
-            title: 'Căn Hộ Chung Cư Tiếp Tục Dẫn Sóng Thị Trường BĐS'
-        },
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        },
-        {
-            title: 'Căn Hộ Chung Cư Tiếp Tục Dẫn Sóng Thị Trường BĐS'
-        },
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        }
-    ]
 
     return blog === null ? (
         <Box sx={{
@@ -126,7 +107,7 @@ function ModernDetailBlogPage(): JSX.Element {
 
                         </Stack>
 
-                        <Stack
+                        {/* <Stack
                             display={matches ? 'block' : 'none'}
                             width={'30%'}
 
@@ -164,8 +145,11 @@ function ModernDetailBlogPage(): JSX.Element {
 
                             </Stack>
 
-                        </Stack>
-
+                        </Stack> */}
+                        <Adsense
+                            client='ca-pub-6296322788342979'
+                            slot='3475600179'                            
+                        />
                     </Stack>
 
                 </Stack>

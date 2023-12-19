@@ -8,6 +8,7 @@ interface PostCardProps {
     title: string;
     address: string;
     expiredDate?: Date;
+    info_message?: string | null;
 }
 
 const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
@@ -19,7 +20,7 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
             case 'pending':
                 return 'Đang chờ duyệt';
             case 'rejected':
-                return 'Bị từ chối';
+                return post?.info_message?? 'Bị từ chối';
             default:
                 return 'Đang chờ duyệt';
         }

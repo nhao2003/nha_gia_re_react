@@ -104,6 +104,7 @@ function HomePage(): JSX.Element {
   
 }
 
+
   const handleClick = () => {
     navigate('/search');
   };
@@ -115,6 +116,7 @@ function HomePage(): JSX.Element {
     backgroundRepeat: 'no-repeat', // Adjust as needed
     // Other styles if needed
   };
+
 
   const [isLoadingPostPurchase, setIsLoadingPostPurchase] = React.useState<boolean>(true);
   const [isLoadingPostRent, setIsLoadingPostRent] = React.useState<boolean>(true);
@@ -167,6 +169,7 @@ function HomePage(): JSX.Element {
       //     setIsLoadingPostRent(false);
       // });
   }, [page]);
+
 
   return (
     <Stack alignItems={'center'}>
@@ -461,6 +464,7 @@ function HomePage(): JSX.Element {
             }
            )}
            
+
           </Stack>
         </Stack>
 

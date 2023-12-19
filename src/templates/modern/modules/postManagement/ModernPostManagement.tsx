@@ -232,6 +232,7 @@ export default function ModernPostManagement() {
                   title={item.title}
                   address={item.address.detail ?? "Rỗng"}
                   expiredDate={new Date()}
+                  info_message={item.info_message}
                 />
               </Grid>
             ))}

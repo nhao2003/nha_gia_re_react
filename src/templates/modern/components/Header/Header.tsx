@@ -5,6 +5,7 @@ import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/images/logo_app.png';
+import { Helmet } from 'react-helmet';
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -52,6 +53,7 @@ const Header: React.FC = () => {
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
       }}
     >
+
       <Stack direction={'row'} spacing={2} marginLeft={2} alignItems={'center'}>
         <Button
           sx={{
