@@ -1,5 +1,11 @@
 import { PropertyTypes } from '../constants/enums';
-import { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures } from '../services/CreatePostData';
+import {
+  AparmentFeatures,
+  HouseFeatures,
+  LandFeatures,
+  MotelFeatures,
+  OfficeFeatures,
+} from '../services/CreatePostData';
 import type Address from './address';
 
 interface RealEstatePost {
@@ -14,7 +20,6 @@ interface RealEstatePost {
   area: number;
   address: Address;
   address_point: string | null;
-  address_detail: string;
   price: number;
   deposit: number | null;
   is_lease: boolean;
