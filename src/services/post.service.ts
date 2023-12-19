@@ -46,7 +46,7 @@ class PostService {
 
   async createPost(post: PropertyListing) {
     const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImFlZmM4MTU5LTcwMjItNDBjMS05MTE1LWRiMTVkYzcwN2Y4ZiIsImlhdCI6MTcwMjg3OTMxMCwiZXhwIjoxNzAyOTY1NzEwfQ.VMudaCGdkZwIUNKS2RlrD6RBaXIwZeqj4WGqGEZ8dVg';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImJmZWY5N2UyLWNlMDMtNDhkMS05YjQ3LTBlNWRjZjM2YzhkNyIsImlhdCI6MTcwMjk2OTc5NiwiZXhwIjoxNzAzMDU2MTk2fQ.VlxHj2HFSiiYSsYWUNVp6Hmhz6nqqyUKopxyZQHF5m8';
 
     const images = post.images;
     const uploadImages = await mediaServices.uploadFiles(images);
@@ -104,3 +104,4 @@ export default PostService;
 //   })
 //   .then((res) => console.log(res))
 //   .catch((err) => console.log(err));
+
