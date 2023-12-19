@@ -17,9 +17,9 @@ interface AppResponse {
 }
 class PostService {
   private static instance: PostService;
-  private readonly api: ApiServiceBuilder;
-  private constructor() {
-    this.api = new ApiServiceBuilder();
+
+  api() : ApiServiceBuilder{
+    return new ApiServiceBuilder();
   }
 
   public static getInstance(): PostService {
@@ -32,7 +32,7 @@ class PostService {
 
   async getAllPosts({ page = 1, queryParams = null, headers = null }: GetProps): Promise<AppResponse> {
     try {
-      const response = await this.api
+      const response = await this.api()
         .withUrl('/posts')
         .withParams({ page, ...(queryParams ?? {}) })
         .withHeaders(headers ?? {})
@@ -50,7 +50,7 @@ class PostService {
     const images = post.images;
     const uploadImages = await mediaServices.uploadFiles(images);
     post.images = uploadImages;
-    const response = await this.api
+    const response = await this.api()
       .withUrl('/posts/create')
       .withBody(post)
       .withHeaders({
@@ -62,11 +62,25 @@ class PostService {
   }
 
   async updatePost(id: string, post: Partial<PropertyListing>) {
-    const response = await this.api
+    const response = await this.api()
       .withUrl('/posts/' + id)
       .withBody(post)
       .build()
       .patch();
+    return response.data ?? null;
+  }
+
+  async deletePost(id: string) {
+    const accessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImY4NDcyZWJiLTk5OWItNGIyNi04YTkwLTE5ZjcxZTI5Mjk2YSIsImlhdCI6MTcwMzAwNDI5NCwiZXhwIjoxNzA1NTk2Mjk0fQ.Zt5v6ES-fage9sLz-QRiBTN-0fTNXHp4Q7PnMO6XVFs';
+    const response = await this.api()
+      .withUrl('/posts/' + id)
+      .withHeaders({ 
+        Authorization: `Bearer ${accessToken}`,
+      })
+      .build()
+      .delete();
+    console.log(response);
     return response.data ?? null;
   }
 }
