@@ -14,9 +14,10 @@ import { Helmet } from 'react-helmet';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <Helmet>
-      <meta name="google-adsense-account" content="ca-pub-6296322788342979" />
-    </Helmet>
+    <div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6296322788342979"
+        crossOrigin="anonymous"></script>
+    </div>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
