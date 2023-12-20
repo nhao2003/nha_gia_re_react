@@ -74,7 +74,6 @@ const ModernSignInPage = () => {
     login()
       .then((response) => {
         if (response.status === 'success') {
-          console.log(response);
           localStorage.setItem('token', response.result.access_token);
           setSuccess(response.message);
 
@@ -87,7 +86,7 @@ const ModernSignInPage = () => {
 
           // navigate('/auth-update-profile');
         } else if (response.status === 'fail') {
-          setError('Email hoặc mật khẩu không đúng');
+          setError(response.message);
           setIsLoading(false);
         }
       })
@@ -115,6 +114,7 @@ const ModernSignInPage = () => {
           <Alert
             sx={{
               width: '100%',
+              marginTop: 2,
             }}
             severity='error'
           >
@@ -133,10 +133,14 @@ const ModernSignInPage = () => {
               onChange={emailChangeHandler}
               isError={emailError !== ''}
             />
-            {emailError !== '' && <label htmlFor='email'>{emailError}</label>}
+            {emailError !== '' && (
+              <label className={classes.error} htmlFor='email'>
+                {emailError}
+              </label>
+            )}
           </div>
           <div className={classes.input}>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='password'>Mật khẩu</label>
             <InputField
               id='password'
               value={password}

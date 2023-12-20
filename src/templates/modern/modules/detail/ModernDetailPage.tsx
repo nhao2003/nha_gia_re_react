@@ -125,8 +125,6 @@ export function ModernDetailPage(): JSX.Element {
     mohinh: 'Cá nhân',
   };
 
-  const navigate = useNavigate();
-
   const navigateToProfile = () => {
     if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
   };
