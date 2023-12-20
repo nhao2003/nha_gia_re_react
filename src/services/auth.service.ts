@@ -62,7 +62,7 @@ class AuthService {
     return response.data.result.access_token;
   }
 
-  private async getAccessToken(): Promise<string | null> {
+  public async getAccessToken(): Promise<string | null> {
     const accessToken = localStorage.getItem('access_token');
     return accessToken;
   }
@@ -101,8 +101,13 @@ class AuthService {
     message: string;
   }> {
     // Change password
-    const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImFlZmM4MTU5LTcwMjItNDBjMS05MTE1LWRiMTVkYzcwN2Y4ZiIsImlhdCI6MTcwMjg3OTMxMCwiZXhwIjoxNzAyOTY1NzEwfQ.VMudaCGdkZwIUNKS2RlrD6RBaXIwZeqj4WGqGEZ8dVg';
+    const accessToken = await this.getAccessToken();
+    if (accessToken === null) {
+      return {
+        status: false,
+        message: 'Bạn chưa đăng nhập',
+      };
+    }
     const changePassword = this.api()
       .withUrl('/auth/change-password')
       .withBody({
