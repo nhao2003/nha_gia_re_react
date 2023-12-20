@@ -45,6 +45,10 @@ const Header: React.FC = () => {
     navigate('/post_create');
   };
 
+  const handlePersonalPage = () => {
+    navigate('/personal');
+  };
+
   return (
     // <AppBar position='static'>
     //   <Toolbar>
@@ -108,17 +112,11 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none'
           }}
-        >Mua bán</Button>
+          onClick={handleHome}
+        >Trang Chủ</Button>
 
 
-        <Button variant="text"
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            display: matches1440 ? 'block' : 'none'
-          }}
-        >Cho thuê</Button>
+      
 
         <Button variant="text"
           sx={{
@@ -130,16 +128,16 @@ const Header: React.FC = () => {
           onClick={handleNews}
         >Tin tức</Button>
 
-        <Button variant="text"
+
+<Button variant="text"
           sx={{
             color: CUSTOM_COLOR.black,
             fontWeight: 'bold',
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none'
           }}
-        >Hỏi đáp</Button>
-
-
+          onClick={handlePersonalPage}
+        >Hồ Sơ</Button>
 
       </Stack>
 
@@ -212,14 +210,7 @@ const Header: React.FC = () => {
             }}
           >Tin tức</Button>
 
-          <Button variant="text"
-            sx={{
-              color: CUSTOM_COLOR.black,
-              fontWeight: 'bold',
-              fontSize: '16px',
-              // display: matches1440 ? 'block' : 'none'
-            }}
-          >Hỏi đáp</Button>
+          
           <Button variant="text"
             sx={{
               color: CUSTOM_COLOR.black,
@@ -262,18 +253,7 @@ const Header: React.FC = () => {
         marginRight={2}
       >
 
-        <NotificationsNoneIcon
-          sx={{
-            width: '30px',
-            height: '30px'
-          }}
-        />
-        <ForumOutlinedIcon
-          sx={{
-            width: '30px',
-            height: '30px'
-          }}
-        />
+     
 
         <Button variant="contained"
           style={{

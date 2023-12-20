@@ -106,9 +106,14 @@ function HomePage(): JSX.Element {
 }
 
 
-  const handleClick = () => {
+  const handleClickSearch = () => {
     navigate('/search');
   };
+
+  const handleClickNews = () => {
+    navigate('/news');
+  };
+
 
   const stackStyle = {
     backgroundImage: `url(${tom_rumble})`,
@@ -204,7 +209,7 @@ function HomePage(): JSX.Element {
             }}
           >
             <OutlinedInput
-              onClick={handleClick}
+              onClick={handleClickSearch}
               sx={{
                 backgroundColor: '#ffffff',
 
@@ -256,6 +261,7 @@ function HomePage(): JSX.Element {
               sx={{
                 color: CUSTOM_COLOR.primary,
               }}
+              onClick={handleClickNews}
             >
               <Typography>Xem thêm</Typography>
               <EastIcon />
@@ -433,6 +439,7 @@ function HomePage(): JSX.Element {
               sx={{
                 color: CUSTOM_COLOR.primary,
               }}
+              onClick = {handleClickSearch}
             >
               <Typography>Xem thêm</Typography>
               <EastIcon />
@@ -509,6 +516,7 @@ function HomePage(): JSX.Element {
               sx={{
                 color: CUSTOM_COLOR.primary,
               }}
+              onClick = {handleClickSearch}
             >
               <Typography>Xem thêm</Typography>
               <EastIcon />
