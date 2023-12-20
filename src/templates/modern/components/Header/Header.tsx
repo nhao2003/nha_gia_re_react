@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Button, useTheme, useMediaQuery, Stack, Drawer } from '@mui/material';
+import { Button, useTheme, useMediaQuery, Stack, Drawer, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/images/logo_app.png';
+import avatar from '../../assets/images/user.png';
+import classes from './Header.module.css';
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -52,7 +54,6 @@ const Header: React.FC = () => {
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
       }}
     >
-
       <Stack direction={'row'} spacing={2} marginLeft={2} alignItems={'center'}>
         <Button
           sx={{
@@ -274,41 +275,52 @@ const Header: React.FC = () => {
           }}
         />
 
-        <Button
-          variant='contained'
-          style={{
-            backgroundColor: CUSTOM_COLOR.white,
-          }}
-          sx={{
-            width: '180px',
-            height: 'fit-content',
-            color: CUSTOM_COLOR.black,
-            fontSize: '14px',
-            borderRadius: '10px',
-            display: matches ? 'inherit' : 'none',
-          }}
-          onClick={() => handleNavigate('signin')}
-        >
-          Đăng ký
-        </Button>
+        {localStorage.getItem('access_token') === null ? (
+          <>
+            <Button
+              variant='contained'
+              style={{
+                backgroundColor: CUSTOM_COLOR.white,
+              }}
+              sx={{
+                width: '180px',
+                height: 'fit-content',
+                color: CUSTOM_COLOR.black,
+                fontSize: '14px',
+                borderRadius: '10px',
+                display: matches ? 'inherit' : 'none',
+              }}
+              onClick={() => handleNavigate('signin')}
+            >
+              Đăng ký
+            </Button>
 
-        <Button
-          variant='contained'
-          style={{
-            backgroundColor: CUSTOM_COLOR.green,
-          }}
-          sx={{
-            width: '180px',
-            height: 'fit-content',
-            color: CUSTOM_COLOR.white,
-            fontSize: '14px',
-            borderRadius: '10px',
-            display: matches ? 'inherit' : 'none',
-          }}
-          onClick={() => handleNavigate('signup')}
-        >
-          Đăng nhập
-        </Button>
+            <Button
+              variant='contained'
+              style={{
+                backgroundColor: CUSTOM_COLOR.green,
+              }}
+              sx={{
+                width: '180px',
+                height: 'fit-content',
+                color: CUSTOM_COLOR.white,
+                fontSize: '14px',
+                borderRadius: '10px',
+                display: matches ? 'inherit' : 'none',
+              }}
+              onClick={() => handleNavigate('signup')}
+            >
+              Đăng nhập
+            </Button>
+          </>
+        ) : (
+          <>
+            <div className={classes.user} onClick={() => handleNavigate('profile')}>
+              <Avatar sx={{ marginRight: '8px' }} src={avatar} alt='avatar' />
+              <span>User</span>
+            </div>
+          </>
+        )}
       </Stack>
     </Stack>
   );
