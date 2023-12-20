@@ -74,7 +74,7 @@ const ModernSignInPage = () => {
     login()
       .then((response) => {
         if (response.status === 'success') {
-          localStorage.setItem('token', response.result.access_token);
+          localStorage.setItem('access_token', response.result.access_token);
           setSuccess(response.message);
 
           setOpenAlert(true);
