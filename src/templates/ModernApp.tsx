@@ -89,6 +89,14 @@ function App(): JSX.Element {
           </ModernDashboardPage>
         }
       />
+      <Route
+        path='/user/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernOthersInformation />
+          </ModernDashboardPage>
+        }
+      />
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
