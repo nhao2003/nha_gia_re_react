@@ -54,16 +54,11 @@ interface UserProfileProps {
   phone: string;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({
-  avatar,
-  fullname,
-  email,
-  phone,
-}) => {
+const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phone }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
       <Avatar sx={{ width: '80%', height: '80%' }} alt={fullname} src={avatar} />
-      <Typography variant="h6" component="div">
+      <Typography variant='h6' component='div'>
         {fullname}
       </Typography>
       <ListItem disablePadding>
@@ -82,10 +77,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
   );
 };
 
-
 export const ProfilePage: React.FC = () => {
-
-
   const [user, setUser] = useState<User | null>(null);
   const items: MenuItem[] = [
     {
@@ -111,7 +103,7 @@ export const ProfilePage: React.FC = () => {
         {
           key: 'my-post',
           title: 'Bài viết của tôi',
-        }
+        },
       ],
     },
     {
@@ -127,14 +119,17 @@ export const ProfilePage: React.FC = () => {
   };
 
   function getMyInfo() {
-    UserService.getInstance().getMyProfile().then((res: any) => {
-      if (res.status !== 'success') {
-        throw new Error(res.message);
-      }
-      setUser(res.data);
-    }).catch((err) => {
-      console.log(err);
-    });
+    UserService.getInstance()
+      .getMyProfile()
+      .then((res: any) => {
+        if (res.status !== 'success') {
+          throw new Error(res.message);
+        }
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   React.useEffect(() => {
@@ -153,43 +148,52 @@ export const ProfilePage: React.FC = () => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
 
   const drawer = (
-    <Box sx={
-      {
+    <Box
+      sx={{
         flexDirection: 'column',
         display: 'flex',
-      }
-    }>
-      <UserProfile fullname={user?.first_name == null || user?.last_name == null ? 'Chưa cung cấp' : user?.first_name + ' ' + user?.last_name
-      } avatar={user?.avatar ?? 'https://picsum.photos/200'} email={user?.email ?? 'Chưa cung cấp'} phone={user?.phone ?? 'Chưa cung cấp'} />
+      }}
+    >
+      <UserProfile
+        fullname={
+          user?.first_name == null || user?.last_name == null
+            ? 'Chưa cung cấp'
+            : user?.first_name + ' ' + user?.last_name
+        }
+        avatar={user?.avatar ?? 'https://picsum.photos/200'}
+        email={user?.email ?? 'Chưa cung cấp'}
+        phone={user?.phone ?? 'Chưa cung cấp'}
+      />
       <Divider />
       <List>
-        {items.map((item, index) => (
-          (item.children != null) ? (
+        {items.map((item, index) =>
+          item.children != null ? (
             <React.Fragment key={item.title}>
-              <ListItemButton onClick={() => { handleCollapseToggle(item.title); }}>
-                <ListItemIcon sx={{ alignItems: 'center' }}>
-                  {item.icon}
-                </ListItemIcon>
+              <ListItemButton
+                onClick={() => {
+                  handleCollapseToggle(item.title);
+                }}
+              >
+                <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
-                <ExpandMoreIcon
-                  style={{ transform: openCollapse[item.title] ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                />
+                <ExpandMoreIcon style={{ transform: openCollapse[item.title] ? 'rotate(180deg)' : 'rotate(0deg)' }} />
               </ListItemButton>
-              <Collapse in={openCollapse[item.title]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={openCollapse[item.title]} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {item.children.map((child) => (
                     <ListItem key={child.title} disablePadding>
-                      <ListItemButton sx={{ paddingLeft: 9 }} onClick={
-                        () => {
-                          if(child.key === 'logout') {
+                      <ListItemButton
+                        sx={{ paddingLeft: 9 }}
+                        onClick={() => {
+                          if (child.key === 'logout') {
                             localStorage.removeItem('token');
                             window.location.reload();
                           }
 
                           setSelectedItemKey(child.key);
-                        }
-                      } selected={selectedItemKey === child.key
-                      } >
+                        }}
+                        selected={selectedItemKey === child.key}
+                      >
                         <ListItemText primary={child.title} />
                       </ListItemButton>
                     </ListItem>
@@ -200,14 +204,12 @@ export const ProfilePage: React.FC = () => {
           ) : (
             <ListItem key={item.title} disablePadding>
               <ListItemButton>
-                <ListItemIcon sx={{ alignItems: 'center' }}>
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-          )
-        ))}
+          ),
+        )}
       </List>
     </Box>
   );
@@ -223,86 +225,80 @@ export const ProfilePage: React.FC = () => {
     >
       <CircularProgress />
     </Box>
-  ) :
-    (
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        {/* <CssBaseline /> */}
-        <AppBar
-          sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
-            display: { xs: 'flex', sm: 'none' }, // Hide on small screens
-            position: 'fixed',
-          }}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Your App Title
-            </Typography>
-          </Toolbar>
-        </AppBar>
+  ) : (
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      {/* <CssBaseline /> */}
+      <AppBar
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          display: { xs: 'flex', sm: 'none' }, // Hide on small screens
+          position: 'fixed',
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant='h6' noWrap component='div'>
+            Your App Title
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="mailbox folders"
-        >
-          <Drawer
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: 'block', sm: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            }}
-          >
-            {drawer}
-          </Drawer>
-          <Box
-            sx={{
-              display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            }}
-          >
-            {drawer}
-          </Box>
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box
-          component="main"
+      <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label='mailbox folders'>
+        <Drawer
+          variant='temporary'
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
           sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
-          {
-          selectedItemKey === 'profile' ? (
-            <ModernUpdateProfile />
-          ) : selectedItemKey === 'change-password' ? (
-            <ChangePassword />
-          ) : selectedItemKey === 'my-post' ? (
-            <ModernPostManagement />
-          ) : selectedItemKey === 'logout' ? (
-            <div>
-              <h1>Logout</h1>
-            </div>
-          ) : (
-            <ModernUpdateProfile />
-          )}
+          {drawer}
+        </Drawer>
+        <Box
+          sx={{
+            display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
         </Box>
       </Box>
-    );
+      <Divider orientation='vertical' flexItem />
+      <Box
+        component='main'
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
+        {selectedItemKey === 'profile' ? (
+          <ModernUpdateProfile />
+        ) : selectedItemKey === 'change-password' ? (
+          <ChangePassword />
+        ) : selectedItemKey === 'my-post' ? (
+          <ModernPostManagement />
+        ) : selectedItemKey === 'logout' ? (
+          <div>
+            <h1>Logout</h1>
+          </div>
+        ) : (
+          <ModernUpdateProfile />
+        )}
+      </Box>
+    </Box>
+  );
 };
