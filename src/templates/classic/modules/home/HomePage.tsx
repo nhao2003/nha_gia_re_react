@@ -66,6 +66,7 @@ function HomePage(): JSX.Element {
     posts: RealEstatePost[];
   }>({ numOfPages: 1, posts: [] });
 
+
   const [postsRent, setPostsRent] = React.useState<{
     numOfPages: number;
     posts: RealEstatePost[];
@@ -116,6 +117,7 @@ function HomePage(): JSX.Element {
     backgroundRepeat: 'no-repeat', // Adjust as needed
     // Other styles if needed
   };
+
 
 
   const [isLoadingPostPurchase, setIsLoadingPostPurchase] = React.useState<boolean>(true);
@@ -169,6 +171,7 @@ function HomePage(): JSX.Element {
       //     setIsLoadingPostRent(false);
       // });
   }, [page]);
+
 
 
   return (
@@ -438,6 +441,7 @@ function HomePage(): JSX.Element {
 
           <Stack direction={'row'} spacing={2}>
 
+
             {isLoadingPostPurchase ? 
              <Stack
              width={'100%'}
@@ -475,6 +479,7 @@ function HomePage(): JSX.Element {
             }
            )}
            
+
 
           </Stack>
         </Stack>
