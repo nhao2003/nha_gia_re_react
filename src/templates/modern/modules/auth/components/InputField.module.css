@@ -3,14 +3,18 @@
   display: block;
   font-size: medium;
   padding: 0.7rem 0.7rem;
-  margin-bottom: 1.5rem;
   outline: none;
   border-radius: 4px;
   border-style: solid;
   border-color: #b8b7b7;
+  width: 100%;
 }
 
 .input:focus {
   outline: none;
   border-color: #026d4d;
+}
+
+.invalid {
+  border-color: #ff0000;
 }

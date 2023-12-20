@@ -2,8 +2,10 @@ import { FurnitureStatus } from '../constants/enums';
 import type Address from '../models/address';
 import { type PropertyFeatures } from '../models/features';
 import { ApiServiceBuilder } from './api.service';
+import AuthService from './auth.service';
 import type { PropertyListing } from './CreatePostData';
 import mediaServices from './media.services';
+import UserService from './user.service';
 interface GetProps {
   page?: number | null;
   queryParams?: Record<string, any> | null;
@@ -45,8 +47,10 @@ class PostService {
   }
 
   async createPost(post: PropertyListing) {
-    const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImY4NDcyZWJiLTk5OWItNGIyNi04YTkwLTE5ZjcxZTI5Mjk2YSIsImlhdCI6MTcwMzAwNDI5NCwiZXhwIjoxNzA1NTk2Mjk0fQ.Zt5v6ES-fage9sLz-QRiBTN-0fTNXHp4Q7PnMO6XVFs';
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    if (accessToken === null) {
+      throw new Error('Bạn chưa đăng nhập');
+    }
     const images = post.images;
     const uploadImages = await mediaServices.uploadFiles(images);
     post.images = uploadImages;
@@ -71,8 +75,10 @@ class PostService {
   }
 
   async deletePost(id: string) {
-    const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImY4NDcyZWJiLTk5OWItNGIyNi04YTkwLTE5ZjcxZTI5Mjk2YSIsImlhdCI6MTcwMzAwNDI5NCwiZXhwIjoxNzA1NTk2Mjk0fQ.Zt5v6ES-fage9sLz-QRiBTN-0fTNXHp4Q7PnMO6XVFs';
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    if (accessToken === null) {
+      throw new Error('Bạn chưa đăng nhập');
+    }
     const response = await this.api()
       .withUrl('/posts/' + id)
       .withHeaders({ 

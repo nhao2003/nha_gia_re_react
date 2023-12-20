@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, useTheme, useMediaQuery, Stack, Drawer } from '@mui/material';
+import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -30,8 +30,8 @@ const Header: React.FC = () => {
     { id: 'blog', href: '/blog', label: 'Blog' },
     { id: 'dangtin', href: '/create-post', label: 'Đăng tin' },
     { id: 'profile', href: '/profile', label: 'Hồ sơ' },
-    { id: 'signin', href: '/signin', label: 'Đăng nhập' },
-    { id: 'signup', href: '/signup', label: 'Đăng ký' },
+    { id: 'signup', href: '/signin', label: 'Đăng nhập' },
+    { id: 'signin', href: '/signup', label: 'Đăng ký' },
   ];
 
   const handleNavigate = (idRoute: string) => {
@@ -87,20 +87,7 @@ const Header: React.FC = () => {
           }}
           onClick={() => handleNavigate('home')}
         >
-          Mua bán
-        </Button>
-
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            display: matches1440 ? 'block' : 'none',
-          }}
-          onClick={() => handleNavigate('chothue')}
-        >
-          Cho thuê
+          Trang chủ
         </Button>
 
         <Button
@@ -114,19 +101,6 @@ const Header: React.FC = () => {
           onClick={() => handleNavigate('blogs')}
         >
           Blogs
-        </Button>
-
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            display: matches1440 ? 'block' : 'none',
-          }}
-          onClick={() => handleNavigate('blog')}
-        >
-          Blog
         </Button>
 
         <Button
@@ -265,7 +239,6 @@ const Header: React.FC = () => {
           display: matches1440 ? 'none' : 'block',
         }}
       />
-
       <Stack direction={'row'} alignItems={'center'} spacing={2} marginRight={2}>
         <NotificationsNoneIcon
           sx={{

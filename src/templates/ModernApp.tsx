@@ -15,29 +15,94 @@ import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage'
 import { ModernOthersInformation } from './modern/modules/profileOther/ModernOthersInformation';
 function App(): JSX.Element {
   return (
-    <ModernDashboardPage>
-      <Routes>
-        <Route path='/' element={<ModernHomePage />} />
-        {/* public route */}
-        <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/user/:id' element={<ModernOthersInformation />} />
-        <Route path='/details/:id' element={<ModernDetailPage />} />
-        <Route path='/search' element={<ModernSearchPage />} />
-        <Route path='/signin' element={<ModernSignInPage />} />
-        <Route path='/signup' element={<ModernSignUpPage />} />
-        <Route path='/forgot-password' element={<ModernForgotPassword />} />
-        <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
-        <Route path='/post-management' element={<ModernPostManagement />} />
-        <Route path='/blogs' element={<MordernBlogPage />} />
-        <Route path='/blogs/:id' element={<ModernDetailBlogPage />} />
-        <Route path='/create-post' element={<PostCreate />} />
 
-        {/* protected route */}
-        {/* <Route element={<AuthRequire />}>
+    <Routes>
+      <Route path='/signin' element={<ModernSignInPage />} />
+      <Route path='/signup' element={<ModernSignUpPage />} />
+      <Route path='/forgot-password' element={<ModernForgotPassword />} />
+      <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
+
+      <Route
+        path='/'
+        element={
+          <ModernDashboardPage>
+            <ModernHomePage />
+          </ModernDashboardPage>
+        }
+      />
+      {/* public route */}
+      <Route
+        path='/profile'
+        element={
+          <ModernDashboardPage>
+            <ProfilePage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/details/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernDetailPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/profile'
+        element={
+          <ModernDashboardPage>
+            <ProfilePage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/post-management'
+        element={
+          <ModernDashboardPage>
+            <ModernPostManagement />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/blogs'
+        element={
+          <ModernDashboardPage>
+            <MordernBlogPage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/blogs/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernDetailBlogPage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/create-post'
+        element={
+          <ModernDashboardPage>
+            <PostCreate />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/user/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernOthersInformation />
+          </ModernDashboardPage>
+        }
+      />
+
+      {/* protected route */}
+      {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
       </Route> */}
-      </Routes>
-    </ModernDashboardPage>
+    </Routes>
   );
 }
 

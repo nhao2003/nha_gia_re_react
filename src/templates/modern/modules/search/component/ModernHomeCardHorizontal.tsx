@@ -25,9 +25,11 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
       direction={'row'}
       onClick={onClick}
       sx={{
-        boxShadow: '2px 2px 5px 0px rgba(0, 0, 0, 0.5)',
+        // boxShadow: '2px 2px 5px 0px rgba(0, 0, 0, 0.5)',
         padding: '10px',
         borderRadius: '10px',
+        border: '1px #ccc solid',
+        cursor: 'pointer',
       }}
     >
       <div
