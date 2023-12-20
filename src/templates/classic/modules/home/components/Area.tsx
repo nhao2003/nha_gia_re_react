@@ -26,7 +26,14 @@ export const Area = ({ sx, background, place, news }: PrivateProps) => {
                 backgroundPosition: 'center', // Adjust as needed
                 backgroundRepeat: 'no-repeat', // Adjust as needed
                 borderRadius: '10px',
-
+                transition: 'transform 0.3s ease-in-out', 
+                '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    transform: 'scale(1.05)', // Scale up on hover
+                  },
+                  '&:active': {
+                    transform: 'scale(0.95)', // Scale down on click
+                  },
             }}
         >
 
