@@ -32,6 +32,8 @@ import ModernPostManagement from '../../postManagement/ModernPostManagement';
 import PostCreate from '../../createpost/PostCreate';
 import type { User } from '../../../../../models/User';
 import UserService from '../../../../../services/user.service';
+import ModernUpdateProfile from '../../auth/UpdateProfile/ModenUpdateProfile';
+import { useNavigate } from 'react-router';
 
 const drawerWidth = '20%';
 
@@ -109,12 +111,7 @@ export const ProfilePage: React.FC = () => {
         {
           key: 'my-post',
           title: 'Bài viết của tôi',
-        },
-        {
-          key: 'saved-post',
-          title: 'Bài viết đã lưu',
-        },
-
+        }
       ],
     },
     {
@@ -184,6 +181,11 @@ export const ProfilePage: React.FC = () => {
                     <ListItem key={child.title} disablePadding>
                       <ListItemButton sx={{ paddingLeft: 9 }} onClick={
                         () => {
+                          if(child.key === 'logout') {
+                            localStorage.removeItem('token');
+                            window.location.reload();
+                          }
+
                           setSelectedItemKey(child.key);
                         }
                       } selected={selectedItemKey === child.key
@@ -286,24 +288,19 @@ export const ProfilePage: React.FC = () => {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          {selectedItemKey === 'profile' ? (
-            <div>
-              <h1>Profile</h1>
-            </div>
+          {
+          selectedItemKey === 'profile' ? (
+            <ModernUpdateProfile />
           ) : selectedItemKey === 'change-password' ? (
             <ChangePassword />
           ) : selectedItemKey === 'my-post' ? (
             <ModernPostManagement />
-          ) : selectedItemKey === 'saved-post' ? (
-            <PostCreate />
           ) : selectedItemKey === 'logout' ? (
             <div>
               <h1>Logout</h1>
             </div>
           ) : (
-
-            <Typography>Diam kasd amet at delenit et justo ut possim feugiat commodo consequat elitr rebum sit clita. Ipsum molestie sit lorem accusam ipsum nulla cum duo commodo eos elitr diam odio quis esse. Duo consetetur clita eirmod stet. Vero sit gubergren aliquyam gubergren illum duis ut sit dolore ut. Qui stet eos duo takimata enim facer duis diam veniam no sea et labore. Aliquyam autem invidunt amet. Diam invidunt placerat ut clita accumsan nonumy justo invidunt quis et wisi ea. Consetetur ullamcorper dolor lorem invidunt ut gubergren nulla accusam stet sadipscing nobis dolor. Iusto et no lorem gubergren labore et dolore possim sanctus takimata. Voluptua dignissim sanctus vel et veniam euismod ipsum. Tempor nonumy iriure lorem ipsum et velit. Vero vero feugiat sit clita dolore sea diam vero. Magna rebum eu et illum elitr tempor sed. Ipsum nonumy nisl magna eos eirmod amet nisl. Delenit lorem euismod justo eirmod lorem clita ad consequat et dolor eos lorem consetetur.</Typography>
-
+            <ModernUpdateProfile />
           )}
         </Box>
       </Box>
