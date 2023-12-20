@@ -56,7 +56,13 @@ export const MordernBlogCard = ({ id, thumbnail, createdAt, author, title, short
             >
                 <Box>
                     <Typography sx={{
-                        typography: 'h6'
+                        height: 'fit-content',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        typography: 'subtitle2',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        fontWeight: 'bold',
                     }}>{title}</Typography>
                     <Typography
                         typography={'subtitle1'}
@@ -65,6 +71,12 @@ export const MordernBlogCard = ({ id, thumbnail, createdAt, author, title, short
                         overflow={'hidden'}
                         textOverflow={'ellipsis'}
                         color={'#6A6A6A'}
+                        sx={{
+                            height: 'fit-content',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                        }}
                     >
                         {shortDescription}
                     </Typography>
