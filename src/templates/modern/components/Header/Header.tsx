@@ -119,7 +119,7 @@ const Header: React.FC = () => {
           Đăng tin
         </Button>
 
-        <Button
+        {/* <Button
           variant='text'
           sx={{
             color: CUSTOM_COLOR.black,
@@ -130,7 +130,7 @@ const Header: React.FC = () => {
           onClick={() => handleNavigate('profile')}
         >
           Hồ sơ
-        </Button>
+        </Button> */}
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -219,7 +219,7 @@ const Header: React.FC = () => {
             Đăng tin
           </Button>
 
-          <Button
+          {/* <Button
             variant='text'
             sx={{
               color: CUSTOM_COLOR.black,
@@ -230,7 +230,7 @@ const Header: React.FC = () => {
             onClick={() => handleNavigate('profile')}
           >
             Hồ sơ
-          </Button>
+          </Button> */}
         </Stack>
       </Drawer>
 

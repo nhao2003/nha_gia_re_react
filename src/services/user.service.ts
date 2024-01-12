@@ -57,12 +57,12 @@ class UserService {
 
 export default UserService;
 
-UserService.getInstance()
-  .getMyProfile()
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error.message);
-    console.log(error.response.data);
-  });
+// UserService.getInstance()
+//   .getMyProfile()
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//     console.log(error.response.data);
+//   });

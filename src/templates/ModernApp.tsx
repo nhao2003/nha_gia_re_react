@@ -98,6 +98,15 @@ function App(): JSX.Element {
         }
       />
 
+      <Route
+      path='/search'
+      element={
+        <ModernDashboardPage>
+          <ModernSearchPage />
+        </ModernDashboardPage>
+      }
+    />
+
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />

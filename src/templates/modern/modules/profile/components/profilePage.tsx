@@ -55,6 +55,7 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phone }) => {
+  const navagate = useNavigate();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
       <Avatar sx={{ width: '80%', height: '80%' }} alt={fullname} src={avatar} />
@@ -146,7 +147,7 @@ export const ProfilePage: React.FC = () => {
   };
 
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-
+  const navagate = useNavigate();
   const drawer = (
     <Box
       sx={{
@@ -171,6 +172,7 @@ export const ProfilePage: React.FC = () => {
             <React.Fragment key={item.title}>
               <ListItemButton
                 onClick={() => {
+                  console.log(item);
                   handleCollapseToggle(item.title);
                 }}
               >
@@ -185,11 +187,6 @@ export const ProfilePage: React.FC = () => {
                       <ListItemButton
                         sx={{ paddingLeft: 9 }}
                         onClick={() => {
-                          if (child.key === 'logout') {
-                            localStorage.removeItem('token');
-                            window.location.reload();
-                          }
-
                           setSelectedItemKey(child.key);
                         }}
                         selected={selectedItemKey === child.key}
@@ -202,7 +199,14 @@ export const ProfilePage: React.FC = () => {
               </Collapse>
             </React.Fragment>
           ) : (
-            <ListItem key={item.title} disablePadding>
+            <ListItem key={item.title} disablePadding onClick={
+              () => {
+                if (item.key === 'logout') {
+                  localStorage.removeItem('access_token');
+                  navagate('/');
+                }
+              }
+            }>
               <ListItemButton>
                 <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
