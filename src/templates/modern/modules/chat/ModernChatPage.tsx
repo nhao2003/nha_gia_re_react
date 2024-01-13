@@ -3,6 +3,7 @@ import { Box, Avatar, Typography, List, ListItem, ListItemAvatar, ListItemText, 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { connect } from 'socket.io-client';
 import ChatContent from './components/ChatContent';
+import type { MessageTypes } from '../../../../constants/enums';
 
 enum SocketEvent {
   Init = 'init',
@@ -21,7 +22,7 @@ function ModernChatPage() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const listRef = useRef<HTMLDivElement>(null);
   const handleSocketEvent = (type: SocketEvent, data: any) => {
     const updatedConversations = [...conversations];
     const updatedMessages = { ...messages };
@@ -72,8 +73,6 @@ function ModernChatPage() {
       conversation_id: string;
     }) => {
       const { type, data: message, conversation_id: conversationId } = data;
-      console.log('On messages', data);
-
       switch (type) {
         case SocketEvent.Init:
 
@@ -140,9 +139,22 @@ function ModernChatPage() {
     setSelectedFile(file ?? null);
   };
 
+  useEffect(() => {
+    if (listRef.current !== null) {
+      console.log('Scroll to bottom');
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    } else {
+      console.log('List ref is null');
+    }
+  }, [messages]);
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px', paddingX: '20px', width: '100%', minHeight: '100vh' }}>
-      <List sx={{ width: '300px', overflowY: 'auto', maxHeight: '100%' }}>
+    <Box sx={{
+      display: 'flex', flexDirection: 'row', gap: '16px', width: '100%', minHeight: '100vh',
+    }}>
+
+      <List sx={{ width: '25%', overflowY: 'auto', maxHeight: '100%', backgroundColor: '#f5f5f5' }}
+      >
         {conversations.map((conversation: any) => {
           const otherParticipant: any = conversation.participants.find((participant: any) => participant.user_id !== myId);
           const otherUser: any = conversation.users.find((user: any) => user.id === otherParticipant.user_id);
@@ -152,8 +164,6 @@ function ModernChatPage() {
                 alignItems="flex-start"
                 button
                 onClick={() => {
-                  // console.log('Selected', conversation.id);
-                  // console.log('Messages', messages[conversation.id]);
                   setSelectedConversation(conversation.id);
                 }}
               >
@@ -179,11 +189,17 @@ function ModernChatPage() {
 
 
       <ChatContent
-        messages={messages[selectedConversation ?? ''] ?? []} 
-        isNoChatSelected={selectedConversation === null} 
-        isFetching={messages[selectedConversation ?? ''] === undefined} 
+        messages={messages[selectedConversation ?? ''] ?? []}
+        isNoChatSelected={selectedConversation === null}
+        isFetching={messages[selectedConversation ?? ''] === undefined}
         myId={'1a9a5785-721a-4bb5-beb7-9d752e2070d4'}
-      />
+        onMessageSend={function (type: MessageTypes, content: any): void {
+          socketRef.current.emit('send_message', {
+            type,
+            conversation_id: selectedConversation,
+            content,
+          });
+        }} />
 
 
     </Box>
