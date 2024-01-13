@@ -8,23 +8,16 @@ import ModernSignUpPage from './modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modules/profile/components/profilePage';
-import  ModernPostManagement  from './modules/postManagement/ModernPostManagement';
+import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
 import MordernChatPage from './modules/chat/ModernChatPage';
+import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
       <Routes>
-        <Route
-          path='/'
-          element={
-
-            <ModernHomePage
-            />
-
-          }
-        />
+        <Route path='/' element={<ModernHomePage />} />
         {/* public route */}
         <Route path='/profile' element={<ProfilePage />} />
         <Route
@@ -42,11 +35,11 @@ function App(): JSX.Element {
         <Route path='/forgot-password' element={<ModernForgotPassword />} />
         <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
         <Route path='/post-management' element={<ModernPostManagement />} />
-        <Route path='/blogs' element={<MordernBlogPage/>} />
-        <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
+        <Route path='/blogs' element={<MordernBlogPage />} />
+        <Route path='/blogs/:id' element={<ModernDetailBlogPage />} />
 
         <Route path='/chat' element={<MordernChatPage />} />
-
+        <Route path='/purchase' element={<ModernPackageListPage />} />
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
