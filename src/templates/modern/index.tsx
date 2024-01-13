@@ -10,12 +10,13 @@ import { ProfilePage } from './modules/profile/components/profilePage';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
 import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
-import MordenCurrentPackagePage from './modules/purchase/page/ModernCurrentPagePage';
+import MordenCurrentPackagePage from './modules/purchase/page/ModernCurrentPackagePage';
 import PostCreate from './modules/createpost/PostCreate';
 import { ModernOthersInformation } from './modules/profileOther/ModernOthersInformation';
 import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
 import ModernChatPage from './modules/chat/ModernChatPage';
 import ModernPostManagement from './modules/postManagement/ModernPostManagement';
+import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackagePage';
 
 function App(): JSX.Element {
   return (
@@ -116,7 +117,25 @@ function App(): JSX.Element {
         path='/purchase'
         element={
           <ModernDashboardPage>
+            <ModernPackageListPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/current-package'
+        element={
+          <ModernDashboardPage>
             <MordenCurrentPackagePage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/choose-package'
+        element={
+          <ModernDashboardPage>
+            <MordenChoosePackagePage />
           </ModernDashboardPage>
         }
       />
