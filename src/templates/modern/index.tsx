@@ -13,6 +13,7 @@ import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
 import MordernChatPage from './modules/chat/ModernChatPage';
 import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
+import MordenCurrentPackagePage from './modules/purchase/page/ModernCurrentPagePage';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
@@ -39,7 +40,7 @@ function App(): JSX.Element {
         <Route path='/blogs/:id' element={<ModernDetailBlogPage />} />
 
         <Route path='/chat' element={<MordernChatPage />} />
-        <Route path='/purchase' element={<ModernPackageListPage />} />
+        <Route path='/purchase' element={<MordenCurrentPackagePage />} />
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />

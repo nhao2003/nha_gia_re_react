@@ -1,5 +1,5 @@
 import React from 'react';
-import ServicePackage from '../component/ServicePackage';
+import CurrentServicePackage from '../component/CurrentServicePackage';
 
 const MordenCurrentPackagePage: React.FC = () => (
   <div style={{ textAlign: 'center', margin: '0 20%' }}>
@@ -14,14 +14,13 @@ const MordenCurrentPackagePage: React.FC = () => (
         marginRight: '20px',
       }}
     >
-      Danh sách các gói dịch vụ
+      Gói hiện tại
       <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
     </div>
     <div>
-      <ServicePackage
+      <CurrentServicePackage
         name='Gói cơ bản'
-        price='50K'
-        description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
+        expired='Thời điểm hết hạn: 10:03 02/11/2023'
         infoList={[
           { check: true, text: '20 tin đăng/tháng (Hiển thị 14 ngày)' },
           { check: true, text: 'Ưu tiên hiển thị tin' },
@@ -31,39 +30,27 @@ const MordenCurrentPackagePage: React.FC = () => (
           { check: false, text: 'Ưu tiên chăm sóc khách hàng' },
           { check: false, text: 'Duyệt tin siêu tốc' },
         ]}
-        onButtonClick={() => {
-          // Xử lý khi button được click
-          console.log('Button được click!');
-        }}
       />
-      <ServicePackage
-        name='Gói tiêu chuẩn'
-        price='100K'
-        description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
-        infoList={[
-          { check: false, text: 'Thông tin 4' },
-          { check: true, text: 'Thông tin 5' },
-          { check: false, text: 'Thông tin 6' },
-        ]}
-        onButtonClick={() => {
-          // Xử lý khi button được click
-          console.log('Button được click!');
+    </div>
+
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <button
+        onClick={() => {}}
+        style={{
+          width: '100%', // Chiều rộng 50%
+          backgroundColor: '#D00000',
+          color: 'white',
+          fontWeight: 'bold',
+          borderRadius: '5px',
+          height: '50px',
+          boxShadow: 'none',
+          border: 'none',
+          marginLeft: '15px',
+          marginRight: '15px',
         }}
-      />
-      <ServicePackage
-        name='Gói cao cấp'
-        price='200K'
-        description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
-        infoList={[
-          { check: true, text: 'Thông tin 7' },
-          { check: false, text: 'Thông tin 8' },
-          { check: true, text: 'Thông tin 9' },
-        ]}
-        onButtonClick={() => {
-          // Xử lý khi button được click
-          console.log('Button được click!');
-        }}
-      />
+      >
+        Hủy gói
+      </button>
     </div>
   </div>
 );

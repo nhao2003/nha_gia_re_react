@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton, Avatar } from '@mui/material';
-
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
