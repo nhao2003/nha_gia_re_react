@@ -7,16 +7,18 @@ import ModernSignUpPage from './modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modules/profile/components/profilePage';
-import ModernPostManagement from './modules/postManagement/ModernPostManagement';
-import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
-import MordernChatPage from './modules/chat/ModernChatPage';
 import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
 import MordenCurrentPackagePage from './modules/purchase/page/ModernCurrentPagePage';
+import PostCreate from './modules/createpost/PostCreate';
+import { ModernOthersInformation } from './modules/profileOther/ModernOthersInformation';
+import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
+import ModernChatPage from './modules/chat/ModernChatPage';
+import ModernPostManagement from './modules/postManagement/ModernPostManagement';
+
 function App(): JSX.Element {
   return (
-
     <Routes>
       <Route path='/signin' element={<ModernSignInPage />} />
       <Route path='/signup' element={<ModernSignUpPage />} />
@@ -108,10 +110,14 @@ function App(): JSX.Element {
         }
       />
 
+      <Route path='/chat' element={<ModernChatPage />} />
+
       <Route
-        path='/chat'
+        path='/purchase'
         element={
-          <ModernChatPage />
+          <ModernDashboardPage>
+            <MordenCurrentPackagePage />
+          </ModernDashboardPage>
         }
       />
 
