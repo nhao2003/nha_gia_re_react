@@ -55,6 +55,7 @@ function TabPanel(props: TabPanelProps) {
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
+     
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
@@ -299,7 +300,7 @@ export default function ModernPostManagement() {
         index={value}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
+        <TabPanel value={value} index={0} dir={theme.direction} >
           <Grid container spacing={2}>
             {pendingPagination.data.map((item, index) => (
               <Grid item key={index} xs={12} sm={6} md={6} lg={6}>

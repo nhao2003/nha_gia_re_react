@@ -1,6 +1,6 @@
 
 import { Route, Routes } from 'react-router-dom'
-
+import './templates/classic/assets/styles/App.css';
 import DashboardPage from './modules/DashboardPage'
 import DetailPage from './modules/Detail/DetailPage'
 import HomePage from './modules/home/HomePage'
@@ -13,7 +13,6 @@ import SignUp from './modules/auth/SignUp'
 import DetailBlog from './modules/news/DetailBlog'
 import PostManagement from './modules/postManagement/postManagement'
 import PostCreate from './modules/postManagement/PostCreate'
-
 
 
 
