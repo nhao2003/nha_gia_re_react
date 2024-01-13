@@ -149,8 +149,12 @@ function ModernChatPage() {
   }, [messages]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px', paddingX: '20px', width: '100%', minHeight: '100vh' }}>
-      <List sx={{ width: '300px', overflowY: 'auto', maxHeight: '100%' }}>
+    <Box sx={{
+      display: 'flex', flexDirection: 'row', gap: '16px', width: '100%', minHeight: '100vh',
+    }}>
+
+      <List sx={{ width: '25%', overflowY: 'auto', maxHeight: '100%', backgroundColor: '#f5f5f5' }}
+      >
         {conversations.map((conversation: any) => {
           const otherParticipant: any = conversation.participants.find((participant: any) => participant.user_id !== myId);
           const otherUser: any = conversation.users.find((user: any) => user.id === otherParticipant.user_id);

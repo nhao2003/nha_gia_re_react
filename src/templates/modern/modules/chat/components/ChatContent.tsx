@@ -19,7 +19,7 @@ interface ChatContentProps {
 const ChatContent: React.FC<ChatContentProps> = (props) => {
     const [inputMessage, setInputMessage] = useState('');
     const [selectedAttachment, setSelectedAttachment] = useState<File | null>(null);
-    
+
 
     const handleSendMessage = () => {
         if (inputMessage === '' && selectedAttachment === null) {
@@ -37,7 +37,6 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
     const chatContentStyles = {
         flex: '1',
         overflow: 'hidden',
-        padding: '20px',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -54,7 +53,9 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
         display: 'flex',
         alignItems: 'center',
         marginTop: '16px',
-        height: '10%'
+        height: '10%',
+        paddingBottom: '16px',
+        paddingRight: '16px',
     };
     return (
         <Box sx={chatContentStyles} >
@@ -99,50 +100,26 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                                                     display: 'flex',
                                                     flexDirection: 'column',
                                                     alignItems: isMyMessage ? 'flex-end' : 'flex-start',
-                                                    maxWidth: '70%'
+                                                    maxWidth: '70%',
+
+
                                                 }}
                                             >
                                                 {message.content_type === MessageTypes.text && (
-                                                    <>
-                                                        <Box
-                                                            sx={{
-                                                                display: 'flex',
-                                                                flexDirection: 'row',
-                                                                alignItems: 'center',
-                                                                justifyContent: isMyMessage ? 'flex-end' : 'flex-start',
-                                                                width: '100%'
-                                                            }}
-                                                        >
-                                                            <Typography
-                                                                sx={{
-                                                                    display: 'inline',
-                                                                    backgroundColor: isMyMessage ? '#026D4D' : '#F3F4F6',
-                                                                    color: isMyMessage ? '#fff' : '#000',
-                                                                    borderRadius: '8px',
-                                                                    padding: '8px',
-                                                                    maxWidth: '80%',
-                                                                    wordWrap: 'break-word'
-                                                                }}
-                                                                component="span"
-                                                                variant="body2"
-                                                                color="text.primary"
-                                                            >
-                                                                {message.content.text}
-                                                            </Typography>
-                                                        </Box>
-                                                        <Typography
-                                                            sx={{
-                                                                display: 'inline',
-                                                                alignSelf: isMyMessage ? 'flex-end' : 'flex-start',
-                                                                marginTop: '4px'
-                                                            }}
-                                                            component="span"
-                                                            variant="body2"
-                                                            color="text.primary"
-                                                        >
-                                                            {new Date(message.sent_at).toLocaleString()}
-                                                        </Typography>
-                                                    </>
+                                                    <Typography
+                                                        sx={{
+                                                            color: isMyMessage ? '#fff' : '#000',
+                                                            padding: '8px',
+                                                            wordBreak: 'break-word',
+                                                            overflowWrap: 'break-word',
+                                                            whiteSpace: 'pre-wrap',
+                                                            backgroundColor: isMyMessage ? '#026D4D' : '#F3F4F6',
+                                                            borderRadius: '8px',
+                                                        }}
+                                                        variant="body2"
+                                                    >
+                                                        {message.content.text}
+                                                    </Typography>
                                                 )}
                                                 {
                                                     message.content_type === MessageTypes.media && (
@@ -162,6 +139,49 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                         </List>
                 }
             </Box>
+            {
+                selectedAttachment !== null && (
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        '&:hover': {
+                            cursor: 'pointer',
+                        },
+                    }}>
+                        <img
+                            src={URL.createObjectURL(selectedAttachment)}
+                            alt="Selected Attachment"
+                            style={{
+                                objectFit: 'cover',
+                                maxHeight: '200px',
+                                maxWidth: '200px',
+                                aspectRatio: '1/1',
+                            }}
+                        />
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => { setSelectedAttachment(null); }}
+                            sx={{
+                                position: 'absolute',
+                                top: '0',
+                                right: '0',
+                                borderRadius: '50%',
+                                minWidth: '0',
+                                width: '32px',
+                                height: '32px',
+                                padding: '0',
+                                margin: '0',
+                            }}
+                        >
+                            X
+                        </Button>
+                    </Box>
+                )
+            }
+
             <Box sx={inputContainerStyles}>
                 <TextField
                     fullWidth
