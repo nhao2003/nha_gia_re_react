@@ -16,11 +16,12 @@ class UserService {
   }
 
   public async updateUser(): Promise<any> {
+    const accessToken = await AuthService.getInstance().getAccessToken();
     const response = await this.api()
       .withUrl('/users/update-profile')
       .withHeaders({
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImNlNDQzYmQ2LTQxNGYtNGM1OS05YTA1LWEzNWZiNTg3Y2UyYyIsImlhdCI6MTcwMDI5MzQzNiwiZXhwIjoxNzAwMzc5ODM2fQ.odPZ6e2GE9LlPdYOVJwup_ymOPQf4tBRz6krSUV8L5k',
+          'Bearer ' + accessToken,
       })
       .withBody({
         first_name: 'Hào',
@@ -42,7 +43,7 @@ class UserService {
   }
 
   public async getMyProfile(): Promise<any> {
-    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImY4NDcyZWJiLTk5OWItNGIyNi04YTkwLTE5ZjcxZTI5Mjk2YSIsImlhdCI6MTcwMzAwNDI5NCwiZXhwIjoxNzA1NTk2Mjk0fQ.Zt5v6ES-fage9sLz-QRiBTN-0fTNXHp4Q7PnMO6XVFs';
+    const accessToken = await AuthService.getInstance().getAccessToken();
     const response = await this.api()
       .withUrl('/users/profile')
       .withHeaders({
