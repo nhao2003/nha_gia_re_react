@@ -1,58 +1,125 @@
 import { Route, Routes } from 'react-router-dom';
 import { ModernDashboardPage } from './modules/profile/pages/ModernDashboardPage';
 import { ModernHomePage } from './modules/home/ModernHomePage';
-import HomePage from '../classic/modules/home/HomePage';
 import { ModernDetailPage } from './modules/detail/ModernDetailPage';
 import ModernSignInPage from './modules/auth/ModernSignInPage';
 import ModernSignUpPage from './modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modules/profile/components/profilePage';
-import  ModernPostManagement  from './modules/postManagement/ModernPostManagement';
+import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
-import MordernChatPage from './modules/chat/ModernChatPage';
+import PostCreate from './modules/createpost/PostCreate';
+import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
+import { ModernOthersInformation } from './modules/profileOther/ModernOthersInformation';
+import ModernChatPage from './modules/chat/ModernChatPage';
 function App(): JSX.Element {
   return (
-    <ModernDashboardPage>
-      <Routes>
-        <Route
-          path='/'
-          element={
 
-            <ModernHomePage
-            />
+    <Routes>
+      <Route path='/signin' element={<ModernSignInPage />} />
+      <Route path='/signup' element={<ModernSignUpPage />} />
+      <Route path='/forgot-password' element={<ModernForgotPassword />} />
+      <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
 
-          }
-        />
-        {/* public route */}
-        <Route path='/profile' element={<ProfilePage />} />
-        <Route
-          path='/details'
-          element={
-            <ModernDashboardPage>
-              <ModernDetailPage />
-            </ModernDashboardPage>
-          }
-        />
+      <Route
+        path='/'
+        element={
+          <ModernDashboardPage>
+            <ModernHomePage />
+          </ModernDashboardPage>
+        }
+      />
+      {/* public route */}
+      <Route
+        path='/profile'
+        element={
+          <ModernDashboardPage>
+            <ProfilePage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/details/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernDetailPage />
+          </ModernDashboardPage>
+        }
+      />
 
-        <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/signin' element={<ModernSignInPage />} />
-        <Route path='/signup' element={<ModernSignUpPage />} />
-        <Route path='/forgot-password' element={<ModernForgotPassword />} />
-        <Route path='/auth-update-profile' element={<ModernUpdateProfile />} />
-        <Route path='/post-management' element={<ModernPostManagement />} />
-        <Route path='/blogs' element={<MordernBlogPage/>} />
-        <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
+      <Route
+        path='/profile'
+        element={
+          <ModernDashboardPage>
+            <ProfilePage />
+          </ModernDashboardPage>
+        }
+      />
 
-        <Route path='/chat' element={<MordernChatPage />} />
+      <Route
+        path='/post-management'
+        element={
+          <ModernDashboardPage>
+            <ModernPostManagement />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/blogs'
+        element={
+          <ModernDashboardPage>
+            <MordernBlogPage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/blogs/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernDetailBlogPage />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/create-post'
+        element={
+          <ModernDashboardPage>
+            <PostCreate />
+          </ModernDashboardPage>
+        }
+      />
+      <Route
+        path='/user/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernOthersInformation />
+          </ModernDashboardPage>
+        }
+      />
 
-        {/* protected route */}
-        {/* <Route element={<AuthRequire />}>
+      <Route
+        path='/search'
+        element={
+          <ModernDashboardPage>
+            <ModernSearchPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/chat'
+        element={
+          <ModernChatPage />
+        }
+      />
+
+      {/* protected route */}
+      {/* <Route element={<AuthRequire />}>
         <Route path='welcome' element={<WelcomePage />} />
       </Route> */}
-      </Routes>
-    </ModernDashboardPage>
+    </Routes>
   );
 }
 
