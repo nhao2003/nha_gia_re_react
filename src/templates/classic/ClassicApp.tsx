@@ -1,10 +1,5 @@
 
 import { Route, Routes } from 'react-router-dom'
-<<<<<<<< HEAD:src/templates/classic/index..tsx
-import './templates/classic/assets/styles/App.css'
-========
-
->>>>>>>> 1997bbf5d267d23378b80669dad348c39a3da15b:src/templates/classic/ClassicApp.tsx
 import DashboardPage from './modules/DashboardPage'
 import DetailPage from './modules/Detail/DetailPage'
 import HomePage from './modules/home/HomePage'
@@ -16,11 +11,8 @@ import SignIn from './modules/auth/SignIn'
 import SignUp from './modules/auth/SignUp'
 import DetailBlog from './modules/news/DetailBlog'
 import PostManagement from './modules/postManagement/postManagement'
-<<<<<<<< HEAD:src/templates/classic/index..tsx
-========
 import PostCreate from './modules/postManagement/PostCreate'
-
->>>>>>>> 1997bbf5d267d23378b80669dad348c39a3da15b:src/templates/classic/ClassicApp.tsx
+import React from 'react'
 
 
 

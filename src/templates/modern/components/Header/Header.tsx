@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           Đăng tin
         </Button>
 
-        {/* <Button
+        <Button
           variant='text'
           sx={{
             color: CUSTOM_COLOR.black,
@@ -146,19 +146,19 @@ const Header: React.FC = () => {
           Hồ sơ
         </Button>
         <Button
-            variant='text'
-            sx={{
-              color: CUSTOM_COLOR.black,
-              fontWeight: 'bold',
-              fontSize: '16px',
-              // display: matches1440 ? 'block' : 'none'
-            }}
-            onClick={() => handleNavigate('chat')}
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            // display: matches1440 ? 'block' : 'none'
+          }}
+          onClick={() => handleNavigate('chat')}
 
-          >
-            Tin nhắn
+        >
+          Tin nhắn
 
-          </Button>
+        </Button>
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -247,7 +247,7 @@ const Header: React.FC = () => {
             Đăng tin
           </Button>
 
-          {/* <Button
+          <Button
             variant='text'
             sx={{
               color: CUSTOM_COLOR.black,
