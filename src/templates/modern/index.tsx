@@ -1,16 +1,17 @@
 import { Route, Routes } from 'react-router-dom';
-import { ModernDashboardPage } from './modern/modules/profile/pages/ModernDashboardPage';
-import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import HomePage from './classic/modules/home/HomePage';
-import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
-import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
-import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
-import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
-import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
-import { ProfilePage } from './modern/modules/profile/components/profilePage';
-import  ModernPostManagement  from './modern/modules/postManagement/ModernPostManagement';
-import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
-import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
+import { ModernDashboardPage } from './modules/profile/pages/ModernDashboardPage';
+import { ModernHomePage } from './modules/home/ModernHomePage';
+import HomePage from '../classic/modules/home/HomePage';
+import { ModernDetailPage } from './modules/detail/ModernDetailPage';
+import ModernSignInPage from './modules/auth/ModernSignInPage';
+import ModernSignUpPage from './modules/auth/ModernSignUpPage';
+import ModernForgotPassword from './modules/auth/ModernForgotPassword';
+import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
+import { ProfilePage } from './modules/profile/components/profilePage';
+import  ModernPostManagement  from './modules/postManagement/ModernPostManagement';
+import MordernBlogPage from './modules/blogs/mordernBlogPage';
+import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
+import MordernChatPage from './modules/chat/ModernChatPage';
 function App(): JSX.Element {
   return (
     <ModernDashboardPage>
@@ -43,6 +44,8 @@ function App(): JSX.Element {
         <Route path='/post-management' element={<ModernPostManagement />} />
         <Route path='/blogs' element={<MordernBlogPage/>} />
         <Route path='/blogs/:id' element={<ModernDetailBlogPage/>} />
+
+        <Route path='/chat' element={<MordernChatPage />} />
 
         {/* protected route */}
         {/* <Route element={<AuthRequire />}>

@@ -32,6 +32,7 @@ const Header: React.FC = () => {
     { id: 'profile', href: '/profile', label: 'Hồ sơ' },
     { id: 'signin', href: '/signin', label: 'Đăng nhập' },
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
+    { id: 'chat', href: '/chat', label: 'Tin nhắn' },
   ];
 
   const handleNavigate = (idRoute: string) => {
@@ -153,6 +154,20 @@ const Header: React.FC = () => {
         >
           Hồ sơ
         </Button>
+        <Button
+            variant='text'
+            sx={{
+              color: CUSTOM_COLOR.black,
+              fontWeight: 'bold',
+              fontSize: '16px',
+              // display: matches1440 ? 'block' : 'none'
+            }}
+            onClick={() => handleNavigate('chat')}
+
+          >
+            Tin nhắn
+
+          </Button>
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -253,6 +268,22 @@ const Header: React.FC = () => {
           >
             Hồ sơ
           </Button>
+
+          <Button
+            variant='text'
+            sx={{
+              color: CUSTOM_COLOR.black,
+              fontWeight: 'bold',
+              fontSize: '16px',
+              // display: matches1440 ? 'block' : 'none'
+            }}
+            onClick={() => handleNavigate('chat')}
+
+          >
+            Tin nhắn
+
+          </Button>
+
         </Stack>
       </Drawer>
 
