@@ -73,7 +73,7 @@ const Header: React.FC = () => {
             height: '91px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('home')}
+          onClick={() => { handleNavigate('home'); }}
         />
 
         <Button
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('home')}
+          onClick={() => { handleNavigate('home'); }}
         >
           Mua bán
         </Button>
@@ -110,7 +110,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('blogs')}
+          onClick={() => { handleNavigate('blogs'); }}
         >
           Blogs
         </Button>
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
                 height: '91px',
                 display: matches1440 ? 'block' : 'none',
               }}
-              onClick={() => handleNavigate('home')}
+              onClick={() => { handleNavigate('home'); }}
             />
           </Stack>
 
@@ -185,7 +185,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('home')}
+            onClick={() => { handleNavigate('home'); }}
           >
             Mua bán
           </Button>
@@ -198,7 +198,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('chothue')}
+            onClick={() => { handleNavigate('chothue'); }}
           >
             Cho thuê
           </Button>
@@ -211,7 +211,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('blogs')}
+            onClick={() => { handleNavigate('blogs'); }}
           >
             Blogs
           </Button>
@@ -224,7 +224,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('blog')}
+            onClick={() => { handleNavigate('blog'); }}
           >
             Blog
           </Button>
@@ -236,7 +236,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('dangtin')}
+            onClick={() => { handleNavigate('dangtin'); }}
           >
             Đăng tin
           </Button>
