@@ -1,27 +1,31 @@
 // ... imports
 
-import { Box, Typography, CircularProgress, List, ListItem, TextField, IconButton, Button, Avatar, ListItemAvatar, ListItemText, Grid } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Box, Typography, CircularProgress, List, ListItem, TextField, IconButton, Button, Avatar, ListItemAvatar } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import type IMessage from '../../../../../models/interfaces/IMessage';
 import { MessageTypes } from '../../../../../constants/enums';
-
+import MediaGrid from './MediaGrid';
 
 interface ChatContentProps {
     isFetching: boolean;
     isNoChatSelected: boolean;
     messages: IMessage[];
     myId: string;
+    onMediaTap?: (index: number) => void;
+    onMessageSend: (type: MessageTypes, content: any) => void;
 }
 
-const ChatContent = (props: ChatContentProps) => {
+const ChatContent: React.FC<ChatContentProps> = (props) => {
     const [inputMessage, setInputMessage] = useState('');
     const [selectedAttachment, setSelectedAttachment] = useState<File | null>(null);
+    
 
     const handleSendMessage = () => {
-        // Xử lý khi người dùng gửi tin nhắn
-        console.log(inputMessage);
-        // Cần thêm xử lý thêm tin nhắn vào danh sách messages ở đây.
+        if (inputMessage === '' && selectedAttachment === null) {
+            return;
+        }
+        props.onMessageSend(MessageTypes.text, inputMessage);
         setInputMessage('');
     };
 
@@ -52,21 +56,8 @@ const ChatContent = (props: ChatContentProps) => {
         marginTop: '16px',
         height: '10%'
     };
-    const renderMediaContent = (media: string[], senderId: string) => {
-        const numColumns = media.length === 1 ? 1 : media.length % 2 === 0 ? 4 : 3;
-
-        return (
-            <Grid container sx={{ gap: '4px', justifyContent: props.myId === senderId ? 'flex-end' : 'flex-start' }}>
-                {media.map((item: string, index: number) => (
-                    <Grid item xs={12 / numColumns} key={index} sx={{ padding: '4px' }}>
-                        <img src={item} style={{ width: '100%' }} alt={`media-${index}`} />
-                    </Grid>
-                ))}
-            </Grid>
-        );
-    };
     return (
-        <Box sx={chatContentStyles}>
+        <Box sx={chatContentStyles} >
             <Box sx={chatListStyles}>
                 {props.isNoChatSelected ?
                     <Typography variant="h5" component="h5" sx={{ textAlign: 'center' }}>Chọn một cuộc trò chuyện để bắt đầu</Typography> :
@@ -74,33 +65,100 @@ const ChatContent = (props: ChatContentProps) => {
                         <Box>
                             <CircularProgress />
                         </Box> :
-                        <List>
-                            {props.messages.map((message) => (
-                                <ListItem
-                                    key={message.id}
-                                    sx={{  
-                                           
-                                    alignSelf: 'flex-start',
-                                 }}
-                                >
-                                    {message.content_type === MessageTypes.text && (
-                                        <ListItemText
-                                            primary={message.content.text}
-                                            secondary={
-                                                <Typography
-                                                    sx={{ display: 'inline' }}
-                                                    component="span"
-                                                    variant="body2"
-                                                    color="text.primary"
-                                                >
-                                                    {new Date(message.sent_at).toLocaleString()}
-                                                </Typography>
-                                            }
-                                        />
-                                    )}
-                                    {message.content_type === MessageTypes.media && renderMediaContent(message.content.media, Math.random() > 0.5 ? props.myId : 'other')}
-                                </ListItem>
-                            ))}
+                        <List
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '16px',
+                                overflowY: 'auto',
+                                maxHeight: '100%',
+                            }}
+                        >
+                            {props.messages.map((message) => {
+                                const isMyMessage = message.sender_id === props.myId;
+
+                                return (
+                                    <ListItem
+                                        key={message.id}
+                                        sx={{
+                                            alignSelf: 'flex-start',
+                                        }}
+                                    >
+
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: isMyMessage ? 'flex-end' : 'flex-start',
+                                                width: '100%'
+                                            }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: isMyMessage ? 'flex-end' : 'flex-start',
+                                                    maxWidth: '70%'
+                                                }}
+                                            >
+                                                {message.content_type === MessageTypes.text && (
+                                                    <>
+                                                        <Box
+                                                            sx={{
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                alignItems: 'center',
+                                                                justifyContent: isMyMessage ? 'flex-end' : 'flex-start',
+                                                                width: '100%'
+                                                            }}
+                                                        >
+                                                            <Typography
+                                                                sx={{
+                                                                    display: 'inline',
+                                                                    backgroundColor: isMyMessage ? '#026D4D' : '#F3F4F6',
+                                                                    color: isMyMessage ? '#fff' : '#000',
+                                                                    borderRadius: '8px',
+                                                                    padding: '8px',
+                                                                    maxWidth: '80%',
+                                                                    wordWrap: 'break-word'
+                                                                }}
+                                                                component="span"
+                                                                variant="body2"
+                                                                color="text.primary"
+                                                            >
+                                                                {message.content.text}
+                                                            </Typography>
+                                                        </Box>
+                                                        <Typography
+                                                            sx={{
+                                                                display: 'inline',
+                                                                alignSelf: isMyMessage ? 'flex-end' : 'flex-start',
+                                                                marginTop: '4px'
+                                                            }}
+                                                            component="span"
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                        >
+                                                            {new Date(message.sent_at).toLocaleString()}
+                                                        </Typography>
+                                                    </>
+                                                )}
+                                                {
+                                                    message.content_type === MessageTypes.media && (
+                                                        <MediaGrid
+                                                            medias={message.content.media}
+                                                            onMediaTap={(index) => { console.log(`Media ${index} tapped`); }}
+                                                        />
+                                                    )
+                                                }
+                                            </Box>
+
+                                        </Box>
+
+                                    </ListItem>
+                                )
+                            })}
                         </List>
                 }
             </Box>
