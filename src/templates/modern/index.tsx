@@ -18,6 +18,7 @@ import ModernChatPage from './modules/chat/ModernChatPage';
 import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackagePage';
 import ModernResultTransactionPage from './modules/purchase/page/ModernResultTransactionPage';
+import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
 
 function App(): JSX.Element {
   return (
@@ -146,6 +147,15 @@ function App(): JSX.Element {
         element={
           <ModernDashboardPage>
             <ModernResultTransactionPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/history'
+        element={
+          <ModernDashboardPage>
+            <ModernHistoryTransactionPage />
           </ModernDashboardPage>
         }
       />
