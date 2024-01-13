@@ -4,30 +4,30 @@ import { IconText } from './IconText';
 import moneyIcon from '../../../assets/images/currency-dollar.svg';
 import homeIcon from '../../../assets/images/home.svg';
 import timeIcon from '../../../assets/images/tabler_clock.svg';
-import { time } from 'console';
-import { useNavigate } from 'react-router-dom';
+import { VisibilityContext } from 'react-horizontal-scrolling-menu';
+import React from 'react';
 
 interface PrivateProps {
+  itemId: string;
   image: string;
   title: string;
   price: any;
   address: string;
   time: string;
+  onClick?: () => void;
   sx?: object;
 }
 
-export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateProps) => {
-  const navigate = useNavigate();
+export const PostNewCard = ({ itemId, image, price, title, address, time, onClick, sx }: PrivateProps) => {
+  const visibility = React.useContext(VisibilityContext);
 
-  const handleClick = () => {
-    navigate('/details');
-  };
+  visibility.isItemVisible(itemId);
 
   return (
     <ButtonBase
       component={Stack}
       direction={'column'}
-      onClick={handleClick}
+      onClick={onClick}
       sx={{
         ...sx,
         width: '280px',
@@ -94,6 +94,7 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
           icon={moneyIcon}
           title={price}
           color={CUSTOM_COLOR.orange}
+          maxLine={1}
         />
 
         <IconText
@@ -103,6 +104,7 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
           icon={homeIcon}
           title={address}
           color={CUSTOM_COLOR.textTitle}
+          maxLine={1}
         />
 
         <IconText
@@ -112,6 +114,7 @@ export const PostNewCard = ({ image, price, title, address, time, sx }: PrivateP
           icon={timeIcon}
           title={time}
           color={CUSTOM_COLOR.textTitle}
+          maxLine={1}
         />
       </Stack>
     </ButtonBase>

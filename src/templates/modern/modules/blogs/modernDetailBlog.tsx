@@ -1,8 +1,5 @@
 import { CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
-import { ModernNewsTag } from './components/modernNewsTag';
-import { MordernBlogCard } from './components/modernBlogCard';
 import { Box } from '@mui/system';
-import DOMPurify from 'dompurify';
 import { HtmlContent } from './components/HtmlContent';
 import { useLocation } from 'react-router-dom';
 import type Blog from '../../../../models/Blog';
@@ -22,35 +19,17 @@ function ModernDetailBlogPage(): JSX.Element {
     }
 
     React.useEffect(() => {
-        if (blog == null)
+
+        if (blog === null)
             fetchBlog().then((response) => {
                 console.log(response);
                 setBlog(response.result[0]);
             }).catch((error) => {
                 console.log(error);
             });
+
     }, []);
 
-    const newstags = [
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        },
-        {
-            title: 'Thị Trường BĐS Vùng Ven Đang Ấm Trở Lại'
-        },
-        {
-            title: 'Căn Hộ Chung Cư Tiếp Tục Dẫn Sóng Thị Trường BĐS'
-        },
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        },
-        {
-            title: 'Căn Hộ Chung Cư Tiếp Tục Dẫn Sóng Thị Trường BĐS'
-        },
-        {
-            title: 'Lãi Suất Vay Ngân Hàng Tháng 10/2023 Mới Nhất'
-        }
-    ]
 
     return blog === null ? (
         <Box sx={{
@@ -124,7 +103,7 @@ function ModernDetailBlogPage(): JSX.Element {
 
                         </Stack>
 
-                        <Stack
+                        {/* <Stack
                             display={matches ? 'block' : 'none'}
                             width={'30%'}
 
@@ -162,8 +141,7 @@ function ModernDetailBlogPage(): JSX.Element {
 
                             </Stack>
 
-                        </Stack>
-
+                        </Stack> */}
                     </Stack>
 
                 </Stack>

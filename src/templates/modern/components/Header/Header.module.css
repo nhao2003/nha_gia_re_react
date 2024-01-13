@@ -29,3 +29,12 @@
   background-color: #29487d;
   font-weight: 700;
 }
+
+.user {
+  display: flex;
+  align-items: center;
+}
+
+.user:hover {
+  cursor: pointer;
+}

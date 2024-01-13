@@ -4,7 +4,7 @@ import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 //   const response = await axios.post(`${BASE_URL}/login`, { username, password })
 //   return response.body
 // }
-
+import appConfig from '../constants/config';
 interface ApiServiceConfig {
   baseURL?: string;
   Url?: string;
@@ -47,16 +47,12 @@ export class ApiServiceBuilder {
 }
 
 export class ApiService {
-  private readonly  isProduction = true;
-  private readonly PRODUCTION_API_URL = 'https://nha-gia-re-server.onrender.com/api/v1';
-  private readonly DEVELOPMENT_API_URL = 'http://localhost:8000/api/v1';
-  private readonly API_URL = this.isProduction ? this.PRODUCTION_API_URL : this.DEVELOPMENT_API_URL;
   private readonly api: AxiosInstance;
   private readonly apiConfig: ApiServiceConfig;
 
   public constructor(config: ApiServiceConfig = {}) {
     this.api = axios.create({
-      baseURL: config.baseURL ?? this.API_URL,
+      baseURL: config.baseURL ?? appConfig.API_URL,
       headers: config.headers ?? {
         'Content-Type': 'application/json',
       },

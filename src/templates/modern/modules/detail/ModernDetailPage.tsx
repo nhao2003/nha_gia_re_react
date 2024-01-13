@@ -1,4 +1,4 @@
-import { Avatar, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -18,60 +18,56 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import EastIcon from '@mui/icons-material/East';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Carousel } from '../home/components/Carousel';
 import PostListComponent from '../home/components/PostListComponent';
 import Grid from '@mui/material/Grid';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
+import type RealEstatePost from '../../../../models/RealEstatePost';
+import { ApiServiceBuilder } from '../../../../services/api.service';
+import dateUtils from '../../../../utils/dateUtils';
+import { Direction, LegalDocumentStatus, PropertyTypes } from '../../../../constants/enums';
 
 export function ModernDetailPage(): JSX.Element {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/search');
-  };
-
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
-  const listImage = [
-    {
-      id: 0,
-      src: 'https://thanhvietcorp.vn/uploads/images/Bao%20chi/cac-mau-nha-vuon-dep.jpg',
-      alt: 'Image 1 for carousel',
-    },
-    {
-      id: 1,
-      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-      alt: 'Image 2 for carousel',
-    },
-    {
-      id: 2,
-      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-      alt: 'Image 3 for carousel',
-    },
-    {
-      id: 3,
-      src: 'https://media.tapchitaichinh.vn/w1480/images/upload/phunganhtuan/2015_07_13/phong-thuy-cho-nha-o-8_CLCV.jpg',
-      alt: 'Image 4 for carousel',
-    },
-    {
-      id: 4,
-      src: 'https://longvan.com.vn/wp-content/uploads/2020/11/mau-nha-cap-3-thiet-ke-dep-nhat-nam-31.jpg',
-      alt: 'Image 5 for carousel',
-    },
-    {
-      id: 5,
-      src: 'https://mogi.vn/news/wp-content/uploads/2018/12/anh-nha-dep-8.jpg',
-      alt: 'Image 6 for carousel',
-    },
-    {
-      id: 6,
-      src: 'https://www.tapdoantrananh.com.vn/uploads/files/2023/01/18/biet-thu-dep-2.jpg',
-      alt: 'Image 7 for carousel',
-    },
-  ];
+  const [listImage, setListImage] = useState<ImageInfo[]>([]);
+  
+  // Get state
+  const [post, setPost] = React.useState<RealEstatePost>(useLocation().state as RealEstatePost);
+  const id = useLocation().pathname.split('/')[2];
+  async function fetchPost() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl("/posts?post_id[eq]='" + id + "'")
+      .build();
+    console.log(query);
+    const response = await query.get();
+    return response.data as any;
+  }
+
+  React.useEffect(() => {
+    if (post === null)
+      fetchPost()
+        .then((response) => {
+          setPost(response.result[0]);
+          // Explicitly specify the type of 'response.result[0]'
+          const firstPost = response.result[0] as RealEstatePost | undefined;
+
+          if (firstPost !== undefined) {
+            setPost(firstPost);
+            setListImage(formatImages(firstPost.images));
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    else {
+      setListImage(formatImages(post.images));
+    }
+  }, []);
 
   const [selectImage, setSelectImage] = useState(0);
   const [indexImage, setIndexImage] = useState(0);
@@ -130,7 +126,66 @@ export function ModernDetailPage(): JSX.Element {
     mohinh: 'Cá nhân',
   };
 
-  return (
+  const navigate = useNavigate();
+
+  const navigateToProfile = () => {
+    if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
+  };
+
+  // Get API Relate
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [postsRelate, setPostsRelate] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page') ?? '1';
+  async function fetchPosts() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts')
+      .withParams({
+        page: page,
+        search: post?.title,
+      })
+      .build();
+    console.log(query);
+    const response = await query.get();
+    return response.data as any;
+  }
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchPosts()
+      .then((response) => {
+        setPostsRelate({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [page]);
+
+  const features: any = post.features;
+
+
+  return post === null ? (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <Stack alignItems={'center'}>
       <Stack width={'100%'} height={'fit-content'} alignItems={'center'} marginTop={'20px'}>
         <Stack
@@ -150,89 +205,6 @@ export function ModernDetailPage(): JSX.Element {
             alignItems={'center'}
           >
             <Carousel slides={listImage} style={{ width: '95%' }} />
-            <Stack
-              direction={'row'}
-              spacing={1}
-              width={'100%'}
-              justifyContent={'center'}
-              sx={{
-                position: 'relative',
-              }}
-            >
-              {listImage.slice(indexImage, indexImage + 4).map((image, index) => (
-                <Stack
-                  key={index}
-                  sx={{
-                    width: '23%',
-
-                    border: selectImage === image.id ? '3px solid #000' : null,
-                  }}
-                  onClick={() => handlerSelectImage(index)}
-                >
-                  <img
-                    style={{
-                      overflow: 'hidden',
-                      objectFit: 'cover',
-                    }}
-                    src={image.src}
-                  />
-                </Stack>
-              ))}
-
-              <Stack
-                sx={{
-                  width: '100%',
-
-                  position: 'absolute',
-                  top: '40%',
-                }}
-                direction={'row'}
-                justifyContent={'space-between'}
-              >
-                <Stack
-                  height={'30px'}
-                  width={'30px'}
-                  sx={{
-                    borderRadius: '20px',
-                    backgroundColor: '#B8B7B7BB',
-                    marginLeft: '20px',
-                    '&:hover': {
-                      backgroundColor: '#8E8C8C',
-                    },
-                  }}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  onClick={previousImage}
-                >
-                  <KeyboardArrowLeftIcon
-                    sx={{
-                      color: CUSTOM_COLOR.white,
-                    }}
-                  />
-                </Stack>
-                <Stack
-                  height={'30px'}
-                  width={'30px'}
-                  sx={{
-                    borderRadius: '20px',
-                    backgroundColor: '#B8B7B7BB',
-                    marginRight: '20px',
-                    '&:hover': {
-                      backgroundColor: '#8E8C8C',
-                    },
-                  }}
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  onClick={nextImage}
-                >
-                  <KeyboardArrowRightIcon
-                    sx={{
-                      color: CUSTOM_COLOR.white,
-                    }}
-                  />
-                </Stack>
-              </Stack>
-            </Stack>
 
             <Stack
               direction={'column'}
@@ -249,12 +221,12 @@ export function ModernDetailPage(): JSX.Element {
                   fontSize: '20px',
                 }}
               >
-                {home.title}
+                {post.title}
               </Typography>
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
-                  {home.price} tỷ - {home.area} <span>m</span>
+                  {post.price} VNĐ - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
@@ -271,7 +243,7 @@ export function ModernDetailPage(): JSX.Element {
                   </Button>
                 </Stack>
               </Stack>
-
+ 
               <Stack
                 direction={'row'}
                 alignSelf={'start'}
@@ -283,7 +255,7 @@ export function ModernDetailPage(): JSX.Element {
                 }}
               >
                 <LocationOnOutlinedIcon />
-                <Typography>{home.address}</Typography>
+                <Typography>{post.address_detail}</Typography>
               </Stack>
 
               <Stack
@@ -297,7 +269,7 @@ export function ModernDetailPage(): JSX.Element {
                 }}
               >
                 <AccessTimeOutlinedIcon />
-                <Typography>{home.time}</Typography>
+                <Typography>{dateUtils.getTimeAgoVi(post.posted_date)}</Typography>
               </Stack>
 
               <Stack
@@ -311,7 +283,7 @@ export function ModernDetailPage(): JSX.Element {
                 }}
               >
                 <BeenhereOutlinedIcon />
-                <Typography>{home.news_status}</Typography>
+                <Typography>Tin đã được kiểm duyệt</Typography>
               </Stack>
 
               <Typography
@@ -333,21 +305,44 @@ export function ModernDetailPage(): JSX.Element {
                   }}
                   spacing={1}
                 >
-                  <TileIcon icon={HomeWorkIcon} title='Tình trạng bất động sản' value={home.status} />
+                  {                  
+                                features?.is_hand_over !== null ??
+                                       <TileIcon
+                                       icon={HomeWorkIcon}
+                                       title="Tình trạng bàn giao"
+                                       value={features.is_hand_over === true ? "Đã bàn giao" : "Chưa bàn giao"}
+                                   />
+                            }
+
 
                   <TileIcon
                     icon={MonetizationOnOutlinedIcon}
                     title='Giá'
-                    value={home.price_per_m2}
+                    value={post.price / post.area}
                     unit={
-                      <>
-                        <span>triệu/m</span>
-                        <sup style={{ fontSize: '12px' }}>2</sup>
-                      </>
+                      <><span>VND/m</span><sup style={{ fontSize: '12px' }}>2</sup></>
                     }
                   />
-                  <TileIcon icon={WcIcon} title='Số phòng vệ sinh' value={home.toilet} unit={'phòng'} />
-                  <TileIcon icon={LocationCityIcon} title='Loại hình căn hộ' value={home.type} />
+                      {
+                                       
+                          <TileIcon
+                          icon={WcIcon}
+                          title="Số phòng vệ sinh"
+                          value={features?.num_of_toilets ?? "Không có"}
+                          unit={"phòng"}
+                          />
+                        
+                      }
+                   <TileIcon
+                      icon={LocationCityIcon}
+                      title="Loại hình căn hộ"
+                      value={post.type_id === PropertyTypes.apartment ? "Căn hộ" : 
+                      post.type_id === PropertyTypes.house ? "Nhà ở" :
+                      post.type_id === PropertyTypes.land ? "Đất" :
+                      post.type_id === PropertyTypes.motel ? "Nhà trọ" :
+                      "Văn phòng"
+                      }
+                  />
                 </Stack>
 
                 <Stack
@@ -359,7 +354,7 @@ export function ModernDetailPage(): JSX.Element {
                   <TileIcon
                     icon={CropIcon}
                     title='Diện tích'
-                    value={home.area}
+                    value={post.area}
                     unit={
                       <>
                         <span>m</span>
@@ -371,7 +366,7 @@ export function ModernDetailPage(): JSX.Element {
                   <TileIcon
                     icon={BedroomParentOutlinedIcon}
                     title='Số phòng ngủ'
-                    value={home.bedroom}
+                    value={features?.num_of_bed_rooms ?? "Không có"}
                     unit={
                       <>
                         <span>triệu/m</span>
@@ -379,13 +374,31 @@ export function ModernDetailPage(): JSX.Element {
                       </>
                     }
                   />
-                  <TileIcon
-                    icon={MeetingRoomOutlinedIcon}
-                    title='Hướng của chính'
-                    value={home.direction}
-                    unit={'phòng'}
-                  />
-                  <TileIcon icon={ReceiptLongOutlinedIcon} title='Giấy tờ pháp lý' value={home.legal} />
+                 {
+                        features?.main_door_direction ??
+
+                        <TileIcon
+                        icon={MeetingRoomOutlinedIcon}
+                        title="Hướng cửa chính"
+                        value={features.main_door_direction === Direction.north ? "Bắc" :
+                        features.main_door_direction === Direction.south ? "Nam" :
+                        features.main_door_direction === Direction.west ? "Tây" : "Đông"
+                        }
+                        
+                    />
+                    }
+                      {
+                            features?.legal_document_status ??
+                            <TileIcon
+                          icon={ReceiptLongOutlinedIcon}
+                          title="Giấy tờ pháp lý"
+                          value={ features.legal_document_status === LegalDocumentStatus.have_certificates ? "Đã có giấy tờ" :
+                          features.legal_document_status === LegalDocumentStatus.waiting_for_certificates ? "Chờ giấy tờ" : "Giấy tờ khác" 
+                          }
+                          />
+
+
+                      }
                 </Stack>
               </Stack>
 
@@ -402,7 +415,7 @@ export function ModernDetailPage(): JSX.Element {
 
               <React.Fragment>
                 <Typography variant='body1' paragraph>
-                  {home.describe}
+                  {post.description}
                 </Typography>
               </React.Fragment>
             </Stack>
@@ -418,13 +431,13 @@ export function ModernDetailPage(): JSX.Element {
             }}
           >
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
-              <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
+              <Avatar alt='Travis Howard' src={post.user.avatar ?? '/static/images/avatar/2.jpg'} />
 
               <Stack>
-                <Typography variant='h6'>Đào Xuân Huy</Typography>
+                <Typography variant='h6'>{post.user.first_name + ' ' + post.user.last_name}</Typography>
                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                  {home.mohinh === 'cá nhân' ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
-                  <Typography>{home.mohinh === 'cá nhân' ? 'Cá nhân' : 'Môi giới'}</Typography>
+                  {post.is_pro_seller ? <PersonOutlineIcon /> : <BusinessCenterIcon />}
+                  <Typography>{post.is_pro_seller ? 'Cá nhân' : 'Môi giới'}</Typography>
                 </Stack>
               </Stack>
             </Stack>
@@ -437,6 +450,7 @@ export function ModernDetailPage(): JSX.Element {
                 backgroundColor: CUSTOM_COLOR.green,
               }}
               endIcon={<ChevronRightIcon />}
+              onClick={navigateToProfile}
             >
               Xem Hồ Sơ
             </Button>
@@ -455,10 +469,36 @@ export function ModernDetailPage(): JSX.Element {
           display: 'flex',
         }}
       >
-        <Stack direction={'row'} marginBottom={1} justifyContent={'space-between'}>
-          <PostListComponent title={'Bài đăng tương tự'} />
-        </Stack>
+        {isLoading ? (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <PostListComponent title={'Bài đăng tương tự'} posts={postsRelate.posts} />
+        )}
       </Stack>
     </Stack>
   );
 }
+
+interface ImageInfo {
+  id: number;
+  src: string;
+  alt: string;
+}
+
+const formatImages = (images: string[]): ImageInfo[] => {
+  return images.map((image, index) => ({
+    id: index,
+    src: image,
+    alt: `Image ${index + 1} for carousel`,
+  }));
+};

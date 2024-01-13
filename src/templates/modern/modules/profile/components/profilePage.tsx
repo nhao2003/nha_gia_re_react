@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {
   AppBar,
+  Avatar,
   Box,
+  CircularProgress,
   Collapse,
   CssBaseline,
   Divider,
@@ -22,10 +24,16 @@ import {
   LocalActivity,
   ExpandMore as ExpandMoreIcon,
   Menu as MenuIcon,
+  EmailOutlined,
+  Call,
 } from '@mui/icons-material';
 import { ChangePassword } from './ChangePassword';
 import ModernPostManagement from '../../postManagement/ModernPostManagement';
-import PostCreate from './PostCreate';
+import PostCreate from '../../createpost/PostCreate';
+import type { User } from '../../../../../models/User';
+import UserService from '../../../../../services/user.service';
+import ModernUpdateProfile from '../../auth/UpdateProfile/ModenUpdateProfile';
+import { useNavigate } from 'react-router';
 
 const drawerWidth = '20%';
 
@@ -40,65 +48,38 @@ interface MenuItem {
 }
 
 interface UserProfileProps {
-  username: string;
-  posts: number;
-  followers: number;
-  joinDate: string;
+  avatar: string;
+  fullname: string;
+  email: string;
+  phone: string;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({
-  username,
-  posts,
-  followers,
-  joinDate,
-}) => {
+const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phone }) => {
+  const navagate = useNavigate();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
-      <AccountCircle sx={{ fontSize: 100 }} />
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px' }}>
-        <Typography variant="h6" noWrap component="div">
-          {username}
-        </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="body2" noWrap component="div">
-              {posts}
-            </Typography>
-            <Typography variant="body2" noWrap component="div">
-              Bài viết
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="body2" noWrap component="div">
-              {followers}
-            </Typography>
-            <Typography variant="body2" noWrap component="div">
-              Người theo dõi
-            </Typography>
-          </Box>
-        </Box>
-        <Typography variant="body2" noWrap component="div"></Typography>
-      </Box>
-      <List>
-        <ListItem disablePadding>
-          <ListItem>
-            <CalendarToday />
-            <ListItemText primary={`Tham gia từ ${joinDate}`} />
-          </ListItem>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItem>
-            <LocalActivity />
-            <ListItemText primary={`Tham gia từ ${joinDate}`} />
-          </ListItem>
-        </ListItem>
-      </List>
+      <Avatar sx={{ width: '80%', height: '80%' }} alt={fullname} src={avatar} />
+      <Typography variant='h6' component='div'>
+        {fullname}
+      </Typography>
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ alignItems: 'center' }}>
+          <EmailOutlined />
+        </ListItemIcon>
+        <ListItemText primary={email} />
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemIcon sx={{ alignItems: 'center' }}>
+          <Call />
+        </ListItemIcon>
+        <ListItemText primary={phone} />
+      </ListItem>
     </Box>
   );
 };
 
-
 export const ProfilePage: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
   const items: MenuItem[] = [
     {
       title: 'Quản lý tài khoản',
@@ -124,11 +105,6 @@ export const ProfilePage: React.FC = () => {
           key: 'my-post',
           title: 'Bài viết của tôi',
         },
-        {
-          key: 'saved-post',
-          title: 'Bài viết đã lưu',
-        },
-
       ],
     },
     {
@@ -143,6 +119,24 @@ export const ProfilePage: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  function getMyInfo() {
+    UserService.getInstance()
+      .getMyProfile()
+      .then((res: any) => {
+        if (res.status !== 'success') {
+          throw new Error(res.message);
+        }
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  React.useEffect(() => {
+    getMyInfo();
+  }, []);
+
   const [openCollapse, setOpenCollapse] = useState<Record<string, boolean>>({});
 
   const handleCollapseToggle = (title: string) => {
@@ -153,39 +147,50 @@ export const ProfilePage: React.FC = () => {
   };
 
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-
+  const navagate = useNavigate();
   const drawer = (
-    <Box sx={
-      {
+    <Box
+      sx={{
         flexDirection: 'column',
         display: 'flex',
-      }
-    }>
-      <UserProfile username="Nguyễn Văn A" posts={10} followers={222} joinDate="01/01/2021" />
+      }}
+    >
+      <UserProfile
+        fullname={
+          user?.first_name == null || user?.last_name == null
+            ? 'Chưa cung cấp'
+            : user?.first_name + ' ' + user?.last_name
+        }
+        avatar={user?.avatar ?? 'https://picsum.photos/200'}
+        email={user?.email ?? 'Chưa cung cấp'}
+        phone={user?.phone ?? 'Chưa cung cấp'}
+      />
       <Divider />
       <List>
-        {items.map((item, index) => (
-          (item.children != null) ? (
+        {items.map((item, index) =>
+          item.children != null ? (
             <React.Fragment key={item.title}>
-              <ListItemButton onClick={() => { handleCollapseToggle(item.title); }}>
-                <ListItemIcon sx={{ alignItems: 'center' }}>
-                  {item.icon}
-                </ListItemIcon>
+              <ListItemButton
+                onClick={() => {
+                  console.log(item);
+                  handleCollapseToggle(item.title);
+                }}
+              >
+                <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
-                <ExpandMoreIcon
-                  style={{ transform: openCollapse[item.title] ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                />
+                <ExpandMoreIcon style={{ transform: openCollapse[item.title] ? 'rotate(180deg)' : 'rotate(0deg)' }} />
               </ListItemButton>
-              <Collapse in={openCollapse[item.title]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+              <Collapse in={openCollapse[item.title]} timeout='auto' unmountOnExit>
+                <List component='div' disablePadding>
                   {item.children.map((child) => (
                     <ListItem key={child.title} disablePadding>
-                      <ListItemButton sx={{ paddingLeft: 9 }} onClick={
-                        () => {
+                      <ListItemButton
+                        sx={{ paddingLeft: 9 }}
+                        onClick={() => {
                           setSelectedItemKey(child.key);
-                        }
-                      } selected={selectedItemKey === child.key
-                      } >
+                        }}
+                        selected={selectedItemKey === child.key}
+                      >
                         <ListItemText primary={child.title} />
                       </ListItemButton>
                     </ListItem>
@@ -194,21 +199,37 @@ export const ProfilePage: React.FC = () => {
               </Collapse>
             </React.Fragment>
           ) : (
-            <ListItem key={item.title} disablePadding>
+            <ListItem key={item.title} disablePadding onClick={
+              () => {
+                if (item.key === 'logout') {
+                  localStorage.removeItem('access_token');
+                  navagate('/');
+                }
+              }
+            }>
               <ListItemButton>
-                <ListItemIcon sx={{ alignItems: 'center' }}>
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>
             </ListItem>
-          )
-        ))}
+          ),
+        )}
       </List>
     </Box>
   );
 
-  return (
+  return user === null ? (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       {/* <CssBaseline /> */}
       <AppBar
@@ -221,27 +242,23 @@ export const ProfilePage: React.FC = () => {
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant='h6' noWrap component='div'>
             Your App Title
           </Typography>
         </Toolbar>
       </AppBar>
 
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
+      <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label='mailbox folders'>
         <Drawer
-          variant="temporary"
+          variant='temporary'
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
@@ -263,9 +280,9 @@ export const ProfilePage: React.FC = () => {
           {drawer}
         </Box>
       </Box>
-      <Divider orientation="vertical" flexItem />
+      <Divider orientation='vertical' flexItem />
       <Box
-        component="main"
+        component='main'
         sx={{
           flexGrow: 1,
           p: 3,
@@ -273,23 +290,17 @@ export const ProfilePage: React.FC = () => {
         }}
       >
         {selectedItemKey === 'profile' ? (
-          <div>
-            <h1>Profile</h1>
-          </div>
+          <ModernUpdateProfile />
         ) : selectedItemKey === 'change-password' ? (
           <ChangePassword />
         ) : selectedItemKey === 'my-post' ? (
           <ModernPostManagement />
-        ) : selectedItemKey === 'saved-post' ? (
-          <PostCreate />
         ) : selectedItemKey === 'logout' ? (
           <div>
             <h1>Logout</h1>
           </div>
         ) : (
-
-          <Typography>Diam kasd amet at delenit et justo ut possim feugiat commodo consequat elitr rebum sit clita. Ipsum molestie sit lorem accusam ipsum nulla cum duo commodo eos elitr diam odio quis esse. Duo consetetur clita eirmod stet. Vero sit gubergren aliquyam gubergren illum duis ut sit dolore ut. Qui stet eos duo takimata enim facer duis diam veniam no sea et labore. Aliquyam autem invidunt amet. Diam invidunt placerat ut clita accumsan nonumy justo invidunt quis et wisi ea. Consetetur ullamcorper dolor lorem invidunt ut gubergren nulla accusam stet sadipscing nobis dolor. Iusto et no lorem gubergren labore et dolore possim sanctus takimata. Voluptua dignissim sanctus vel et veniam euismod ipsum. Tempor nonumy iriure lorem ipsum et velit. Vero vero feugiat sit clita dolore sea diam vero. Magna rebum eu et illum elitr tempor sed. Ipsum nonumy nisl magna eos eirmod amet nisl. Delenit lorem euismod justo eirmod lorem clita ad consequat et dolor eos lorem consetetur.</Typography>
-
+          <ModernUpdateProfile />
         )}
       </Box>
     </Box>

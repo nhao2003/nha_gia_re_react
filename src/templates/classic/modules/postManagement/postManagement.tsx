@@ -313,7 +313,7 @@ export default function PostManagement() {
         </TabPanel>
       </SwipeableViews>
       {/* Xem thêm */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <CircularProgress sx={{ display: isLoading  ? 'block' : 'none' }} />
         <Button variant='text' sx={{ display: isLoading || !checkCanLoadMore(value) ? 'none' : 'block' }} onClick={() => {
           handleLoadMore(value);

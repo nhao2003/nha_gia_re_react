@@ -20,7 +20,7 @@ export const LovedNews = () => {
             }}>Tin đã yêu thích</Typography>
 
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                {Array.from(Array(6)).map((_, index) => (
+                {/* {Array.from(Array(6)).map((_, index) => (
                     <Grid item xs={2} sm={4} md={4} key={index}>
                         <HomeCard
                             image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
@@ -33,7 +33,7 @@ export const LovedNews = () => {
                             areas={234}
                         />
                     </Grid>
-                ))}
+                ))} */}
             </Grid>
 
         </Box>

@@ -3,11 +3,10 @@ import AuthService from './auth.service';
 
 class UserService {
   private static instance: UserService;
-  private readonly api: ApiServiceBuilder;
-  private constructor() {
-    this.api = new ApiServiceBuilder();
+  api(): ApiServiceBuilder {
+    return new ApiServiceBuilder();
   }
-
+  
   public static getInstance(): UserService {
     if (UserService.instance === undefined || UserService.instance === null) {
       UserService.instance = new UserService();
@@ -17,7 +16,7 @@ class UserService {
   }
 
   public async updateUser(): Promise<any> {
-    const response = await this.api
+    const response = await this.api()
       .withUrl('/users/update-profile')
       .withHeaders({
         Authorization:
@@ -41,16 +40,29 @@ class UserService {
 
     return response.data ?? null;
   }
+
+  public async getMyProfile(): Promise<any> {
+    const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6ImY4NDcyZWJiLTk5OWItNGIyNi04YTkwLTE5ZjcxZTI5Mjk2YSIsImlhdCI6MTcwMzAwNDI5NCwiZXhwIjoxNzA1NTk2Mjk0fQ.Zt5v6ES-fage9sLz-QRiBTN-0fTNXHp4Q7PnMO6XVFs';
+    const response = await this.api()
+      .withUrl('/users/profile')
+      .withHeaders({
+        Authorization: `Bearer ${accessToken}`,
+      })
+      .build()
+      .get();
+
+    return response.data ?? null;
+  }
 }
 
 export default UserService;
 
-UserService.getInstance()
-  .updateUser()
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error.message);
-    console.log(error.response.data);
-  });
+// UserService.getInstance()
+//   .getMyProfile()
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//     console.log(error.response.data);
+//   });
