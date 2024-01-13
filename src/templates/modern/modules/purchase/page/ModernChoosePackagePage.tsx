@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, Radio } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface TermPackage {
   id: string;
@@ -8,6 +9,12 @@ interface TermPackage {
 }
 
 const MordenChoosePackagePage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/purchase/result');
+  };
+
   const [selectedTerm, setSelectedTerm] = useState<string>('12-month');
   const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
 
@@ -72,7 +79,7 @@ const MordenChoosePackagePage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={() => {
-            // Xử lý khi nhấn nút Mua ngay
+            handleClick();
           }}
           style={{
             width: '100%',

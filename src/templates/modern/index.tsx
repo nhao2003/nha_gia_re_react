@@ -17,6 +17,7 @@ import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
 import ModernChatPage from './modules/chat/ModernChatPage';
 import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackagePage';
+import ModernResultTransactionPage from './modules/purchase/page/ModernResultTransactionPage';
 
 function App(): JSX.Element {
   return (
@@ -136,6 +137,15 @@ function App(): JSX.Element {
         element={
           <ModernDashboardPage>
             <MordenChoosePackagePage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/result'
+        element={
+          <ModernDashboardPage>
+            <ModernResultTransactionPage />
           </ModernDashboardPage>
         }
       />
