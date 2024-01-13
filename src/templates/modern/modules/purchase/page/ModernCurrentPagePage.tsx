@@ -1,7 +1,7 @@
 import React from 'react';
 import ServicePackage from '../component/ServicePackage';
 
-const CurrentPackagePage: React.FC = () => (
+const MordenCurrentPackagePage: React.FC = () => (
   <div style={{ textAlign: 'center', margin: '0 20%' }}>
     <div
       style={{
@@ -68,4 +68,4 @@ const CurrentPackagePage: React.FC = () => (
   </div>
 );
 
-export default CurrentPackagePage;
+export default MordenCurrentPackagePage;
