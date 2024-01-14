@@ -20,13 +20,10 @@ function ModernChatPage() {
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
-  const [newMessage, setNewMessage] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const userId = AuthService.getInstance().getUserIdFromToken();
   const handleSocketEvent = (type: SocketEvent, data: any) => {
     const updatedConversations = [...conversations];
-    const updatedMessages = { ...messages };
     switch (type) {
       case SocketEvent.Init:
         setConversations(data);
@@ -184,6 +181,8 @@ function ModernChatPage() {
                 alignItems="flex-start"
                 onClick={() => {
                   setSelectedConversation(conversation.id);
+                  /// Set conversation id to url
+                  navigate(`/chat/${otherParticipant.user_id}`);
                 }}
                 sx={{
                   backgroundColor: selectedConversation === conversation.id ? '#e0e0e0' : 'transparent',

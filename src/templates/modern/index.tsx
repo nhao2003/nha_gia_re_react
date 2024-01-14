@@ -160,7 +160,7 @@ function App(): JSX.Element {
       />
 
       <Route
-        path='/chat'
+        path='/chat/:id?'
         element={
           <div
             style={{
