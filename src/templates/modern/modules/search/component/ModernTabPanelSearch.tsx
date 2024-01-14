@@ -4,11 +4,13 @@ import type RealEstatePost from '../../../../../models/RealEstatePost';
 import React from 'react';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import dateUtils from '../../../../../utils/dateUtils';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams} from 'react-router-dom';
 
 export function ModernTabPanelSearch(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
+
+
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [posts, setPosts] = React.useState<{
     numOfPages: number;
@@ -19,20 +21,14 @@ export function ModernTabPanelSearch(): JSX.Element {
   const page = searchParams.get('page') ?? '1';
   const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
 
+
   async function fetchPosts() {
-    const query = new ApiServiceBuilder()
-      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
-      .withUrl('/posts')
-      .withParams({
-        page: page,
-        q: searchTerm,
-      })
-      .build();
-    const response = await query.get();
-    return response.data as any;
+    const response  = await fetch(`https://nha-gia-re-server.onrender.com/api/v1/post_address->>province_code[eq]='1'`);
+    return  response.json as any;
   }
 
   React.useEffect(() => {
+
     setIsLoading(true);
     fetchPosts()
       .then((response) => {
@@ -47,6 +43,9 @@ export function ModernTabPanelSearch(): JSX.Element {
       .finally(() => {
         setIsLoading(false);
       });
+
+
+    console.log(searchTerm);
   }, [page]);
 
   return isLoading ? (
