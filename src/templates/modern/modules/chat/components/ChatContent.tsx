@@ -257,6 +257,16 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                         label="Nhập tin nhắn..."
                         value={inputMessage}
                         onChange={(e) => { setInputMessage(e.target.value); }}
+                        onKeyDown={
+                            (e) => {
+                                if (e.key === 'Enter') {
+                                    handleSendMessage().catch((err) => {
+                                        console.log(err);
+                                    });
+                                }
+                            }
+                        }
+
                     />
                     <input type="file" multiple={true}
                         accept="image/*, video/*" style={{ display: 'none' }}
@@ -285,7 +295,6 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                                         color: '#fff',
                                     },
                                 }}
-
                                 onClick={
                                     () => {
                                         handleSendMessage().catch((err) => {
@@ -293,6 +302,7 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                                         });
                                     }
                                 } >
+
                                 Gửi
                             </Button>
                     }
