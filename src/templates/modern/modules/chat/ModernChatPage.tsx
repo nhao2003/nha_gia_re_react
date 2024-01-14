@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Avatar, Typography, List, ListItem, ListItemAvatar, ListItemText, Divider, Button } from '@mui/material';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, Avatar, Typography, List, ListItemAvatar, ListItemText, Divider, ListItemButton } from '@mui/material';
 import { connect } from 'socket.io-client';
 import ChatContent from './components/ChatContent';
 import type { MessageTypes } from '../../../../constants/enums';
+import AuthService from '../../../../services/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 enum SocketEvent {
   Init = 'init',
@@ -13,7 +14,6 @@ enum SocketEvent {
 }
 
 const host = 'http://localhost:8000/conversations';
-const myId = '1a9a5785-721a-4bb5-beb7-9d752e2070d4';
 
 function ModernChatPage() {
   const socketRef = useRef<any>();
@@ -23,10 +23,10 @@ function ModernChatPage() {
   const [newMessage, setNewMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const userId = AuthService.getInstance().getUserIdFromToken();
   const handleSocketEvent = (type: SocketEvent, data: any) => {
     const updatedConversations = [...conversations];
     const updatedMessages = { ...messages };
-
     switch (type) {
       case SocketEvent.Init:
         setConversations(data);
@@ -56,10 +56,11 @@ function ModernChatPage() {
     }
   };
 
-  const initializeSocket = () => {
+  const initializeSocket = async () => {
+    const accessToken = await AuthService.getInstance().getAccessToken();
     socketRef.current = connect(host, {
       auth: {
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6IjUxOTk4NmMwLWEwY2QtNDIzMC1iMWRkLTc1ODkwNmZiYTk5NyIsImlhdCI6MTcwNTA1MDIyMCwiZXhwIjoxNzA3NjQyMjIwfQ.MQPNrJP4mP1WJ5x2FuNV9WLeezSnTcQ2OGf2SGmS4SI',
+        token: accessToken,
       },
     });
 
@@ -111,33 +112,29 @@ function ModernChatPage() {
       console.log('Messages', messages);
     });
   };
-
+  const navigate = useNavigate();
   useEffect(() => {
-    initializeSocket();
+    initializeSocket().catch((err) => {
+      console.log(err);
+      // Go to login page
+      navigate('/signin');
+    });
 
     return () => {
-      socketRef.current.disconnect();
+      socketRef.current?.disconnect();
     };
   }, []);
 
   useEffect(() => {
     const index = Object.keys(messages).findIndex((key) => key === selectedConversation);
     if (index === -1) {
-      socketRef.current.emit('init_chat', {
+      socketRef.current?.emit('init_chat', {
         conversation_id: selectedConversation,
       });
     }
   }, [selectedConversation]);
 
-  const handleSendMessage = () => {
-    console.log(newMessage);
-    setNewMessage('');
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setSelectedFile(file ?? null);
-  };
+  const [isXs, setIsXs] = useState(window.innerWidth < 600);
 
   useEffect(() => {
     if (listRef.current !== null) {
@@ -148,51 +145,81 @@ function ModernChatPage() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsXs(window.innerWidth < 600);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <Box sx={{
-      display: 'flex', flexDirection: 'row', gap: '16px', width: '100%', minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100wh',
+      overflowY: 'auto'
     }}>
 
-      <List sx={{ width: '25%', overflowY: 'auto', maxHeight: '100%', backgroundColor: '#f5f5f5' }}
+      <List
+        sx={{
+          width: {
+            xl: '25%',
+            lg: '25%',
+            md: '25%',
+            sm: '25%',
+            xs: '15%',
+          },
+          // overflowY: 'auto',
+          backgroundColor: '#f5f5f5',
+        }}
       >
         {conversations.map((conversation: any) => {
-          const otherParticipant: any = conversation.participants.find((participant: any) => participant.user_id !== myId);
+          const otherParticipant: any = conversation.participants.find((participant: any) => participant.user_id !== userId);
           const otherUser: any = conversation.users.find((user: any) => user.id === otherParticipant.user_id);
           return (
             <React.Fragment key={conversation.id}>
-              <ListItem
+              <ListItemButton
                 alignItems="flex-start"
-                button
                 onClick={() => {
                   setSelectedConversation(conversation.id);
                 }}
+                sx={{
+                  backgroundColor: selectedConversation === conversation.id ? '#e0e0e0' : 'transparent',
+                }
+                }
               >
                 <ListItemAvatar>
                   <Avatar alt={otherUser.first_name} src={otherUser.avatar} />
                 </ListItemAvatar>
-                <ListItemText
-                  primary={otherUser.first_name}
-                  secondary={
-                    <React.Fragment>
-                      <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                        {conversation.last_message.content.text}
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
+                {
+                  !isXs &&
+                  <ListItemText
+                    primary={otherUser.first_name}
+                    secondary={
+                      <React.Fragment>
+                        <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
+                          {conversation.last_message.content?.text ?? 'Bắt đầu cuộc trò chuyện'}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                }
+              </ListItemButton>
+              {
+                !isXs &&
+                <Divider variant="inset" component="li" />
+              }
             </React.Fragment>
           );
         })}
       </List>
-
-
       <ChatContent
         messages={messages[selectedConversation ?? ''] ?? []}
         isNoChatSelected={selectedConversation === null}
         isFetching={messages[selectedConversation ?? ''] === undefined}
-        myId={'1a9a5785-721a-4bb5-beb7-9d752e2070d4'}
+        myId={userId ?? ''}
         onMessageSend={function (type: MessageTypes, content: any): void {
           socketRef.current.emit('send_message', {
             type,

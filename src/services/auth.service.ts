@@ -64,6 +64,14 @@ class AuthService {
 
   public async getAccessToken(): Promise<string | null> {
     const accessToken = localStorage.getItem('access_token');
+    if (this.isTokenExpired(accessToken ?? '')) {
+      try {
+        const newAccessToken = await this.refreshToken();
+        return newAccessToken;
+      } catch (error) {
+        return null;
+      }
+    }
     return accessToken;
   }
 
@@ -132,6 +140,16 @@ class AuthService {
         message,
       };
     }
+  }
+
+  public getUserIdFromToken(): string | null {
+    const accessToken = localStorage.getItem('access_token');
+    if (accessToken === null) {
+      return null;
+    }
+    const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+    console.log(decodedToken);
+    return decodedToken.user_id;
   }
 }
 export default AuthService;

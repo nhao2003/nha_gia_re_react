@@ -19,6 +19,7 @@ import ModernPostManagement from './modules/postManagement/ModernPostManagement'
 import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackagePage';
 import ModernResultTransactionPage from './modules/purchase/page/ModernResultTransactionPage';
 import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
+import { Header } from './components/Header/Header';
 
 function App(): JSX.Element {
   return (
@@ -113,7 +114,6 @@ function App(): JSX.Element {
         }
       />
 
-      <Route path='/chat' element={<ModernChatPage />} />
 
       <Route
         path='/purchase'
@@ -157,6 +157,33 @@ function App(): JSX.Element {
           <ModernDashboardPage>
             <ModernHistoryTransactionPage />
           </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/chat'
+        element={
+          <div
+            style={
+              {
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                maxHeight: '100vh',
+                // overflow: 'hidden',
+              }
+            }
+          >
+            <div
+              style={{
+                width: '100%',
+                zIndex: 1000,
+              }}
+            >
+              <Header />
+            </div>
+            <ModernChatPage />
+          </div>
         }
       />
 

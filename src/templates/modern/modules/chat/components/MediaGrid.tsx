@@ -30,6 +30,14 @@ const MediaGrid: React.FC<MediaGridProps> = ({ medias, onMediaTap }) => {
     } else {
         column = 3;
     }
+    function isVideo(url: string) {
+        // Check contains video extension or contains video domain
+        return (
+            url.includes('.mp4') ||
+            url.includes('/video/')
+        );
+
+    }
 
     return (
         <Grid container spacing={2}>
@@ -49,16 +57,29 @@ const MediaGrid: React.FC<MediaGridProps> = ({ medias, onMediaTap }) => {
                     <StyledPaper
                         onClick={onMediaTap !== undefined ? () => { onMediaTap(index); } : undefined}
                     >
-                        <img
-                            src={media}
-                            alt={`Media ${index}`}
-                            style={{
-                                objectFit: 'cover',
-                                maxHeight: '200px',
-                                maxWidth: '200px',
-                                aspectRatio: '1/1',
-                            }}
-                        />
+                        {
+                            isVideo(media) ?
+                                <video
+                                    src={media}
+                                    controls
+                                    style={{
+                                        maxHeight: '200px',
+                                        maxWidth: '200px',
+                                        aspectRatio: '1/1',
+                                    }}
+                                />
+                                :
+                                <img
+                                    src={media}
+                                    alt={`Media ${index}`}
+                                    style={{
+                                        objectFit: 'cover',
+                                        maxHeight: '200px',
+                                        maxWidth: '200px',
+                                        aspectRatio: '1/1',
+                                    }}
+                                />
+                        }
                     </StyledPaper>
                 </Grid>
             ))}

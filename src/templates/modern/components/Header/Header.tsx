@@ -49,7 +49,7 @@ const Header: React.FC = () => {
     <Stack
       direction={'row'}
       justifyContent={'space-between'}
-      marginBottom={5}
+      // marginBottom={5}
       sx={{
         backgroundColor: CUSTOM_COLOR.white,
         width: '100%',
