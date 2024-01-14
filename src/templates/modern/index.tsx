@@ -114,7 +114,6 @@ function App(): JSX.Element {
         }
       />
 
-
       <Route
         path='/purchase'
         element={
@@ -146,7 +145,7 @@ function App(): JSX.Element {
         path='/purchase/result'
         element={
           <ModernDashboardPage>
-            <ModernResultTransactionPage />
+            <ModernResultTransactionPage isSuccess={true} />
           </ModernDashboardPage>
         }
       />
@@ -164,15 +163,13 @@ function App(): JSX.Element {
         path='/chat'
         element={
           <div
-            style={
-              {
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100vh',
-                maxHeight: '100vh',
-                // overflow: 'hidden',
-              }
-            }
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100vh',
+              maxHeight: '100vh',
+              // overflow: 'hidden',
+            }}
           >
             <div
               style={{
