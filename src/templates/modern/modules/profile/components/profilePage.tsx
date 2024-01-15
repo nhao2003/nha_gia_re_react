@@ -107,8 +107,8 @@ export const ProfilePage: React.FC = () => {
       ],
     },
     {
-      key: 'logout',
       title: 'Đăng xuất',
+      key: 'logout',
       icon: <ExitToApp />,
     },
   ];
