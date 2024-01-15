@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { Box, Avatar, Typography, List, ListItemAvatar, ListItemText, Divider, ListItemButton } from '@mui/material';
+
 import ChatContent from './components/ChatContent';
-import type { MessageTypes } from '../../../../constants/enums';
+import { MessageTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import conversationService from '../../../../services/conversation.service';
@@ -14,6 +16,7 @@ function ModernChatPage() {
   const [messages, setMessages] = useState<Record<string, IMessage[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+
   const userId = AuthService.getInstance().getUserIdFromToken();
 
   // Get id from url
@@ -23,7 +26,6 @@ function ModernChatPage() {
   }
 
   function messageListener(conversationId: string, messages: IMessage[]) {
-    console.log('Message listener: ', conversationId, messages);
     setMessages((prev) => {
       return {
         ...prev,
@@ -40,50 +42,49 @@ function ModernChatPage() {
     setMessages(await conversationService.getAllMessages());
   };
   const navigate = useNavigate();
+  const [isXs, setIsXs] = useState(window.innerWidth < 600);
 
   useEffect(() => {
+    console.log('useEffect Initialize Chat Page');
     initializeSocket()
       .catch((err) => {
         console.log(err);
         navigate('/signin');
       });
 
-    return () => {
-      conversationService.removeConversationsEventListener(conversationListener);
-      conversationService.removeMessagesEventListener(messageListener);
-    };
-  }, []);
+    if (id !== undefined) {
+      console.log('Call from useEffect: ', id);
+      handleIdChange(id);
+    }
 
-
-
-  const [isXs, setIsXs] = useState(window.innerWidth < 600);
-
-  useEffect(() => {
     const handleResize = () => {
       setIsXs(window.innerWidth < 600);
     };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
+      conversationService.removeConversationsEventListener(conversationListener);
+      conversationService.removeMessagesEventListener(messageListener);
     };
   }, []);
 
-  useEffect(() => { 
-    if (id !== undefined) {
-      conversationService.getOrCreateConversation(id).then((data) => {
-        if (data !== null && data !== undefined) {
-          console.log('Conversation found: ', data);
-          setSelectedConversation(data.conversation.id);
-          conversationService.initConversation(data.conversation.id);
-        } else {
-          console.log('Conversation not found');
-          setSelectedConversation(null);
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
-  }, [id]);
+
+  function handleIdChange(id: string) {
+    conversationService.getOrCreateConversation(id).then((data) => {
+      if (data !== null && data !== undefined) {
+        console.log('Conversation found: ', data);
+        setSelectedConversation(data.conversation.id);
+        conversationService.initConversation(data.conversation.id);
+      } else {
+        console.log('Conversation not found');
+        setSelectedConversation(null);
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+
 
 
   return (
@@ -123,6 +124,7 @@ function ModernChatPage() {
                   console.log('Messages: ', messages);
                   /// Set conversation id to url
                   navigate(`/chat/${otherParticipant.user_id}`);
+                  handleIdChange(otherParticipant.user_id);
                 }}
                 sx={{
                   backgroundColor: selectedConversation === conversation.id ? '#e0e0e0' : 'transparent',
@@ -139,7 +141,13 @@ function ModernChatPage() {
                     secondary={
                       <React.Fragment>
                         <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                          {conversation.last_message.content?.text ?? 'Bắt đầu cuộc trò chuyện'}
+                          {
+                            conversation.last_message === undefined || conversation.last_message === null ?
+                              "Bắt đầu cuộc trò chuyện" :
+                              conversation.last_message.type === MessageTypes.text ?
+                                conversation.last_message.content.text :
+                                "Đã gửi phương tiện"
+                          }
                         </Typography>
                       </React.Fragment>
                     }
@@ -161,13 +169,14 @@ function ModernChatPage() {
         myId={userId ?? ''}
         onMessageSend={async function (content: any): Promise<void> {
           if (selectedConversation !== null) {
-            await conversationService.sendMessage(selectedConversation, content); 
+            await conversationService.sendMessage(selectedConversation, content);
           }
         }} />
 
 
     </Box>
   );
+
 }
 
 export default ModernChatPage;
