@@ -113,6 +113,7 @@ export const ProfilePage: React.FC = () => {
       ],
     },
     {
+
       title: 'Gói dịch vụ',
       key: 'package',
       icon: <Inventory />,
@@ -140,7 +141,9 @@ export const ProfilePage: React.FC = () => {
     },
     {
       key: 'logout',
+
       title: 'Đăng xuất',
+      key: 'logout',
       icon: <ExitToApp />,
     },
   ];
