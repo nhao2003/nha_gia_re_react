@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, Radio } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
+import { formatMoney } from '../../../../../services/fortmat.service';
 
 interface TermPackage {
   id: string;
@@ -9,6 +11,9 @@ interface TermPackage {
 }
 
 const MordenChoosePackagePage: React.FC = () => {
+  const [curPackage, setCurPackage] = React.useState<IMembershipPackage>(useLocation().state as IMembershipPackage);
+  const id = useLocation().pathname.split('/')[2];
+
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -19,10 +24,10 @@ const MordenChoosePackagePage: React.FC = () => {
   const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
 
   const termPackages: TermPackage[] = [
-    { id: '1-month', label: 'Gói 1 tháng', price: '360.000đ' },
-    { id: '3-month', label: 'Gói 3 tháng', price: '960.000đ' },
-    { id: '6-month', label: 'Gói 6 tháng', price: '360.000đ' },
-    { id: '12-month', label: 'Gói 12 tháng', price: '960.000đ' },
+    { id: '1-month', label: 'Gói 1 tháng', price: `${formatMoney(curPackage.price_per_month)}` },
+    { id: '3-month', label: 'Gói 3 tháng', price: `${formatMoney(curPackage.price_per_month * 3)}` },
+    { id: '6-month', label: 'Gói 6 tháng', price: `${formatMoney(curPackage.price_per_month * 6)}` },
+    { id: '12-month', label: 'Gói 12 tháng', price: `${formatMoney(curPackage.price_per_month * 12)}` },
   ];
 
   // Cập nhật giá tiền và tổng tiền khi chọn Radio button
@@ -50,7 +55,7 @@ const MordenChoosePackagePage: React.FC = () => {
           marginRight: '20px',
         }}
       >
-        Gói hiện tại
+        {curPackage.name}
         <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
       </div>
       <Grid container spacing={2}>
@@ -84,9 +89,9 @@ const MordenChoosePackagePage: React.FC = () => {
 
       {/* Thêm 3 text align bên phải */}
       <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-        <p style={{ fontSize: '1.2em' }}>Giá gói: {selectedPackagePrice}đ</p>
-        <p style={{ fontSize: '1.2em' }}>Giảm giá: -{discount}đ</p>
-        <p style={{ fontWeight: 'bold', fontSize: '1.5em', color: '#026D4D' }}>Tổng tiền: {totalAmount}đ</p>
+        <p style={{ fontSize: '1.2em' }}>Giá gói: {formatMoney(selectedPackagePrice)}</p>
+        <p style={{ fontSize: '1.2em' }}>Giảm giá: -{formatMoney(discount)}</p>
+        <p style={{ fontWeight: 'bold', fontSize: '1.5em', color: '#026D4D' }}>Tổng tiền: {formatMoney(totalAmount)}</p>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
