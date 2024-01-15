@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Grid, Radio } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
 import { formatMoney } from '../../../../../services/fortmat.service';
+import { ApiServiceBuilder } from '../../../../../services/api.service';
+import AuthService from '../../../../../services/auth.service';
 
 interface TermPackage {
   id: string;
@@ -12,13 +14,43 @@ interface TermPackage {
 
 const MordenChoosePackagePage: React.FC = () => {
   const [curPackage, setCurPackage] = React.useState<IMembershipPackage>(useLocation().state as IMembershipPackage);
-  const id = useLocation().pathname.split('/')[2];
+  const id = useLocation().pathname.split('/')[3];
 
-  const navigate = useNavigate();
+  async function createOrderRequest() {
+    const userId = AuthService.getInstance().getUserIdFromToken();
+    const numOfMonths = selectedTerm.split('-')[0];
+    const redirectUrl = 'http://localhost:3000/purchase/result';
+    console.log(userId, id, numOfMonths, redirectUrl);
+    try {
+      const response = await new ApiServiceBuilder()
+        .withUrl('/membership-package/check-out')
+        .withBody({
+          user_id: userId,
+          membership_package_id: id,
+          num_of_subscription_month: numOfMonths,
+          redirect_url: redirectUrl,
+        })
+        .build()
+        .post();
+      return response.data as any;
+    } catch (error) {
+      console.log(error);
+      return (error as any).response.data;
+    }
+  }
 
-  const handleClick = () => {
-    navigate('/purchase/result');
-  };
+  function handleCheckout() {
+    createOrderRequest()
+      .then((data) => {
+        console.log(data);
+        if (data.status === 'success') {
+          window.location.href = data.result.order_url;
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((error) => console.log(error));
+  }
 
   const [selectedTerm, setSelectedTerm] = useState<string>('1-month');
   const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
@@ -37,7 +69,7 @@ const MordenChoosePackagePage: React.FC = () => {
   };
 
   // Giảm giá
-  const discount = 160000;
+  const discount = 0;
 
   // Tổng tiền
   const totalAmount = selectedPackagePrice - discount;
@@ -97,7 +129,7 @@ const MordenChoosePackagePage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={() => {
-            handleClick();
+            handleCheckout();
           }}
           style={{
             width: '100%',
