@@ -7,16 +7,23 @@ import ModernSignUpPage from './modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
 import { ProfilePage } from './modules/profile/components/profilePage';
-import ModernPostManagement from './modules/postManagement/ModernPostManagement';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
+import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
+import MordenCurrentPackagePage from './modules/purchase/page/ModernCurrentPackagePage';
 import PostCreate from './modules/createpost/PostCreate';
-import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
 import { ModernOthersInformation } from './modules/profileOther/ModernOthersInformation';
+import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
 import ModernChatPage from './modules/chat/ModernChatPage';
+import ModernPostManagement from './modules/postManagement/ModernPostManagement';
+import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackagePage';
+import ModernResultTransactionPage from './modules/purchase/page/ModernResultTransactionPage';
+import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
+import { Header } from './components/Header/Header';
+import ModernAboutUsPage from './modules/aboutUs/page/ModernAboutUsPage';
+
 function App(): JSX.Element {
   return (
-
     <Routes>
       <Route path='/signin' element={<ModernSignInPage />} />
       <Route path='/signup' element={<ModernSignUpPage />} />
@@ -109,9 +116,81 @@ function App(): JSX.Element {
       />
 
       <Route
-        path='/chat'
+        path='/purchase'
         element={
-          <ModernChatPage />
+          <ModernDashboardPage>
+            <ModernPackageListPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/current-package'
+        element={
+          <ModernDashboardPage>
+            <MordenCurrentPackagePage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/choose-package/:id'
+        element={
+          <ModernDashboardPage>
+            <MordenChoosePackagePage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/result'
+        element={
+          <ModernDashboardPage>
+            <ModernResultTransactionPage isSuccess={true} />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/purchase/history'
+        element={
+          <ModernDashboardPage>
+            <ModernHistoryTransactionPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/chat/:id?'
+        element={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100vh',
+              maxHeight: '100vh',
+              // overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                zIndex: 1000,
+              }}
+            >
+              <Header />
+            </div>
+            <ModernChatPage />
+          </div>
+        }
+      />
+
+      <Route
+        path='/about-us'
+        element={
+          <ModernDashboardPage>
+            <ModernAboutUsPage />
+          </ModernDashboardPage>
         }
       />
 

@@ -26,6 +26,8 @@ import {
   Menu as MenuIcon,
   EmailOutlined,
   Call,
+  Inventory,
+  Assessment,
 } from '@mui/icons-material';
 import { ChangePassword } from './ChangePassword';
 import ModernPostManagement from '../../postManagement/ModernPostManagement';
@@ -34,6 +36,9 @@ import type { User } from '../../../../../models/User';
 import UserService from '../../../../../services/user.service';
 import ModernUpdateProfile from '../../auth/UpdateProfile/ModenUpdateProfile';
 import { useNavigate } from 'react-router';
+import MordenCurrentPackagePage from '../../purchase/page/ModernCurrentPackagePage';
+import ModernPackageListPage from '../../purchase/page/ModernPackageListPage';
+import ModernHistoryTransactionPage from '../../purchase/page/ModernHistoryTransactionPage';
 
 const drawerWidth = '20%';
 
@@ -108,6 +113,35 @@ export const ProfilePage: React.FC = () => {
       ],
     },
     {
+
+      title: 'Gói dịch vụ',
+      key: 'package',
+      icon: <Inventory />,
+      children: [
+        {
+          key: 'current-package',
+          title: 'Gói hiện tại',
+        },
+        {
+          key: 'buy-package',
+          title: 'Đăng ký mua',
+        },
+      ],
+    },
+    {
+      title: 'Quản lý tài chính',
+      key: 'finance',
+      icon: <Assessment />,
+      children: [
+        {
+          key: 'history-transaction',
+          title: 'Lịch sử giao dịch',
+        },
+      ],
+    },
+    {
+      key: 'logout',
+
       title: 'Đăng xuất',
       key: 'logout',
       icon: <ExitToApp />,
@@ -199,14 +233,16 @@ export const ProfilePage: React.FC = () => {
               </Collapse>
             </React.Fragment>
           ) : (
-            <ListItem key={item.title} disablePadding onClick={
-              () => {
+            <ListItem
+              key={item.title}
+              disablePadding
+              onClick={() => {
                 if (item.key === 'logout') {
                   localStorage.removeItem('access_token');
                   navagate('/');
                 }
-              }
-            }>
+              }}
+            >
               <ListItemButton>
                 <ListItemIcon sx={{ alignItems: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
@@ -299,8 +335,16 @@ export const ProfilePage: React.FC = () => {
           <div>
             <h1>Logout</h1>
           </div>
+        ) : selectedItemKey === 'current-package' ? (
+          <MordenCurrentPackagePage />
+        ) : selectedItemKey === 'buy-package' ? (
+          <ModernPackageListPage />
+        ) : selectedItemKey === 'history-transaction' ? (
+          <ModernHistoryTransactionPage />
         ) : (
-          <ModernUpdateProfile />
+          <div>
+            <h1>Profile</h1>
+          </div>
         )}
       </Box>
     </Box>

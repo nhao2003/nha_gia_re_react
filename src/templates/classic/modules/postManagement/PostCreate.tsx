@@ -375,7 +375,7 @@ const PostCreate: React.FC = () => {
                 ward_code: addressDetail?.wardIndex ?? 1,
                 detail: addressDetail?.detail,
             },
-            images: selectedImages,
+            medias: selectedImages,
             price: purposeType === 'rent' ? price : undefined,
             deposit: purposeType === 'rent' ? deposit : undefined,
             features,
@@ -913,6 +913,8 @@ const PostCreate: React.FC = () => {
                                     else
                                         if (!Number.isNaN(val) && val >= minPrice && val <= maxPrice)
                                             setDeposit(Math.abs(val));
+                                        else
+                                            setDepositError('Giá đặt cọc không hợp lệ');
 
                                 }}
                                 type='number'

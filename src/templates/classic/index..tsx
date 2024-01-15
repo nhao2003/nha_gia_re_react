@@ -1,3 +1,4 @@
+
 import { Route, Routes } from 'react-router-dom';
 // import './templates/classic/assets/styles/App.css';
 import DashboardPage from './modules/DashboardPage';
@@ -15,6 +16,11 @@ import PostCreate from './modules/postManagement/PostCreate';
 import Package from './modules/package/Package';
 import DetailedPackage from './modules/package/DetailedPackage';
 import PaymentResult from './modules/package/PaymentResult';
+
+import './assets/styles/index.css'
+
+
+
 
 function App(): JSX.Element {
   return (

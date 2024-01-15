@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton, Avatar } from '@mui/material';
-
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -37,6 +36,8 @@ const Header: React.FC = () => {
     { id: 'signin', href: '/signin', label: 'Đăng nhập' },
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
     { id: 'chat', href: '/chat', label: 'Tin nhắn' },
+    { id: 'purchase', href: '/purchase', label: 'Thanh toán' },
+    { id: 'about-us', href: '/about-us', label: 'Về chúng tôi' },
   ];
 
   const handleNavigate = (idRoute: string) => {
@@ -49,7 +50,7 @@ const Header: React.FC = () => {
     <Stack
       direction={'row'}
       justifyContent={'space-between'}
-      marginBottom={5}
+      // marginBottom={5}
       sx={{
         backgroundColor: CUSTOM_COLOR.white,
         width: '100%',
@@ -78,7 +79,9 @@ const Header: React.FC = () => {
             height: '91px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('home'); }}
+          onClick={() => {
+            handleNavigate('home');
+          }}
         />
 
         <Button
@@ -89,7 +92,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('home'); }}
+          onClick={() => {
+            handleNavigate('home');
+          }}
         >
           Trang chủ
         </Button>
@@ -115,7 +120,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('blogs'); }}
+          onClick={() => {
+            handleNavigate('blogs');
+          }}
         >
           Blogs
         </Button>
@@ -128,7 +135,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('dangtin'); }}
+          onClick={() => {
+            handleNavigate('dangtin');
+          }}
         >
           Đăng tin
         </Button>
@@ -154,10 +163,32 @@ const Header: React.FC = () => {
             // display: matches1440 ? 'block' : 'none'
           }}
           onClick={() => handleNavigate('chat')}
-
         >
           Tin nhắn
-
+        </Button>
+        <Button
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            // display: matches1440 ? 'block' : 'none'
+          }}
+          onClick={() => handleNavigate('about-us')}
+        >
+          Về chúng tôi
+        </Button>
+        <Button
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            // display: matches1440 ? 'block' : 'none'
+          }}
+          onClick={() => handleNavigate('purchase')}
+        >
+          Thanh toán
         </Button>
       </Stack>
 
@@ -179,7 +210,9 @@ const Header: React.FC = () => {
                 height: '91px',
                 display: matches1440 ? 'block' : 'none',
               }}
-              onClick={() => { handleNavigate('home'); }}
+              onClick={() => {
+                handleNavigate('home');
+              }}
             />
           </Stack>
 
@@ -191,7 +224,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('home'); }}
+            onClick={() => {
+              handleNavigate('home');
+            }}
           >
             Mua bán
           </Button>
@@ -204,7 +239,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('chothue'); }}
+            onClick={() => {
+              handleNavigate('chothue');
+            }}
           >
             Cho thuê
           </Button>
@@ -217,7 +254,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('blogs'); }}
+            onClick={() => {
+              handleNavigate('blogs');
+            }}
           >
             Blogs
           </Button>
@@ -230,7 +269,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('blog'); }}
+            onClick={() => {
+              handleNavigate('blog');
+            }}
           >
             Blog
           </Button>
@@ -242,7 +283,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('dangtin'); }}
+            onClick={() => {
+              handleNavigate('dangtin');
+            }}
           >
             Đăng tin
           </Button>
@@ -269,12 +312,22 @@ const Header: React.FC = () => {
               // display: matches1440 ? 'block' : 'none'
             }}
             onClick={() => handleNavigate('chat')}
-
           >
             Tin nhắn
-
           </Button>
 
+          <Button
+            variant='text'
+            sx={{
+              color: CUSTOM_COLOR.black,
+              fontWeight: 'bold',
+              fontSize: '16px',
+              // display: matches1440 ? 'block' : 'none'
+            }}
+            onClick={() => handleNavigate('purchase')}
+          >
+            Thanh toán
+          </Button>
         </Stack>
       </Drawer>
 
@@ -309,7 +362,9 @@ const Header: React.FC = () => {
                 borderRadius: '10px',
                 display: matches ? 'inherit' : 'none',
               }}
-              onClick={() => { handleNavigate('signin'); }}
+              onClick={() => {
+                handleNavigate('signin');
+              }}
             >
               Đăng ký
             </Button>
@@ -327,14 +382,21 @@ const Header: React.FC = () => {
                 borderRadius: '10px',
                 display: matches ? 'inherit' : 'none',
               }}
-              onClick={() => { handleNavigate('signup'); }}
+              onClick={() => {
+                handleNavigate('signup');
+              }}
             >
               Đăng nhập
             </Button>
           </>
         ) : (
           <>
-            <div className={classes.user} onClick={() => { handleNavigate('profile'); }}>
+            <div
+              className={classes.user}
+              onClick={() => {
+                handleNavigate('profile');
+              }}
+            >
               <Avatar sx={{ marginRight: '8px' }} src={avatar} alt='avatar' />
               <span>User</span>
             </div>
