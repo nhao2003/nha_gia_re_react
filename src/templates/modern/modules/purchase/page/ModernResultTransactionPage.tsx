@@ -2,12 +2,81 @@ import React from 'react';
 import SuccessIcon from '../../../assets/images/success_transaction.svg';
 import FailIcon from '../../../assets/images/fail_transaction.svg';
 import CircleIcon from '../../../assets/images/exclamation-circle.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ApiServiceBuilder } from '../../../../../services/api.service';
+import type ITransaction from '../../../../../models/interfaces/ITransaction';
+import { CircularProgress } from '@mui/material';
+import { formatDateTime } from '../../../../../services/fortmat.service';
+import AuthService from '../../../../../services/auth.service';
 
-const ModernResultTransactionPage: React.FC<{ isSuccess: boolean }> = ({ isSuccess }) => {
-  const transactionStatus = isSuccess ? 'Giao dịch thành công' : 'Giao dịch không thành công';
-  const transactionAmount = '720.000 VNĐ';
+const ModernResultTransactionPage: React.FC = () => {
+  const navigate = useNavigate();
+  // http://localhost:3000/purchase/result/c4ce2968-8941-4c18-8a2d-3d2b3e1c16b9?amount=100000&appid=2554&apptransid=240115_4933404831340&bankcode=&checksum=c0e0349e4335743ec7b52c7dbf2da18a2e3e57d1efecf6efba30e91b813ebc50&discountamount=0&pmcid=38&status=1
+  const id = useLocation().pathname.split('/')[3];
 
-  return (
+  // get data from api
+  const [packages, setPackages] = React.useState<{
+    numOfPages: number;
+    packages: ITransaction[];
+  }>({ numOfPages: 1, packages: [] });
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [isSuccess, setIsSuccess] = React.useState<boolean>(true);
+  const [transactionStatus, setTransactionStatus] = React.useState<string>('');
+  // const transactionStatus = isSuccess ? 'Giao dịch thành công' : 'Giao dịch không thành công';
+
+  async function fetchTransaction() {
+    // Fake delay
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    if (accessToken === null) {
+      throw new Error('Bạn chưa đăng nhập');
+    }
+    console.log(`/transactions?id[eq]='${id}'`);
+    const query = new ApiServiceBuilder()
+      .withUrl(`/transactions?id[eq]='${id}'`)
+      .withHeaders({ Authorization: `Bearer ${accessToken}` })
+      .build();
+    const response = await query.get();
+    return response.data as any;
+  }
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchTransaction()
+      .then((response) => {
+        console.log(response);
+        setPackages({
+          numOfPages: response.num_of_pages,
+          packages: response.result,
+        });
+        setIsSuccess(response.result[0].status === 'paid');
+        setTransactionStatus(isSuccess ? 'Giao dịch thành công' : 'Giao dịch không thành công');
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  function addMonthsToDate(date: Date, months: number): Date {
+    const newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() + months);
+    return newDate;
+  }
+
+  return isLoading ? (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '80vh',
+      }}
+    >
+      <CircularProgress />
+    </div>
+  ) : (
     <div style={{ textAlign: 'center', margin: '0 20%' }}>
       <div
         style={{
@@ -34,7 +103,7 @@ const ModernResultTransactionPage: React.FC<{ isSuccess: boolean }> = ({ isSucce
         <p
           style={{ fontSize: '1.2em', fontWeight: 'bold', color: isSuccess ? '#026D4D' : '#FF3E3E', marginTop: '5px' }}
         >
-          {transactionAmount}
+          {packages.packages[0].amount}
         </p>
       </div>
 
@@ -60,11 +129,17 @@ const ModernResultTransactionPage: React.FC<{ isSuccess: boolean }> = ({ isSucce
           <p>Ngày kết thúc:</p>
         </div>
         <div style={{ flex: '1.5', color: '#2B3641' }}>
-          <p>ID29204912</p>
-          <p>14:26 21/10/2023</p>
-          <p>Mua Gói chuyên nghiệp 1 tháng</p>
-          <p>14:27 21/10/2023</p>
-          <p>14:27 21/11/2023</p>
+          <p>{packages.packages[0].id}</p>
+          <p>{formatDateTime(packages.packages[0].timestamp)}</p>
+          <p>
+            Mua {packages.packages[0].package.name} {packages.packages[0].num_of_subscription_month} tháng
+          </p>
+          <p>{formatDateTime(packages.packages[0].timestamp)}</p>
+          <p>
+            {formatDateTime(
+              addMonthsToDate(packages.packages[0].timestamp, packages.packages[0].num_of_subscription_month),
+            )}
+          </p>
         </div>
       </div>
 
@@ -90,7 +165,7 @@ const ModernResultTransactionPage: React.FC<{ isSuccess: boolean }> = ({ isSucce
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={() => {
-            // Xử lý khi nhấn nút Quay lại
+            navigate(`/home`);
           }}
           style={{
             width: '100%',

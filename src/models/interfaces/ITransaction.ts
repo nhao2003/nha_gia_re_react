@@ -1,3 +1,5 @@
+import type IMembershipPackage from './IMembershipPackage';
+
 interface ITransaction {
   id: string;
   user_id: string;
@@ -10,5 +12,6 @@ interface ITransaction {
   amount: number;
   platform: string;
   is_active: boolean;
+  package: IMembershipPackage;
 }
 export default ITransaction;

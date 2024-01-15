@@ -143,10 +143,10 @@ function App(): JSX.Element {
       />
 
       <Route
-        path='/purchase/result'
+        path='/purchase/result/:id'
         element={
           <ModernDashboardPage>
-            <ModernResultTransactionPage isSuccess={true} />
+            <ModernResultTransactionPage />
           </ModernDashboardPage>
         }
       />
