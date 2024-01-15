@@ -37,6 +37,7 @@ const Header: React.FC = () => {
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
     { id: 'chat', href: '/chat', label: 'Tin nhắn' },
     { id: 'purchase', href: '/purchase', label: 'Thanh toán' },
+    { id: 'about-us', href: '/about-us', label: 'Về chúng tôi' },
   ];
 
   const handleNavigate = (idRoute: string) => {
@@ -163,7 +164,18 @@ const Header: React.FC = () => {
         >
           Tin nhắn
         </Button>
-
+        <Button
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            // display: matches1440 ? 'block' : 'none'
+          }}
+          onClick={() => handleNavigate('about-us')}
+        >
+          Về chúng tôi
+        </Button>
         <Button
           variant='text'
           sx={{
