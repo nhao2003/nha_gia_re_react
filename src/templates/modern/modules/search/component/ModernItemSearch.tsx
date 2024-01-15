@@ -18,6 +18,10 @@ import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import { ListItemFilter } from '../../../../classic/modules/search/components/ListItemFilter';
 import { ModernTabPanelSearch } from './ModernTabPanelSearch';
 
+interface ModernItemSearchProps {
+  isLease: boolean;
+}
+
 export const ModernItemSearch = () => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
@@ -82,7 +86,7 @@ export const ModernItemSearch = () => {
             <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label='tab dbs'>
                 <Tab
-                  label='Liên quan'
+                  label='Cho thuê'
                   value='1'
                   sx={{
                     textTransform: 'none',
@@ -90,7 +94,7 @@ export const ModernItemSearch = () => {
                   }}
                 />
                 <Tab
-                  label='Tin mới nhất'
+                  label='Mua bán'
                   value='2'
                   sx={{
                     textTransform: 'none',
@@ -100,10 +104,10 @@ export const ModernItemSearch = () => {
               </TabList>
             </Stack>
             <TabPanel value='1'>
-              <ModernTabPanelSearch />
+              <ModernTabPanelSearch posts={[]} numOfPages={0} currentPage={0} />
             </TabPanel>
             <TabPanel value='2'>
-              <ModernTabPanelSearch />
+              <ModernTabPanelSearch posts={[]} numOfPages={0} currentPage={0} />
             </TabPanel>
           </TabContext>
         </Box>

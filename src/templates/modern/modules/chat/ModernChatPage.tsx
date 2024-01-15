@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Avatar, Typography, List, ListItemAvatar, ListItemText, Divider, ListItemButton } from '@mui/material';
-import { connect } from 'socket.io-client';
+
 import ChatContent from './components/ChatContent';
 import type { MessageTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
@@ -55,11 +55,7 @@ function ModernChatPage() {
 
   const initializeSocket = async () => {
     const accessToken = await AuthService.getInstance().getAccessToken();
-    socketRef.current = connect(host, {
-      auth: {
-        token: accessToken,
-      },
-    });
+ 
 
     socketRef.current.on('conversations', (data: { type: SocketEvent; data: any }) => {
       handleSocketEvent(data.type, data.data);
