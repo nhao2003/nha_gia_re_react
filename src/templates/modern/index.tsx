@@ -1,18 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
-import { ModernDashboardPage } from './modern/modules/profile/pages/ModernDashboardPage';
-import { ModernHomePage } from './modern/modules/home/ModernHomePage';
-import { ModernDetailPage } from './modern/modules/detail/ModernDetailPage';
-import ModernSignInPage from './modern/modules/auth/ModernSignInPage';
-import ModernSignUpPage from './modern/modules/auth/ModernSignUpPage';
-import ModernForgotPassword from './modern/modules/auth/ModernForgotPassword';
-import ModernUpdateProfile from './modern/modules/auth/UpdateProfile/ModenUpdateProfile';
-import { ProfilePage } from './modern/modules/profile/components/profilePage';
-import ModernPostManagement from './modern/modules/postManagement/ModernPostManagement';
-import MordernBlogPage from './modern/modules/blogs/mordernBlogPage';
-import ModernDetailBlogPage from './modern/modules/blogs/modernDetailBlog';
-import PostCreate from './modern/modules/createpost/PostCreate';
-import { ModernSearchPage } from './modern/modules/search/page/ModernSearchPage';
-import { ModernOthersInformation } from './modern/modules/profileOther/ModernOthersInformation';
+import { ModernDashboardPage } from './modules/profile/pages/ModernDashboardPage';
+import { ModernHomePage } from './modules/home/ModernHomePage';
+import { ModernDetailPage } from './modules/detail/ModernDetailPage';
+import ModernSignInPage from './modules/auth/ModernSignInPage';
+import ModernSignUpPage from './modules/auth/ModernSignUpPage';
+import ModernForgotPassword from './modules/auth/ModernForgotPassword';
+import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
+import { ProfilePage } from './modules/profile/components/profilePage';
+import ModernPostManagement from './modules/postManagement/ModernPostManagement';
+import MordernBlogPage from './modules/blogs/mordernBlogPage';
+import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
+import PostCreate from './modules/createpost/PostCreate';
+import { ModernSearchPage } from './modules/search/page/ModernSearchPage';
+import { ModernOthersInformation } from './modules/profileOther/ModernOthersInformation';
+import ModernChatPage from './modules/chat/ModernChatPage';
 function App(): JSX.Element {
   return (
 
@@ -95,6 +96,22 @@ function App(): JSX.Element {
           <ModernDashboardPage>
             <ModernOthersInformation />
           </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/search'
+        element={
+          <ModernDashboardPage>
+            <ModernSearchPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
+        path='/chat'
+        element={
+          <ModernChatPage />
         }
       />
 

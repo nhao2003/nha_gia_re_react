@@ -42,6 +42,10 @@ const Header: React.FC = () => {
     navigate('/post_create');
   };
 
+  const handlePersonalPage = () => {
+    navigate('/personal');
+  };
+
   return (
     // <AppBar position='static'>
     //   <Toolbar>
@@ -99,20 +103,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
+          onClick={handleHome}
         >
-          Mua bán
-        </Button>
-
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            display: matches1440 ? 'block' : 'none',
-          }}
-        >
-          Cho thuê
+          Trang Chủ
         </Button>
 
         <Button
@@ -136,8 +129,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
+          onClick={handlePersonalPage}
         >
-          Hỏi đáp
+          Hồ Sơ
         </Button>
       </Stack>
 
@@ -206,17 +200,6 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-          >
-            Hỏi đáp
-          </Button>
-          <Button
-            variant='text'
-            sx={{
-              color: CUSTOM_COLOR.black,
-              fontWeight: 'bold',
-              fontSize: '16px',
-              // display: matches1440 ? 'block' : 'none'
-            }}
             onClick={handlePostManagement}
           >
             Quản lý tin
@@ -247,19 +230,6 @@ const Header: React.FC = () => {
       />
 
       <Stack direction={'row'} alignItems={'center'} spacing={2} marginRight={2}>
-        <NotificationsNoneIcon
-          sx={{
-            width: '30px',
-            height: '30px',
-          }}
-        />
-        <ForumOutlinedIcon
-          sx={{
-            width: '30px',
-            height: '30px',
-          }}
-        />
-
         <Button
           variant='contained'
           style={{

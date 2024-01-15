@@ -440,7 +440,7 @@ function DetailPage(): JSX.Element {
                                         post.type_id === PropertyTypes.land ? "Đất" :
                                         post.type_id === PropertyTypes.motel ? "Nhà trọ" :
                                         "Văn phòng"
-                                    }
+                                        }
                                     />
                                 </Stack>
 
@@ -487,7 +487,7 @@ function DetailPage(): JSX.Element {
                                         title="Giấy tờ pháp lý"
                                         value={ features.legal_document_status === LegalDocumentStatus.have_certificates ? "Đã có giấy tờ" :
                                         features.legal_document_status === LegalDocumentStatus.waiting_for_certificates ? "Chờ giấy tờ" : "Giấy tờ khác" 
-                                    }
+                                        }
                                         />
 
 

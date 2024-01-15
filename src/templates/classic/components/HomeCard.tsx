@@ -37,7 +37,7 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
         borderColor: CUSTOM_COLOR.grayNobel,
         transition: 'transform 0.3s ease-in-out', // Add a transition for the transform property
         '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
           transform: 'scale(1.05)', // Scale up on hover
         },
         '&:active': {

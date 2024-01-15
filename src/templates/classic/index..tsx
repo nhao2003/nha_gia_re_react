@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-
+import './templates/classic/assets/styles/App.css';
 import DashboardPage from './modules/DashboardPage';
 import DetailPage from './modules/Detail/DetailPage';
 import HomePage from './modules/home/HomePage';
@@ -12,9 +12,6 @@ import SignUp from './modules/auth/SignUp';
 import DetailBlog from './modules/news/DetailBlog';
 import PostManagement from './modules/postManagement/postManagement';
 import PostCreate from './modules/postManagement/PostCreate';
-import Package from './modules/package/Package';
-import DetailedPackage from './modules/package/DetailedPackage';
-import PaymentResult from './modules/package/PaymentResult';
 
 function App(): JSX.Element {
   return (
@@ -105,31 +102,6 @@ function App(): JSX.Element {
 
       <Route path='login' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
-      <Route
-        path='package'
-        element={
-          <DashboardPage>
-            <Package />
-          </DashboardPage>
-        }
-      />
-      <Route
-        path='package/:id'
-        element={
-          <DashboardPage>
-            <DetailedPackage />
-          </DashboardPage>
-        }
-      />
-
-      <Route
-        path='transaction/:id'
-        element={
-          <DashboardPage>
-            <PaymentResult />
-          </DashboardPage>
-        }
-      />
 
       {/* protected route */}
       {/* <Route element={<AuthRequire />}>
