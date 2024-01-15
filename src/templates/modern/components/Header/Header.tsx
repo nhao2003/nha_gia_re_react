@@ -36,7 +36,7 @@ const Header: React.FC = () => {
     { id: 'signin', href: '/signin', label: 'Đăng nhập' },
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
     { id: 'chat', href: '/chat', label: 'Tin nhắn' },
-    { id: 'purchase', href: '/purchase/history', label: 'Thanh toán' },
+    { id: 'purchase', href: '/purchase', label: 'Thanh toán' },
     { id: 'about-us', href: '/about-us', label: 'Về chúng tôi' },
   ];
 

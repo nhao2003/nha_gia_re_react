@@ -15,7 +15,7 @@ const MordenChoosePackagePage: React.FC = () => {
     navigate('/purchase/result');
   };
 
-  const [selectedTerm, setSelectedTerm] = useState<string>('12-month');
+  const [selectedTerm, setSelectedTerm] = useState<string>('1-month');
   const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
 
   const termPackages: TermPackage[] = [
@@ -39,7 +39,20 @@ const MordenChoosePackagePage: React.FC = () => {
 
   return (
     <div style={{ textAlign: 'center', margin: '0 20%' }}>
-      {/* ...Các phần khác giữ nguyên... */}
+      <div
+        style={{
+          marginBottom: '20px',
+          fontWeight: 'bold',
+          color: '#026D4D',
+          fontSize: '1.5em',
+          textAlign: 'left',
+          marginLeft: '20px',
+          marginRight: '20px',
+        }}
+      >
+        Gói hiện tại
+        <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
+      </div>
       <Grid container spacing={2}>
         {termPackages.map((term) => (
           <Grid item xs={6} key={term.id}>
