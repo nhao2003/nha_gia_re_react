@@ -36,9 +36,8 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
             setIsUploading(true);
             const uploadMeidas = [...selectedAttachments]
             setSelectedAttachments(null);
-            const result = await mediaServices.uploadFiles(uploadMeidas);
             setIsUploading(false);
-            props.onMessageSend(MessageTypes.media, result);
+            props.onMessageSend(MessageTypes.media, uploadMeidas);
         }
     };
 

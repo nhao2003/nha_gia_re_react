@@ -20,6 +20,8 @@ import MordenChoosePackagePage from './modules/purchase/page/ModernChoosePackage
 import ModernResultTransactionPage from './modules/purchase/page/ModernResultTransactionPage';
 import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
 import { Header } from './components/Header/Header';
+import ModernAboutUsPage  from './modules/aboutUs/page/ModernAboutUsPage';
+
 
 function App(): JSX.Element {
   return (
@@ -181,6 +183,15 @@ function App(): JSX.Element {
             </div>
             <ModernChatPage />
           </div>
+        }
+      />
+
+      <Route
+        path='/about-us'
+        element={
+          <ModernDashboardPage>
+            <ModernAboutUsPage />
+          </ModernDashboardPage>
         }
       />
 
