@@ -14,7 +14,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path='/*' element={<ModernApp />} />
+          <Route path='/*' element={<ClassicApp />} />
         </Routes>
       </BrowserRouter>
     </Provider>

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { Box, Avatar, Typography, List, ListItemAvatar, ListItemText, Divider, ListItemButton } from '@mui/material';
+
 import ChatContent from './components/ChatContent';
 import { MessageTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
@@ -14,6 +16,7 @@ function ModernChatPage() {
   const [messages, setMessages] = useState<Record<string, IMessage[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+
   const userId = AuthService.getInstance().getUserIdFromToken();
 
   // Get id from url
@@ -168,6 +171,7 @@ function ModernChatPage() {
       />
     </Box>
   );
+
 }
 
 export default ModernChatPage;
