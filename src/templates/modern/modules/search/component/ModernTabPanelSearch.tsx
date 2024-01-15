@@ -11,22 +11,19 @@ interface SearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
   currentPage: number;
+  isLoading: boolean;
   onPageChange?: (page: number) => void;
 }
 
 export function ModernTabPanelSearch(props: SearchProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [params, setParams] = React.useState({});
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get('page') ?? '1';
-  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
-  const [province, setProvince] = React.useState<string | undefined>(undefined);
 
-  return isLoading ? (
+  return props.isLoading ? (
     <Box
       sx={{
         width: '100%',

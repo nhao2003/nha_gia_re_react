@@ -44,7 +44,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const navigate = useNavigate();
 
   const searchParams = new URLSearchParams(location.search);
-  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
+  const searchTerm = searchParams.get('search') ?? ''; // Add this line to get the search term from the URL
 
   const [search, setSearch] = React.useState(searchTerm ?? '');
   const [open, setOpen] = React.useState(false);
@@ -72,18 +72,21 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   let params;
 
   const handleSearch = () => {
-    searchParams.set('q', encodeURIComponent(search).toString());
+    searchParams.set('search', encodeURIComponent(search).toString());
 
     if (selectProvince !== null) {
-      searchParams.set('province', selectProvince);
+      searchParams.set('province_code', selectProvince);
     }
     if (selectType !== null) {
       searchParams.set('type_id', selectType);
     }
-
-    console.log(selectProvince);
-
-    // navigate(`/search?${searchParams.toString()}`, { replace: true });
+    // Giá
+    // if (price[0] !== 0) {
+    //   searchParams.set('min_price', price[0].toString());
+    // }
+    // if (price[1] !== 120000000000) {
+    //   searchParams.set('max_price', price[1].toString());
+    // }
     props.onFilterButtonClick(searchParams);
   };
 
@@ -266,7 +269,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const [inputValue, setInputValue] = React.useState('');
 
   const minDistancePrice = 1000000000;
-  const [price, setPrice] = React.useState<number[]>([2000000000, 4000000000]);
+  const [price, setPrice] = React.useState<number[]>([0, 10000000000]);
 
   const minDistanceArea = 1000;
   const [area, setArea] = React.useState<number[]>([2000, 4000]);
@@ -278,7 +281,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
 
     if (newValue[1] - newValue[0] < minDistancePrice) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 120000000000 - minDistancePrice);
+        const clamped = Math.min(newValue[0], 10000000000 - minDistancePrice);
         setPrice([clamped, clamped + minDistancePrice]);
       } else {
         const clamped = Math.max(newValue[1], minDistancePrice);
