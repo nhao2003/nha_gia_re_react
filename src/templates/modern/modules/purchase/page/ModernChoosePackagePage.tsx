@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Grid, Radio } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
+import { formatMoney } from '../../../../../services/fortmat.service';
+import { ApiServiceBuilder } from '../../../../../services/api.service';
+import AuthService from '../../../../../services/auth.service';
 
 interface TermPackage {
   id: string;
@@ -9,20 +13,53 @@ interface TermPackage {
 }
 
 const MordenChoosePackagePage: React.FC = () => {
-  const navigate = useNavigate();
+  const [curPackage, setCurPackage] = React.useState<IMembershipPackage>(useLocation().state as IMembershipPackage);
+  const id = useLocation().pathname.split('/')[3];
 
-  const handleClick = () => {
-    navigate('/purchase/result');
-  };
+  async function createOrderRequest() {
+    const userId = AuthService.getInstance().getUserIdFromToken();
+    const numOfMonths = selectedTerm.split('-')[0];
+    const redirectUrl = 'http://localhost:3000/purchase/result';
+    console.log(userId, id, numOfMonths, redirectUrl);
+    try {
+      const response = await new ApiServiceBuilder()
+        .withUrl('/membership-package/check-out')
+        .withBody({
+          user_id: userId,
+          membership_package_id: id,
+          num_of_subscription_month: numOfMonths,
+          redirect_url: redirectUrl,
+        })
+        .build()
+        .post();
+      return response.data as any;
+    } catch (error) {
+      console.log(error);
+      return (error as any).response.data;
+    }
+  }
 
-  const [selectedTerm, setSelectedTerm] = useState<string>('12-month');
+  function handleCheckout() {
+    createOrderRequest()
+      .then((data) => {
+        console.log(data);
+        if (data.status === 'success') {
+          window.location.href = data.result.order_url;
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+
+  const [selectedTerm, setSelectedTerm] = useState<string>('1-month');
   const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
 
   const termPackages: TermPackage[] = [
-    { id: '1-month', label: 'Gói 1 tháng', price: '360.000đ' },
-    { id: '3-month', label: 'Gói 3 tháng', price: '960.000đ' },
-    { id: '6-month', label: 'Gói 6 tháng', price: '360.000đ' },
-    { id: '12-month', label: 'Gói 12 tháng', price: '960.000đ' },
+    { id: '1-month', label: 'Gói 1 tháng', price: `${formatMoney(curPackage.price_per_month)}` },
+    { id: '3-month', label: 'Gói 3 tháng', price: `${formatMoney(curPackage.price_per_month * 3)}` },
+    { id: '6-month', label: 'Gói 6 tháng', price: `${formatMoney(curPackage.price_per_month * 6)}` },
+    { id: '12-month', label: 'Gói 12 tháng', price: `${formatMoney(curPackage.price_per_month * 12)}` },
   ];
 
   // Cập nhật giá tiền và tổng tiền khi chọn Radio button
@@ -32,14 +69,27 @@ const MordenChoosePackagePage: React.FC = () => {
   };
 
   // Giảm giá
-  const discount = 160000;
+  const discount = 0;
 
   // Tổng tiền
   const totalAmount = selectedPackagePrice - discount;
 
   return (
     <div style={{ textAlign: 'center', margin: '0 20%' }}>
-      {/* ...Các phần khác giữ nguyên... */}
+      <div
+        style={{
+          marginBottom: '20px',
+          fontWeight: 'bold',
+          color: '#026D4D',
+          fontSize: '1.5em',
+          textAlign: 'left',
+          marginLeft: '20px',
+          marginRight: '20px',
+        }}
+      >
+        {curPackage.name}
+        <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
+      </div>
       <Grid container spacing={2}>
         {termPackages.map((term) => (
           <Grid item xs={6} key={term.id}>
@@ -71,15 +121,15 @@ const MordenChoosePackagePage: React.FC = () => {
 
       {/* Thêm 3 text align bên phải */}
       <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-        <p style={{ fontSize: '1.2em' }}>Giá gói: {selectedPackagePrice}đ</p>
-        <p style={{ fontSize: '1.2em' }}>Giảm giá: -{discount}đ</p>
-        <p style={{ fontWeight: 'bold', fontSize: '1.5em', color: '#026D4D' }}>Tổng tiền: {totalAmount}đ</p>
+        <p style={{ fontSize: '1.2em' }}>Giá gói: {formatMoney(selectedPackagePrice)}</p>
+        <p style={{ fontSize: '1.2em' }}>Giảm giá: -{formatMoney(discount)}</p>
+        <p style={{ fontWeight: 'bold', fontSize: '1.5em', color: '#026D4D' }}>Tổng tiền: {formatMoney(totalAmount)}</p>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={() => {
-            handleClick();
+            handleCheckout();
           }}
           style={{
             width: '100%',
