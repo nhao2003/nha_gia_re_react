@@ -148,7 +148,6 @@ class AuthService {
       return null;
     }
     const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
-    console.log(decodedToken);
     return decodedToken.user_id;
   }
 }

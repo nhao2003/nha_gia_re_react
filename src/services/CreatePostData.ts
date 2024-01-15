@@ -70,7 +70,9 @@ interface PropertyListing {
   price?: number | null;
   deposit?: number | null;
   area: number;
-  images: File[];
+  medias?: File[] | null;
+  images?: string[];
+  videos?: string[];
   address: Address;
   features: MotelFeatures | AparmentFeatures | OfficeFeatures | HouseFeatures | LandFeatures;
   is_lease: boolean;

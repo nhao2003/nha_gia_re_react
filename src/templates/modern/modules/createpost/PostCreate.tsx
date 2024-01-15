@@ -24,6 +24,7 @@ import addressUtils from '../../../../utils/addressUtils';
 import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../services/CreatePostData';
 import PostService from '../../../../services/post.service';
 import { LoadingButton } from '@mui/lab';
+import { error } from 'console';
 export interface FormValues {
     purposeType: string;
     apartmentType: string;
@@ -75,8 +76,16 @@ interface Address {
 }
 
 const PostCreate: React.FC = () => {
-    const maxPrice = 1000000000;
     const minPrice = 0;
+    const maxPrice = 1000000000;
+    const minArea = 0;
+    const maxArea = 1000000;
+    const minElectricityPrice = 0;
+    const maxElectricityPrice = 10000000;
+    const minWaterPrice = 0;
+    const maxWaterPrice = 10000000;
+    const minMeter = 1;
+    const maxMeter = 1000000;
     const [area, setArea] = useState<number | null>(null);
     const [propertyType, setPropertyType] = useState<string | null>(null);
     const [purposeType, setPurposeType] = useState<'rent' | 'sell'>('rent');
@@ -119,6 +128,34 @@ const PostCreate: React.FC = () => {
     const handleOpenDialog = () => {
         (fileInputRef as any).current.click();
     };
+
+    function handleNumberInput(value: string, setState: React.Dispatch<React.SetStateAction<number | null>>, setError: React.Dispatch<React.SetStateAction<string | null>>, min: number, max: number) {
+        const str = value.replace(/[^0-9]/g, '');
+        const val = Number.parseInt(str);
+        if (value.length === 0) {
+            setState(null);
+        }
+        else if (!Number.isNaN(val) && val >= min && val <= max) {
+            setState(Math.abs(val));
+            setError(null);
+        }
+        else
+            setError(`Giá trị phải nằm trong khoảng từ ${min} đến ${max}`);
+    }
+
+    function handleStringInput(value: string, setState: React.Dispatch<React.SetStateAction<string>>, setError: React.Dispatch<React.SetStateAction<string | null>>, maxChar: number, isRequired: boolean) {
+        if (value.length === 0 && isRequired) {
+            setError('Không được để trống');
+        }
+        else if (value.length > maxChar) {
+            setError(`Không được nhập quá ${maxChar} ký tự`);
+        }
+        else {
+            setState(value);
+            setError(null);
+        }
+    }
+
     // Handle Error
     const [titleError, setTitleError] = useState<string | null>(null);
     const [descriptionError, setDescriptionError] = useState<string | null>(null);
@@ -134,6 +171,9 @@ const PostCreate: React.FC = () => {
     const [waterPriceError, setWaterPriceError] = useState<string | null>(null);
     const [electricityPriceError, setElectricityPriceError] = useState<string | null>(null);
     const [isHandOverError, setIsHandOverError] = useState<string | null>(null);
+    const [lengthError, setLengthError] = useState<string | null>(null);
+    const [widthError, setWidthError] = useState<string | null>(null);
+    const [usedAreaError, setUsedAreaError] = useState<string | null>(null);
     interface State extends SnackbarOrigin {
         isSuccessful: boolean;
         open: boolean;
@@ -178,11 +218,6 @@ const PostCreate: React.FC = () => {
             isValid = false;
         } else
             setDepositError(null);
-        // if (mainDirection === null && ['house', 'office', 'land'].includes(propertyType ?? '')) {
-        //     setMainDirectionError('Hướng không được để trống');
-        //     isValid = false;
-        // } else
-        //     setMainDirectionError(null);
         if (landType === null && propertyType === 'land') {
             setLandTypeError('Loại đất không được để trống');
             isValid = false;
@@ -370,7 +405,7 @@ const PostCreate: React.FC = () => {
                 ward_code: addressDetail?.wardIndex ?? 1,
                 detail: addressDetail?.detail,
             },
-            images: selectedImages,
+            medias: selectedImages,
             price: purposeType === 'rent' ? price : undefined,
             deposit: purposeType === 'rent' ? deposit : undefined,
             features,
@@ -390,7 +425,7 @@ const PostCreate: React.FC = () => {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingX: '20px', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingX: '20px', minHeight: '100vh', marginTop: '20px' }}>
             <Snackbar open={state.open} autoHideDuration={3000} anchorOrigin={{ vertical: state.vertical, horizontal: state.horizontal }} onClose={() => { setSnackBar(''); }}>
                 <Alert onClose={() => {
                     setState({ ...state, open: false });
@@ -471,8 +506,7 @@ const PostCreate: React.FC = () => {
                             fullWidth
                             value={title}
                             onChange={(e) => {
-                                setTitleError(null);
-                                setTitle(e.target.value);
+                                handleStringInput(e.target.value, setTitle, setTitleError, 250, true);
                             }}
                             error={titleError !== null}
                             helperText={titleError}
@@ -485,7 +519,9 @@ const PostCreate: React.FC = () => {
                             multiline
                             rows={4}
                             value={description}
-                            onChange={(e) => { setDescription(e.target.value); setDescriptionError(null); }}
+                            onChange={(e) => {
+                                handleStringInput(e.target.value, setDescription, setDescriptionError, 1000, true);
+                            }}
                             error={descriptionError !== null}
                             helperText={descriptionError}
                             inputProps={{ maxLength: 1000 }}
@@ -789,7 +825,6 @@ const PostCreate: React.FC = () => {
                                     value={block}
                                     fullWidth onChange={(e) => {
                                         setBlock(e.target.value);
-
                                     }} />
                             </Box>
                         }
@@ -801,7 +836,7 @@ const PostCreate: React.FC = () => {
                                     type='number'
                                     inputProps={{ min: 0 }}
                                     value={electricityPrice} onChange={(e) => {
-                                        setElectricityPrice(Number.parseInt(e.target.value));
+                                        handleNumberInput(e.target.value, setElectricityPrice, setElectricityPriceError, minElectricityPrice, maxElectricityPrice);
                                     }}
                                     error={electricityPriceError !== null}
                                     helperText={electricityPriceError}
@@ -810,7 +845,7 @@ const PostCreate: React.FC = () => {
                                     type='number'
                                     inputProps={{ min: 0 }}
                                     value={waterPrice} onChange={(e) => {
-                                        setWaterPrice(Number.parseInt(e.target.value));
+                                        handleNumberInput(e.target.value, setWaterPrice, setWaterPriceError, minWaterPrice, maxWaterPrice);
                                     }}
                                     error={waterPriceError !== null}
                                     helperText={waterPriceError}
@@ -829,7 +864,9 @@ const PostCreate: React.FC = () => {
                                 id="area"
                                 label="Diện tích (m2)"
                                 fullWidth
-                                onChange={(e) => { setArea(Number.parseInt(e.target.value)); }}
+                                onChange={(e) => {
+                                    handleNumberInput(e.target.value, setArea, setAreaError, minMeter, maxMeter);
+                                }}
                                 type='number'
                                 inputProps={{ min: 0 }}
                                 error={areaError !== null}
@@ -840,7 +877,9 @@ const PostCreate: React.FC = () => {
                                 id="price"
                                 label="Giá"
                                 fullWidth
-                                onChange={(e) => { setRentPrice(Number.parseInt(e.target.value)); }}
+                                onChange={(e) => {
+                                    handleNumberInput(e.target.value, setRentPrice, setPriceError, minPrice, maxPrice);
+                                }}
                                 type='number'
                                 inputProps={{ min: 0 }}
                                 error={rentPriceError !== null}
@@ -870,18 +909,27 @@ const PostCreate: React.FC = () => {
                                     id="width"
                                     label="Chiều ngang (m)"
                                     fullWidth
-                                    value={mWidth} onChange={(e) => { setWidth(Number.parseInt(e.target.value)); }}
+                                    value={mWidth}
+                                    onChange={(e) => {
+                                        handleNumberInput(e.target.value, setWidth, setWidthError, minMeter, maxMeter);
+                                    }}
                                     type='number'
                                     inputProps={{ min: 0 }}
+                                    error={widthError !== null}
+                                    helperText={widthError}
                                 />
                                 <TextField
                                     id="length"
                                     label="Chiều dài (m)"
                                     fullWidth
-                                    value={mLength} onChange={(e) => { setLength(Number.parseInt(e.target.value)); }}
+                                    value={mLength}
+                                    onChange={(e) => {
+                                        handleNumberInput(e.target.value, setLength, setLengthError, minMeter, maxMeter);
+                                    }}
                                     type='number'
                                     inputProps={{ min: 0 }}
-
+                                    error={lengthError !== null}
+                                    helperText={lengthError}
                                 />
                             </Box>
                         }
@@ -894,14 +942,9 @@ const PostCreate: React.FC = () => {
                                 label="Giá đặt cọc"
                                 fullWidth
                                 sx={{ marginTop: '16px' }}
-                                value={deposit} onChange={(e) => {
-                                    const val = Number.parseInt(e.target.value);
-                                    if (e.target.value.length === 0)
-                                        setDeposit(null);
-                                    else
-                                        if (!Number.isNaN(val) && val >= minPrice && val <= maxPrice)
-                                            setDeposit(Math.abs(val));
-
+                                value={deposit}
+                                onChange={(e) => {
+                                    handleNumberInput(e.target.value, setDeposit, setDepositError, minPrice, maxPrice);
                                 }}
                                 type='number'
                                 inputProps={{ min: minPrice, max: maxPrice }}

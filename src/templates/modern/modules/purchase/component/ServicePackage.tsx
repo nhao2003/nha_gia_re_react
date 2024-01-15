@@ -26,7 +26,7 @@ const ServicePackage: React.FC<ServicePackageProps> = ({ name, price, descriptio
             <p style={{ fontSize: '1.5em', fontWeight: 'bold', color: '#026D4D', margin: '0', marginRight: '5px' }}>
               {price}
             </p>
-            <p style={{ fontSize: '1em', fontWeight: 'bold', color: '#6A6A6A', margin: '0' }}>VNĐ/THÁNG</p>
+            <p style={{ fontSize: '1em', fontWeight: 'bold', color: '#6A6A6A', margin: '0' }}>/THÁNG</p>
           </div>
         </div>
       </div>

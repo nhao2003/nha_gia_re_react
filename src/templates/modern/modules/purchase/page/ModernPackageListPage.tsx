@@ -1,15 +1,71 @@
 import React from 'react';
 import ServicePackage from '../component/ServicePackage';
 import { useNavigate } from 'react-router-dom';
+import { ApiServiceBuilder } from '../../../../../services/api.service';
+import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
+import { Box, CircularProgress } from '@mui/material';
+import { formatMoney } from '../../../../../services/fortmat.service';
 
 const ModernPackageListPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate('/purchase/choose-package');
+  const handleClick = (pack: IMembershipPackage) => {
+    navigate(`/purchase/choose-package/${pack.id}`, {
+      state: pack,
+    });
   };
 
-  return (
+  // get data from api
+  const [packages, setPackages] = React.useState<{
+    numOfPages: number;
+    packages: IMembershipPackage[];
+  }>({ numOfPages: 1, packages: [] });
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get('page') ?? '1';
+  async function fetchMemberPackage() {
+    // Fake delay
+    const query = new ApiServiceBuilder()
+      .withUrl('/membership-package')
+      .withParams({
+        page: page,
+      })
+      .build();
+    const response = await query.get();
+    return response.data as any;
+  }
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchMemberPackage()
+      .then((response) => {
+        setPackages({
+          numOfPages: response.num_of_pages,
+          packages: response.result,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [page]);
+
+  return isLoading ? (
+    <Box
+      sx={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <div style={{ textAlign: 'center', margin: '0 20%' }}>
       <div
         style={{
@@ -26,52 +82,24 @@ const ModernPackageListPage: React.FC = () => {
         <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
       </div>
       <div>
-        <ServicePackage
-          name='Gói cơ bản'
-          price='50K'
-          description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
-          infoList={[
-            { check: true, text: '20 tin đăng/tháng (Hiển thị 14 ngày)' },
-            { check: true, text: 'Ưu tiên hiển thị tin' },
-            { check: true, text: 'Ưu tiên duyệt tin' },
-            { check: false, text: 'Ưu tiên duyệt tin' },
-            { check: false, text: 'Huy hiệu xác minh' },
-            { check: false, text: 'Ưu tiên chăm sóc khách hàng' },
-            { check: false, text: 'Duyệt tin siêu tốc' },
-          ]}
-          onButtonClick={() => {
-            // Xử lý khi button được click
-            handleClick();
-          }}
-        />
-        <ServicePackage
-          name='Gói tiêu chuẩn'
-          price='100K'
-          description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
-          infoList={[
-            { check: false, text: 'Thông tin 4' },
-            { check: true, text: 'Thông tin 5' },
-            { check: false, text: 'Thông tin 6' },
-          ]}
-          onButtonClick={() => {
-            // Xử lý khi button được click
-            handleClick();
-          }}
-        />
-        <ServicePackage
-          name='Gói cao cấp'
-          price='200K'
-          description='Giải pháp tiết kiệm dành cho môi giới mới vào nghề'
-          infoList={[
-            { check: true, text: 'Thông tin 7' },
-            { check: false, text: 'Thông tin 8' },
-            { check: true, text: 'Thông tin 9' },
-          ]}
-          onButtonClick={() => {
-            // Xử lý khi button được click
-            handleClick();
-          }}
-        />
+        {packages.packages.map((item, index) => (
+          <ServicePackage
+            key={index}
+            name={item.name}
+            price={formatMoney(item.price_per_month)}
+            description={item.description}
+            infoList={[
+              { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
+              { check: true, text: 'Huy hiệu xác minh' },
+              { check: item.display_priority_point > 0, text: 'Ưu tiên hiển thị tin' },
+              { check: item.post_approval_priority_point > 0, text: 'Ưu tiên duyệt tin' },
+            ]}
+            onButtonClick={() => {
+              // Xử lý khi button được click
+              handleClick(item);
+            }}
+          />
+        ))}
       </div>
     </div>
   );

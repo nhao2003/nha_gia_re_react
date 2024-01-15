@@ -46,14 +46,33 @@ class PostService {
     }
   }
 
+  private isVideo(url: string) {
+    return url.includes('video');
+  }
+
   async createPost(post: PropertyListing) {
     const accessToken = await AuthService.getInstance().getAccessToken();
     if (accessToken === null) {
       throw new Error('Bạn chưa đăng nhập');
     }
-    const images = post.images;
-    const uploadImages = await mediaServices.uploadFiles(images);
-    post.images = uploadImages;
+    const medias = post.medias as File[];
+    const uploadMeidas = await mediaServices.uploadFiles(medias);
+    uploadMeidas.forEach((media) => {
+      if (this.isVideo(media)) {
+        if (post.videos === undefined || post.videos === null) {
+          post.videos = [media];
+        } else {
+          post.videos.push(media);
+        }
+      } else {
+        if (post.images === undefined || post.images === null) {
+          post.images = [media];
+        } else {
+          post.images.push(media);
+        }
+      }
+    });
+    delete post.medias;
     const response = await this.api()
       .withUrl('/posts/create')
       .withBody(post)
