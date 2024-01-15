@@ -58,6 +58,7 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
 
     const chatListStyles = {
         overflowY: 'auto',
+        flex: '1',
     };
 
     const inputContainerStyles = {
@@ -89,6 +90,16 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
         groups[date].push(message);
         return groups;
     }, {});
+    const listRef = useRef<HTMLUListElement>(null);
+
+    // Scroll to bottom when component is mounted
+    useEffect(() => {
+        if (listRef.current !== null) {
+            listRef.current.scrollTop = listRef.current.scrollHeight;
+        }
+    }, [props.messages]);
+
+
     return props.isNoChatSelected ?
         <Box sx={container}>
             <img src={emptyMesssage} alt="Chat" style={{ width: '20%' }} />
@@ -99,7 +110,9 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
                 <CircularProgress />
             </Box> :
             <Box sx={chatContentStyles} >
-                <Box sx={chatListStyles}>
+                <Box
+                    ref={listRef}
+                    sx={chatListStyles}>
                     <List
                         sx={{
                             display: 'flex',
