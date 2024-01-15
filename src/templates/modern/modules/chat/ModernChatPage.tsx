@@ -5,6 +5,9 @@ import ChatContent from './components/ChatContent';
 import type { MessageTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import conversationService from '../../../../services/conversation.service';
+import type Conversation from '../../../../models/interfaces/IConversation';
+import type IMessage from '../../../../models/interfaces/IMessage';
 
 enum SocketEvent {
   Init = 'init',
@@ -16,98 +19,32 @@ enum SocketEvent {
 const host = 'http://localhost:8000/conversations';
 
 function ModernChatPage() {
-  const socketRef = useRef<any>();
   const [messages, setMessages] = useState<Record<string, any[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const userId = AuthService.getInstance().getUserIdFromToken();
-  const handleSocketEvent = (type: SocketEvent, data: any) => {
-    const updatedConversations = [...conversations];
-    switch (type) {
-      case SocketEvent.Init:
-        setConversations(data);
-        break;
-      case SocketEvent.New:
-        updatedConversations.push(data);
-        setConversations(updatedConversations);
-        break;
-      case SocketEvent.Update: {
-        const updateIndex = updatedConversations.findIndex((conv) => conv.id === data.id);
-        if (updateIndex !== -1) {
-          updatedConversations[updateIndex] = data;
-          setConversations(updatedConversations);
-        }
-        break;
-      }
-      case SocketEvent.Delete: {
-        const deleteIndex = updatedConversations.findIndex((conv) => conv.id === data.id);
-        if (deleteIndex !== -1) {
-          updatedConversations.splice(deleteIndex, 1);
-          setConversations(updatedConversations);
-        }
-        break;
-      }
-      default:
-        break;
-    }
-  };
+
+  function conversationListener(conversations: Conversation[]) {
+    setConversations(conversations);
+  }
+
+  function messageListener(conversationId: string, messages: IMessage[]) {
+    console.log('Message listener', conversationId, messages);
+    setMessages((prev) => {
+      return {
+        ...prev,
+        [conversationId]: messages,
+      };
+    });
+  }
+
+
 
   const initializeSocket = async () => {
-    const accessToken = await AuthService.getInstance().getAccessToken();
-    socketRef.current = connect(host, {
-      auth: {
-        token: accessToken,
-      },
-    });
-
-    socketRef.current.on('conversations', (data: { type: SocketEvent; data: any }) => {
-      handleSocketEvent(data.type, data.data);
-    });
-
-    socketRef.current.on('messages', (data: {
-      type: SocketEvent;
-      data: any;
-      conversation_id: string;
-    }) => {
-      const { type, data: message, conversation_id: conversationId } = data;
-      switch (type) {
-        case SocketEvent.Init:
-
-          console.log(SocketEvent.Init);
-          messages[conversationId] = message;
-          setMessages({ ...messages });
-          break;
-
-        case SocketEvent.New:
-          console.log(SocketEvent.New);
-          messages[conversationId].push(message);
-          setMessages({ ...messages });
-          break;
-        case SocketEvent.Update: {
-          console.log(SocketEvent.Update);
-          const updateIndex = messages[conversationId].findIndex((msg) => msg.id === message.id);
-          if (updateIndex !== -1) {
-            messages[conversationId][updateIndex] = message;
-            setMessages({ ...messages });
-          }
-        }
-          break;
-        case SocketEvent.Delete: {
-          console.log(SocketEvent.Delete);
-          const deleteIndex = messages[conversationId].findIndex((msg) => msg.id === message.id);
-          if (deleteIndex !== -1) {
-            messages[conversationId].splice(deleteIndex, 1);
-            setMessages({ ...messages });
-          }
-        }
-          break;
-        default:
-          console.log('Default');
-          break;
-      }
-      console.log('Messages', messages);
-    });
+    await conversationService.initSocket();
+    conversationService.addConversationsEventListener(conversationListener);
+    conversationService.addMessagesEventListener(messageListener);
   };
   const navigate = useNavigate();
   useEffect(() => {
@@ -118,16 +55,14 @@ function ModernChatPage() {
     });
 
     return () => {
-      socketRef.current?.disconnect();
+      conversationService.removeConversationsEventListener(conversationListener);
+      conversationService.removeMessagesEventListener(messageListener);
     };
   }, []);
 
   useEffect(() => {
-    const index = Object.keys(messages).findIndex((key) => key === selectedConversation);
-    if (index === -1) {
-      socketRef.current?.emit('init_chat', {
-        conversation_id: selectedConversation,
-      });
+    if (selectedConversation !== null) {
+      conversationService.initConversation(selectedConversation);
     }
   }, [selectedConversation]);
 
@@ -220,11 +155,11 @@ function ModernChatPage() {
         isFetching={messages[selectedConversation ?? ''] === undefined}
         myId={userId ?? ''}
         onMessageSend={function (type: MessageTypes, content: any): void {
-          socketRef.current.emit('send_message', {
-            type,
-            conversation_id: selectedConversation,
-            content,
-          });
+          if (selectedConversation !== null) {
+            conversationService.sendMessage(selectedConversation, content).catch((err) => {
+              console.log(err);
+            });
+          }
         }} />
 
 
