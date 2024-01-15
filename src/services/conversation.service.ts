@@ -47,9 +47,7 @@ class ConversationService {
     }
   }
 
-  public removeMessagesEventListener(
-    callback: (conversationId: string, messages: IMessage[]) => void,
-  ): void {
+  public removeMessagesEventListener(callback: (conversationId: string, messages: IMessage[]) => void): void {
     const index = this.messagesEventListeners.indexOf(callback);
     if (index !== -1) {
       this.messagesEventListeners.splice(index, 1);
@@ -68,7 +66,10 @@ class ConversationService {
     });
   }
 
-  public async getConversation(otherUserId: string): Promise<any> {
+  public async getOrCreateConversation(otherUserId: string): Promise<{
+    conversation: IConversation;
+    isExist: boolean;
+  }> {
     try {
       // const accessToken = await AuthService.getInstance().getAccessToken();
       const accessToken =
@@ -93,6 +94,10 @@ class ConversationService {
         .post();
 
       const { conversation, isExist } = (response.data as any).result;
+      if (isExist === false) {
+        this.conversations.push(conversation);
+        this.notifyConversationsEventListeners();
+      }
       return {
         conversation,
         isExist,
@@ -169,8 +174,20 @@ class ConversationService {
     this.notifyMessagesEventListeners(conversationId);
   };
 
-  public async getMessages(conversationId: string): Promise<IMessage[]> {
-    return this.messages[conversationId] ?? [];
+  public async getConversations(): Promise<IConversation[]> {
+    return this.conversations;
+  }
+
+  public async getConversation(conversationId: string): Promise<IConversation | undefined> {
+    return this.conversations.find((conv) => conv.id === conversationId);
+  }
+
+  public async getAllMessages(): Promise<Record<string, IMessage[]>> {
+    return this.messages;
+  }
+
+  public async getMessages(conversationId: string): Promise<IMessage[] | undefined> {
+    return this.messages[conversationId];
   }
 
   public async sendMessage(conversationId: string, content: string | File[]): Promise<void> {
@@ -198,12 +215,18 @@ class ConversationService {
     if (this.socket === null) {
       throw new Error('Socket is not connected');
     }
+    if (this.messages[conversationId] !== undefined) {
+      this.notifyMessagesEventListeners(conversationId);
+    }
     this.socket.emit('init_chat', {
       conversation_id: conversationId,
     });
   }
 
   public async initSocket(): Promise<void> {
+    if (this.socket !== null) {
+      return;
+    }
     const accessToken = await AuthService.getInstance().getAccessToken();
     this.socket = connect('http://localhost:8000/conversations', {
       auth: {
@@ -216,7 +239,7 @@ class ConversationService {
     });
 
     this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
-      console.log("On messages: ", data);
+      console.log('On messages: ', data);
       this.handleMessageEvent(data.type, data);
     });
   }

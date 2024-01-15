@@ -15,7 +15,7 @@ interface ChatContentProps {
     messages: IMessage[];
     myId: string;
     onMediaTap?: (index: number) => void;
-    onMessageSend: (type: MessageTypes, content: any) => void;
+    onMessageSend: (content: any) => Promise<void>
 }
 
 const ChatContent: React.FC<ChatContentProps> = (props) => {
@@ -28,16 +28,14 @@ const ChatContent: React.FC<ChatContentProps> = (props) => {
             return;
         }
         if (inputMessage !== '') {
-            props.onMessageSend(MessageTypes.text, inputMessage);
+            await props.onMessageSend(inputMessage);
             setInputMessage('');
-
         }
         if (selectedAttachments !== null) {
             setIsUploading(true);
-            const uploadMeidas = [...selectedAttachments]
             setSelectedAttachments(null);
+            await props.onMessageSend(selectedAttachments);
             setIsUploading(false);
-            props.onMessageSend(MessageTypes.media, uploadMeidas);
         }
     };
 
