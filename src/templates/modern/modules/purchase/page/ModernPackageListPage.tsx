@@ -82,24 +82,26 @@ const ModernPackageListPage: React.FC = () => {
         <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
       </div>
       <div>
-        {packages.packages.map((item, index) => (
-          <ServicePackage
-            key={index}
-            name={item.name}
-            price={formatMoney(item.price_per_month)}
-            description={item.description}
-            infoList={[
-              { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
-              { check: true, text: 'Huy hiệu xác minh' },
-              { check: item.display_priority_point > 0, text: 'Ưu tiên hiển thị tin' },
-              { check: item.post_approval_priority_point > 0, text: 'Ưu tiên duyệt tin' },
-            ]}
-            onButtonClick={() => {
-              // Xử lý khi button được click
-              handleClick(item);
-            }}
-          />
-        ))}
+        {packages.packages.map((item, index) =>
+          item.is_active ? (
+            <ServicePackage
+              key={index}
+              name={item.name}
+              price={formatMoney(item.price_per_month)}
+              description={item.description}
+              infoList={[
+                { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
+                { check: true, text: 'Huy hiệu xác minh' },
+                { check: item.display_priority_point > 0, text: 'Ưu tiên hiển thị tin' },
+                { check: item.post_approval_priority_point > 0, text: 'Ưu tiên duyệt tin' },
+              ]}
+              onButtonClick={() => {
+                // Xử lý khi button được click
+                handleClick(item);
+              }}
+            />
+          ) : null,
+        )}
       </div>
     </div>
   );

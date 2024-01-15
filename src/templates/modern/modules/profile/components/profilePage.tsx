@@ -342,9 +342,7 @@ export const ProfilePage: React.FC = () => {
         ) : selectedItemKey === 'history-transaction' ? (
           <ModernHistoryTransactionPage />
         ) : (
-          <div>
-            <h1>Profile</h1>
-          </div>
+          <ModernPostManagement />
         )}
       </Box>
     </Box>

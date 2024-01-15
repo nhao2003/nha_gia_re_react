@@ -19,7 +19,7 @@ const MordenChoosePackagePage: React.FC = () => {
   async function createOrderRequest() {
     const userId = AuthService.getInstance().getUserIdFromToken();
     const numOfMonths = selectedTerm.split('-')[0];
-    const redirectUrl = 'http://localhost:3000/purchase/result';
+    const redirectUrl = 'http://localhost:3000/purchase/result/:id';
     console.log(userId, id, numOfMonths, redirectUrl);
     try {
       const response = await new ApiServiceBuilder()
@@ -53,7 +53,7 @@ const MordenChoosePackagePage: React.FC = () => {
   }
 
   const [selectedTerm, setSelectedTerm] = useState<string>('1-month');
-  const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(360000);
+  const [selectedPackagePrice, setSelectedPackagePrice] = useState<number>(curPackage.price_per_month);
 
   const termPackages: TermPackage[] = [
     { id: '1-month', label: 'Gói 1 tháng', price: `${formatMoney(curPackage.price_per_month)}` },
