@@ -9,7 +9,7 @@ class MediaServices {
     }
     let uploadUrl = `${apiUrl}/media/upload`;
     if (isAsync) {
-      uploadUrl += '?isAsync=true';
+      uploadUrl += '?async=true';
     }
     const response = await axios.post(uploadUrl, formData);
     if (response.data.status === 'success') {
