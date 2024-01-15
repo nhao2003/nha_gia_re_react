@@ -36,7 +36,7 @@ const Header: React.FC = () => {
     { id: 'signin', href: '/signin', label: 'Đăng nhập' },
     { id: 'signup', href: '/signup', label: 'Đăng ký' },
     { id: 'chat', href: '/chat', label: 'Tin nhắn' },
-    { id: 'purchase', href: '/purchase', label: 'Thanh toán' },
+    { id: 'purchase', href: '/purchase/history', label: 'Thanh toán' },
     { id: 'about-us', href: '/about-us', label: 'Về chúng tôi' },
   ];
 
@@ -135,7 +135,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('dangtin'); }}
+          onClick={() => {
+            handleNavigate('dangtin');
+          }}
         >
           Đăng tin
         </Button>
@@ -360,7 +362,9 @@ const Header: React.FC = () => {
                 borderRadius: '10px',
                 display: matches ? 'inherit' : 'none',
               }}
-              onClick={() => { handleNavigate('signin'); }}
+              onClick={() => {
+                handleNavigate('signin');
+              }}
             >
               Đăng ký
             </Button>
@@ -378,14 +382,21 @@ const Header: React.FC = () => {
                 borderRadius: '10px',
                 display: matches ? 'inherit' : 'none',
               }}
-              onClick={() => { handleNavigate('signup'); }}
+              onClick={() => {
+                handleNavigate('signup');
+              }}
             >
               Đăng nhập
             </Button>
           </>
         ) : (
           <>
-            <div className={classes.user} onClick={() => { handleNavigate('profile'); }}>
+            <div
+              className={classes.user}
+              onClick={() => {
+                handleNavigate('profile');
+              }}
+            >
               <Avatar sx={{ marginRight: '8px' }} src={avatar} alt='avatar' />
               <span>User</span>
             </div>
