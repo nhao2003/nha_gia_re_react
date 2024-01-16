@@ -157,7 +157,8 @@ export const ProfilePage: React.FC = () => {
         if (res.status !== 'success') {
           throw new Error(res.message);
         }
-        setUser(res.data);
+        console.log("Get user's info successfully", res);
+        setUser(res.result);
       })
       .catch((err) => {
         console.log(err);

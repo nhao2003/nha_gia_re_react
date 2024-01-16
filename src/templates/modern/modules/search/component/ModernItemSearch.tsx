@@ -18,7 +18,15 @@ import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import { ListItemFilter } from '../../../../classic/modules/search/components/ListItemFilter';
 import { ModernTabPanelSearch } from './ModernTabPanelSearch';
 
-export const ModernItemSearch = () => {
+interface ModernItemSearchProps {
+  isLease: boolean;
+  posts: any[];
+  numOfPages: number;
+  isLoading: boolean;
+  onIsLeaseChange?: (isLease: boolean) => void;
+}
+
+export const ModernItemSearch = (props: ModernItemSearchProps): JSX.Element => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
@@ -29,10 +37,11 @@ export const ModernItemSearch = () => {
     setOpen(!open);
   };
 
-  const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+    if (props.onIsLeaseChange !== undefined) {
+      props.onIsLeaseChange(newValue === '1');
+    }
   };
 
   const breadcrumbs = [
@@ -78,11 +87,12 @@ export const ModernItemSearch = () => {
       </Typography>
       <Stack direction={'row'} justifyContent={'space-between'}>
         <Box sx={{ width: matches ? '72%' : '98%', typography: 'body1' }}>
-          <TabContext value={value}>
+          <TabContext value={props.isLease ? '1' : '2'}>
             <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label='tab dbs'>
+              <TabList
+                onChange={handleChange} aria-label='tab dbs'>
                 <Tab
-                  label='Liên quan'
+                  label='Cho thuê'
                   value='1'
                   sx={{
                     textTransform: 'none',
@@ -90,7 +100,7 @@ export const ModernItemSearch = () => {
                   }}
                 />
                 <Tab
-                  label='Tin mới nhất'
+                  label='Mua bán'
                   value='2'
                   sx={{
                     textTransform: 'none',
@@ -99,12 +109,12 @@ export const ModernItemSearch = () => {
                 />
               </TabList>
             </Stack>
-            <TabPanel value='1'>
-              <ModernTabPanelSearch />
-            </TabPanel>
-            <TabPanel value='2'>
-              <ModernTabPanelSearch />
-            </TabPanel>
+            <ModernTabPanelSearch
+              posts={props.posts}
+              numOfPages={props.numOfPages}
+              currentPage={0}
+              isLoading={props.isLoading}
+            />
           </TabContext>
         </Box>
         <Stack

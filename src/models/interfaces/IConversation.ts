@@ -1,3 +1,4 @@
+import type IMessage from "./IMessage";
 import type IParticipant from "./IParticipant";
 import type { IUser } from "./IUser";
 
@@ -8,6 +9,6 @@ interface Conversation {
   is_active: boolean;
   participants: IParticipant[];
   users: IUser[];
-  last_message: any;
+  last_message: IMessage;
 }
 export default Conversation;

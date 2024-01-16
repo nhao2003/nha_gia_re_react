@@ -18,6 +18,8 @@ import DetailedPackage from './modules/package/DetailedPackage';
 import PaymentResult from './modules/package/PaymentResult';
 
 import './assets/styles/index.css'
+import Header from './components/Header';
+import ClassicChatPage from './modules/chat/ClassicChatPage';
 
 
 
@@ -139,10 +141,30 @@ function App(): JSX.Element {
         }
       />
 
-      {/* protected route */}
-      {/* <Route element={<AuthRequire />}>
-        <Route path='welcome' element={<WelcomePage />} />
-      </Route> */}
+      <Route
+        path='/chat/:id?'
+        element={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100vh',
+              maxHeight: '100vh',
+              // overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                zIndex: 1000,
+              }}
+            >
+              <Header />
+            </div>
+            <ClassicChatPage />
+          </div>
+        }
+      />
     </Routes>
   );
 }

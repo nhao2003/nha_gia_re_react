@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Radio } from '@mui/material';
+import { Grid, Radio, useMediaQuery, useTheme } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
 import { formatMoney } from '../../../../../services/fortmat.service';
@@ -13,6 +13,9 @@ interface TermPackage {
 }
 
 const MordenChoosePackagePage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const [curPackage, setCurPackage] = React.useState<IMembershipPackage>(useLocation().state as IMembershipPackage);
   const id = useLocation().pathname.split('/')[3];
 
@@ -75,7 +78,7 @@ const MordenChoosePackagePage: React.FC = () => {
   const totalAmount = selectedPackagePrice - discount;
 
   return (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',
@@ -122,7 +125,7 @@ const MordenChoosePackagePage: React.FC = () => {
       {/* Thêm 3 text align bên phải */}
       <div style={{ textAlign: 'right', marginBottom: '20px' }}>
         <p style={{ fontSize: '1.2em' }}>Giá gói: {formatMoney(selectedPackagePrice)}</p>
-        <p style={{ fontSize: '1.2em' }}>Giảm giá: -{formatMoney(discount)}</p>
+        {/* <p style={{ fontSize: '1.2em' }}>Giảm giá: -{formatMoney(discount)}</p> */}
         <p style={{ fontWeight: 'bold', fontSize: '1.5em', color: '#026D4D' }}>Tổng tiền: {formatMoney(totalAmount)}</p>
       </div>
 

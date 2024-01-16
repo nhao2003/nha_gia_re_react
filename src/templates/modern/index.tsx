@@ -1,12 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import { ModernDashboardPage } from './modules/profile/pages/ModernDashboardPage';
+import { ModernDashboardPage } from './components/ModernDashboardPage';
 import { ModernHomePage } from './modules/home/ModernHomePage';
 import { ModernDetailPage } from './modules/detail/ModernDetailPage';
 import ModernSignInPage from './modules/auth/ModernSignInPage';
 import ModernSignUpPage from './modules/auth/ModernSignUpPage';
 import ModernForgotPassword from './modules/auth/ModernForgotPassword';
 import ModernUpdateProfile from './modules/auth/UpdateProfile/ModenUpdateProfile';
-import { ProfilePage } from './modules/profile/components/profilePage';
 import MordernBlogPage from './modules/blogs/mordernBlogPage';
 import ModernDetailBlogPage from './modules/blogs/modernDetailBlog';
 import ModernPackageListPage from './modules/purchase/page/ModernPackageListPage';
@@ -21,6 +20,7 @@ import ModernResultTransactionPage from './modules/purchase/page/ModernResultTra
 import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
 import { Header } from './components/Header/Header';
 import ModernAboutUsPage from './modules/aboutUs/page/ModernAboutUsPage';
+import { ProfilePage } from './modules/profile/components/profilePage';
 
 function App(): JSX.Element {
   return (
@@ -55,16 +55,6 @@ function App(): JSX.Element {
           </ModernDashboardPage>
         }
       />
-
-      <Route
-        path='/profile'
-        element={
-          <ModernDashboardPage>
-            <ProfilePage />
-          </ModernDashboardPage>
-        }
-      />
-
       <Route
         path='/post-management'
         element={
