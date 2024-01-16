@@ -63,7 +63,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phon
   const navagate = useNavigate();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
-      <Avatar sx={{ width: '80%', height: '80%' }} alt={fullname} src={avatar} />
+      <Avatar
+        sx={{
+          width: '80%',
+          height: 'auto',
+          aspectRatio: '1 / 1', // Đảm bảo chiều rộng và chiều cao bằng nhau
+          borderRadius: '50%', // Đặt hình dạng thành hình tròn
+        }}
+        alt={fullname}
+        src={avatar}
+      />
       <Typography variant='h6' component='div'>
         {fullname}
       </Typography>
