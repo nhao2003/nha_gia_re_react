@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import { ApiServiceBuilder } from './api.service';
 import AuthService from './auth.service';
-import type { Socket } from 'socket.io-client';
-import { connect } from 'socket.io-client';
+// import type { Socket } from 'socket.io-client';
+// import { connect } from 'socket.io-client';
 import type IMessage from '../models/interfaces/IMessage';
 import type IConversation from '../models/interfaces/IConversation';
 import { MessageTypes } from '../constants/enums';
@@ -26,7 +26,7 @@ class ConversationService {
     return new ApiServiceBuilder();
   }
 
-  private socket: Socket | null = null;
+  // private socket: Socket | null = null;
 
   private readonly conversationsEventListeners: Array<(conversations: IConversation[]) => void> = [];
 
@@ -191,63 +191,61 @@ class ConversationService {
   }
 
   public async sendMessage(conversationId: string, content: string | File[]): Promise<void> {
-    if (this.socket === null) {
-      throw new Error('Socket is not connected');
-    }
-    // If content is array of files, upload them first
-    if (Array.isArray(content)) {
-      const result = await mediaServices.uploadFiles(content, true);
-      this.socket.emit('send_message', {
-        type: MessageTypes.media,
-        conversation_id: conversationId,
-        content: result,
-      });
-    } else {
-      this.socket.emit('send_message', {
-        type: MessageTypes.text,
-        conversation_id: conversationId,
-        content,
-      });
-    }
+    // if (this.socket === null) {
+    //   throw new Error('Socket is not connected');
+    // }
+    // // If content is array of files, upload them first
+    // if (Array.isArray(content)) {
+    //   const result = await mediaServices.uploadFiles(content, true);
+    //   this.socket.emit('send_message', {
+    //     type: MessageTypes.media,
+    //     conversation_id: conversationId,
+    //     content: result,
+    //   });
+    // } else {
+    //   this.socket.emit('send_message', {
+    //     type: MessageTypes.text,
+    //     conversation_id: conversationId,
+    //     content,
+    //   });
+    // }
   }
 
   public initConversation(conversationId: string): void {
-    if (this.socket === null) {
-      throw new Error('Socket is not connected');
-    }
-    if (this.messages[conversationId] !== undefined) {
-      this.notifyMessagesEventListeners(conversationId);
-    }
-    this.socket.emit('init_chat', {
-      conversation_id: conversationId,
-    });
+    // if (this.socket === null) {
+    //   throw new Error('Socket is not connected');
+    // }
+    // if (this.messages[conversationId] !== undefined) {
+    //   this.notifyMessagesEventListeners(conversationId);
+    // }
+    // this.socket.emit('init_chat', {
+    //   conversation_id: conversationId,
+    // });
   }
 
   public async initSocket(): Promise<void> {
-    if (this.socket !== null) {
-      return;
-    }
-    const accessToken = await AuthService.getInstance().getAccessToken();
-    this.socket = connect('http://localhost:8000/conversations', {
-      auth: {
-        token: accessToken,
-      },
-    });
-
-    this.socket.on('conversations', (data: { type: SocketEvent; data: any }) => {
-      this.handleConversationEvent(data.type, data.data);
-    });
-
-    this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
-      console.log('On messages: ', data);
-      this.handleMessageEvent(data.type, data);
-    });
+    // if (this.socket !== null) {
+    //   return;
+    // }
+    // const accessToken = await AuthService.getInstance().getAccessToken();
+    // this.socket = connect('http://localhost:8000/conversations', {
+    //   auth: {
+    //     token: accessToken,
+    //   },
+    // });
+    // this.socket.on('conversations', (data: { type: SocketEvent; data: any }) => {
+    //   this.handleConversationEvent(data.type, data.data);
+    // });
+    // this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
+    //   console.log('On messages: ', data);
+    //   this.handleMessageEvent(data.type, data);
+    // });
   }
 
   public disconnectSocket(): void {
-    if (this.socket !== null) {
-      this.socket.disconnect();
-    }
+    // if (this.socket !== null) {
+    //   this.socket.disconnect();
+    // }
   }
 }
 
