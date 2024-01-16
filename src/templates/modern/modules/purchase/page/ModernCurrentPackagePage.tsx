@@ -5,8 +5,12 @@ import { ApiServiceBuilder } from '../../../../../services/api.service';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
 import type ISubscription from '../../../../../models/interfaces/ISubscription';
 import { formatDateTime } from '../../../../../services/fortmat.service';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const MordenCurrentPackagePage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   // get current package
@@ -74,7 +78,7 @@ const MordenCurrentPackagePage: React.FC = () => {
   }
 
   return (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',

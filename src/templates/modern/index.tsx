@@ -20,7 +20,7 @@ import ModernResultTransactionPage from './modules/purchase/page/ModernResultTra
 import ModernHistoryTransactionPage from './modules/purchase/page/ModernHistoryTransactionPage';
 import { Header } from './components/Header/Header';
 import ModernAboutUsPage from './modules/aboutUs/page/ModernAboutUsPage';
-import { ProfilePage } from './modules/profile/components/ProfilePage';
+import { ProfilePage } from './modules/profile/components/profilePage';
 
 function App(): JSX.Element {
   return (

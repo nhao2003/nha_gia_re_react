@@ -5,8 +5,11 @@ import { ApiServiceBuilder } from '../../../../../services/api.service';
 import AuthService from '../../../../../services/auth.service';
 import type ITransaction from '../../../../../models/interfaces/ITransaction';
 import { formatDateTime, formatMoney } from '../../../../../services/fortmat.service';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const ModernHistoryTransactionPage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   // get data from api
   const [packages, setPackages] = React.useState<{
     numOfPages: number;
@@ -60,7 +63,7 @@ const ModernHistoryTransactionPage: React.FC = () => {
       </div>
     </div>
   ) : (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',

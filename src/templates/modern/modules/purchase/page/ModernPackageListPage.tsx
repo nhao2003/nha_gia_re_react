@@ -3,10 +3,13 @@ import ServicePackage from '../component/ServicePackage';
 import { useNavigate } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { formatMoney } from '../../../../../services/fortmat.service';
 
 const ModernPackageListPage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const navigate = useNavigate();
 
   const handleClick = (pack: IMembershipPackage) => {
@@ -66,7 +69,7 @@ const ModernPackageListPage: React.FC = () => {
       <CircularProgress />
     </Box>
   ) : (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',

@@ -5,11 +5,14 @@ import CircleIcon from '../../../assets/images/exclamation-circle.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import type ITransaction from '../../../../../models/interfaces/ITransaction';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { formatDateTime, formatMoney } from '../../../../../services/fortmat.service';
 import AuthService from '../../../../../services/auth.service';
 
 const ModernResultTransactionPage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const navigate = useNavigate();
   // http://localhost:3000/purchase/result/c4ce2968-8941-4c18-8a2d-3d2b3e1c16b9?amount=100000&appid=2554&apptransid=240115_4933404831340&bankcode=&checksum=c0e0349e4335743ec7b52c7dbf2da18a2e3e57d1efecf6efba30e91b813ebc50&discountamount=0&pmcid=38&status=1
   const id = useLocation().pathname.split('/')[3];
@@ -84,7 +87,7 @@ const ModernResultTransactionPage: React.FC = () => {
       <CircularProgress />
     </div>
   ) : (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',
