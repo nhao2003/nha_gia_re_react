@@ -129,11 +129,13 @@ class AuthService {
       .build();
     try {
       const response = await changePassword.post();
+      console.log("Change password response: ", response.data);
       return {
         status: true,
         message: 'Thay đổi mật khẩu thành công',
       };
     } catch (error: any) {
+      console.log("Change password error: ", error.response.data);
       const message = error.response.data.code === 108 ? 'Mật khẩu hiện tại không đúng' : 'Thay đổi mật khẩu thất bại';
       return {
         status: false,
