@@ -17,6 +17,7 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { SelectedTab } from './components/SelectedTab';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
@@ -30,6 +31,7 @@ import CUSTOM_COLOR from '../../constants/colors';
 import { LovedNews } from './pages/LovedNews';
 import SubcriptionPackage from './pages/SubcriptionPackage';
 import { useNavigate } from 'react-router-dom';
+import PaymentHistory from './pages/PaymentHistory';
 
 const defaultTheme = createTheme();
 
@@ -38,7 +40,7 @@ export function PersonalPage(): JSX.Element {
   const navigate = useNavigate();
 
   const handleListItemClick = (index: number) => (event: React.MouseEvent<Element, MouseEvent>) => {
-    if (index === 4) {
+    if (index === 5) {
       localStorage.removeItem('access_token');
       window.location.href = '/';
     }
@@ -137,14 +139,22 @@ export function PersonalPage(): JSX.Element {
               index={3}
               selected={selectedIndex === 3}
               setSelected={handleListItemClick(3)}
+              icon={HistoryOutlinedIcon}
+              title={'Lịch sử giao dịch'}
+            />
+
+            <SelectedTab
+              index={3}
+              selected={selectedIndex === 4}
+              setSelected={handleListItemClick(4)}
               icon={LockResetIcon}
               title={'Thay đổi mật khẩu'}
             />
 
             <SelectedTab
-              index={4}
-              selected={selectedIndex === 4}
-              setSelected={handleListItemClick(4)}
+              index={5}
+              selected={selectedIndex === 5}
+              setSelected={handleListItemClick(5)}
               icon={LogoutIcon}
               title={'Đăng xuất'}
             />
@@ -157,6 +167,8 @@ export function PersonalPage(): JSX.Element {
         ) : selectedIndex === 2 ? (
           <SubcriptionPackage />
         ) : selectedIndex === 3 ? (
+          <PaymentHistory />
+        ) : selectedIndex === 4 ? (
           <ChangePasswordPage />
         ) : null}
       </Stack>
