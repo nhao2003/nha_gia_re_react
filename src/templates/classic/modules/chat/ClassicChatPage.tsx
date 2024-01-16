@@ -13,7 +13,7 @@ import type IParticipant from '../../../../models/interfaces/IParticipant';
 import type { IUser } from '../../../../models/interfaces/IUser';
 import dateUtils from '../../../../utils/dateUtils';
 
-function ModernChatPage() {
+function ClassicChatPage() {
   const [messages, setMessages] = useState<Record<string, IMessage[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -149,7 +149,7 @@ function ModernChatPage() {
                               ? conversation.last_message.content.text
                               : 'Đã gửi phương tiện'}
                         </Typography>
-                        
+
                         <Typography
                           sx={{ display: 'inline', float: 'right' }}
                           component='span'
@@ -162,6 +162,7 @@ function ModernChatPage() {
                               : conversation.last_message.sent_at
                           )}
                         </Typography>
+
                       </React.Fragment>
                     }
                   />
@@ -188,4 +189,4 @@ function ModernChatPage() {
 
 }
 
-export default ModernChatPage;
+export default ClassicChatPage;
