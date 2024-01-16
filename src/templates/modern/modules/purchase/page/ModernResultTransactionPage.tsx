@@ -34,7 +34,7 @@ const ModernResultTransactionPage: React.FC = () => {
     }
     console.log(`/transactions?id[eq]='${id}'`);
     const query = new ApiServiceBuilder()
-      .withUrl(`/transactions?id[eq]='${id}'`)
+      .withUrl(`/membership-package/transactions?id[eq]='${id}'`)
       .withHeaders({ Authorization: `Bearer ${accessToken}` })
       .build();
     const response = await query.get();
@@ -163,14 +163,16 @@ const ModernResultTransactionPage: React.FC = () => {
             </div>
             <div style={{ flex: '1.5', color: '#2B3641' }}>
               <p>{packages.packages[0].id}</p>
-              <p>{formatDateTime(packages.packages[0].timestamp)}</p>
+              <p>{formatDateTime(new Date(packages.packages[0].timestamp))}</p>
               <p>
                 Mua {packages.packages[0].package.name} {packages.packages[0].num_of_subscription_month} tháng
               </p>
-              <p>{formatDateTime(packages.packages[0].timestamp)}</p>
+              <p>{formatDateTime(new Date(packages.packages[0].timestamp))}</p>
               <p>
                 {formatDateTime(
-                  addMonthsToDate(packages.packages[0].timestamp, packages.packages[0].num_of_subscription_month),
+                  new Date(
+                    addMonthsToDate(packages.packages[0].timestamp, packages.packages[0].num_of_subscription_month),
+                  ),
                 )}
               </p>
             </div>
