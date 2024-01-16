@@ -1,6 +1,6 @@
 // Header.tsx
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer, Avatar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.svg';
 import CUSTOM_COLOR from '../constants/colors';
@@ -8,11 +8,13 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import MenuIcon from '@mui/icons-material/Menu';
+import avatar from '../assets/images/user.png';
 
 const Header: React.FC = () => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
+  const token = localStorage.getItem('access_token');
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -265,7 +267,6 @@ const Header: React.FC = () => {
         >
           Quản lý tin
         </Button>
-
         <Button
           variant='contained'
           style={{
@@ -285,34 +286,59 @@ const Header: React.FC = () => {
         >
           Đăng tin
         </Button>
+        {token !== null ? (
+          <>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              spacing={2}
+              onClick={() => {
+                navigate('/personal');
+              }}
+            >
+              <Avatar src={avatar} alt='avatar' />
+              <span
+                style={{
+                  color: CUSTOM_COLOR.black,
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                }}
+              >
+                User
+              </span>
+            </Stack>
+          </>
+        ) : (
+          <>
+            <Button
+              variant='text'
+              sx={{
+                color: CUSTOM_COLOR.black,
+                fontWeight: 'bold',
+                fontSize: '16px',
+              }}
+              onClick={() => {
+                navigate('/login');
+              }}
+            >
+              Đăng nhập
+            </Button>
 
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-          }}
-          onClick={() => {
-            navigate('/login');
-          }}
-        >
-          Đăng nhập
-        </Button>
-
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-          }}
-          onClick={() => {
-            navigate('/signup');
-          }}
-        >
-          Đăng ký
-        </Button>
+            <Button
+              variant='text'
+              sx={{
+                color: CUSTOM_COLOR.black,
+                fontWeight: 'bold',
+                fontSize: '16px',
+              }}
+              onClick={() => {
+                navigate('/signup');
+              }}
+            >
+              Đăng ký
+            </Button>
+          </>
+        )}
       </Stack>
     </Stack>
   );
