@@ -26,6 +26,10 @@ export function ModernTabPanelSearch(props: SearchProps) {
   const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
   const [province, setProvince] = React.useState<string | undefined>(undefined);
 
+  React.useEffect(() => {
+    setIsLoading(false);
+  }, [props]);
+
   return isLoading ? (
     <Box
       sx={{
@@ -45,9 +49,9 @@ export function ModernTabPanelSearch(props: SearchProps) {
           <ModernHomeCardHorizontal
             image={post.images[0]}
             title={post.title}
-            price={post.price + 'VNĐ'}
+            price={post.price + ' VNĐ'}
             address={post.address_detail ?? 'Chưa cập nhật'}
-            type={'personal'}
+            type={post.is_pro_seller}
             avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
             name={post.user.first_name + ' ' + post.user.last_name}
             time={dateUtils.getTimeAgoVi(post.posted_date)}

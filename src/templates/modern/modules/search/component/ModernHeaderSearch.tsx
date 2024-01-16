@@ -28,12 +28,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import addressUtils from '../../../../../utils/addressUtils';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderSearchProps {
-  onFilterButtonClick: (params: URLSearchParams) => void;
+  onFilterButtonClick: (params: Record<string, any>) => void;
 }
 
 export const ModernHeaderSearch = (props: HeaderSearchProps) => {
@@ -46,20 +46,16 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const searchParams = new URLSearchParams(location.search);
   const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
 
-  const [search, setSearch] = React.useState(searchTerm ?? '');
+  const [search, setSearch] = React.useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
 
   const provices = addressUtils.getProvinces().map((provice, index) => provice.name);
 
   const [selectProvince, setSelectProvince] = React.useState<string | null>(null);
   const [selectType, setSelectType] = React.useState<string | null>(null);
-  const [selectHandOver, setSelectHandOver] = React.useState<string | null>(null);
-  const [selectTypeDepartment, setSelectTypeDepartment] = React.useState<string | null>(null);
-  const [selectNumBeds, setSelectNumBeds] = React.useState<number | null>(null);
-  const [selectDerection, setSelectDerection] = React.useState<string | null>(null);
-  const [selectBalcony, setSelectBalcony] = React.useState<string | null>(null);
-  const [selectLegalDocumentStatus, setSelectLegalDocumentStatus] = React.useState<string | null>(null);
-  const [selectFurniture, setSelectFurnitutre] = React.useState<string | null>(null);
+
+  const [sortBy, setSortBy] = React.useState<string | null>(null);
+  const [postBy, setPostBy] = React.useState<string | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,24 +65,51 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
     setOpen(false);
   };
 
-  let params;
+  const [params, setParams] = React.useState({});
 
   const handleSearch = () => {
-    searchParams.set('q', encodeURIComponent(search).toString());
+    if (search !== null) {
+      setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
+    }
+
+    if (selectType !== null) {
+      setParams((params) => ({ ...params, type_id: selectType }));
+    }
 
     if (selectProvince !== null) {
-      searchParams.set('province', selectProvince);
-    }
-    if (selectType !== null) {
-      searchParams.set('type_id', selectType);
+      setParams((params) => ({ ...params, province_code: selectProvince }));
     }
 
-    console.log(selectProvince);
+    if (price[0] > 0 || price[1] < 120000000000) {
+      setParams((params) => ({ ...params, minPrice: price[0], maxPrice: price[1] }));
+    }
+
+    if (area[0] > 0 || price[1] < 10000) {
+      setParams((params) => ({ ...params, minArea: area[0], maxArea: area[1] }));
+    }
+
+    if (sortBy !== null) {
+      setParams((params) => ({ ...params, sortBy: sortBy }));
+    }
+
+    if (postBy != null) {
+      setParams((params) => ({ ...params, postBy: postBy }));
+    }
+
+    console.log('province', selectProvince, selectType);
 
     // navigate(`/search?${searchParams.toString()}`, { replace: true });
-    props.onFilterButtonClick(searchParams);
+    props.onFilterButtonClick(params);
   };
 
+  const handCancle = () => {
+    setSelectProvince(null);
+    setSelectType(null);
+    setPrice([0, 120000000000]);
+    setArea([0, 10000]);
+    setSortBy(null);
+    setPostBy(null);
+  };
   const options = ['Chung cư', 'Căn hộ'];
   const types = [
     {
@@ -111,165 +134,14 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
     },
   ];
 
-  const handOvers = [
-    {
-      title: 'Đã bàn giao',
-      value: 'handedOver',
-    },
-    {
-      title: 'Chưa bàn giao',
-      value: 'notHandOver',
-    },
-  ];
-
-  const typeApartments = [
-    {
-      title: 'Căn hộ',
-      value: 'apartment',
-    },
-    {
-      title: 'Duplex',
-      value: 'duplex',
-    },
-    {
-      title: 'Officetel',
-      value: 'officetel',
-    },
-    {
-      title: 'Dịch vụ',
-      value: 'service',
-    },
-    {
-      title: 'Ký túc xá',
-      value: 'dormitory',
-    },
-    {
-      title: 'Penthouse',
-      value: 'penhouse',
-    },
-  ];
-
-  const numBeds = [
-    {
-      title: '1',
-      value: 1,
-    },
-    {
-      title: '2',
-      value: 2,
-    },
-    {
-      title: '3',
-      value: 13,
-    },
-    {
-      title: '4',
-      value: 4,
-    },
-    {
-      title: '5',
-      value: 5,
-    },
-    {
-      title: '6',
-      value: 6,
-    },
-    {
-      title: '7',
-      value: 7,
-    },
-
-    {
-      title: '8',
-      value: 8,
-    },
-    {
-      title: '9',
-      value: 9,
-    },
-    {
-      title: '10',
-      value: 10,
-    },
-  ];
-
-  const derections = [
-    {
-      title: 'Đông',
-      value: 'east',
-    },
-    {
-      title: 'Tây',
-      value: 'west',
-    },
-    {
-      title: 'Nam',
-      value: 'south',
-    },
-    {
-      title: 'Bắc',
-      value: 'north',
-    },
-    {
-      title: 'Đông Bắc',
-      value: 'northEast',
-    },
-    {
-      title: 'Tây Bắc',
-      value: 'northWest',
-    },
-    {
-      title: 'Đông Nam',
-      value: 'southEast',
-    },
-    {
-      title: 'Tây Nam',
-      value: 'southWest',
-    },
-  ];
-
-  const legelDocumentStatuss = [
-    {
-      title: 'Đang chờ giấy tờ',
-      value: 'waiting_for_certificates',
-    },
-    {
-      title: 'Đã có giấy tờ',
-      value: 'haveCertificates',
-    },
-    {
-      title: 'Các giấy tờ khác',
-      value: 'otherDocuments',
-    },
-  ];
-
-  const furnitureStatuses = [
-    {
-      title: 'Trống',
-      value: 'empty',
-    },
-    {
-      title: 'Cơ bản',
-      value: 'basic',
-    },
-    {
-      title: 'Đầy đủ',
-      value: 'full',
-    },
-    {
-      title: 'Cao cấp',
-      value: 'highEnd',
-    },
-  ];
-
   const [value, setValue] = React.useState<string | null>(types[0].value);
   const [inputValue, setInputValue] = React.useState('');
 
   const minDistancePrice = 1000000000;
-  const [price, setPrice] = React.useState<number[]>([2000000000, 4000000000]);
+  const [price, setPrice] = React.useState<number[]>([0, 120000000000]);
 
   const minDistanceArea = 1000;
-  const [area, setArea] = React.useState<number[]>([2000, 4000]);
+  const [area, setArea] = React.useState<number[]>([0, 10000]);
 
   const handleChangePrice = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
@@ -307,6 +179,10 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
     }
   };
 
+  useEffect(() => {
+    handleSearch();
+  }, [selectProvince, selectType, price, area, sortBy, postBy]);
+
   const numberFormat = new Intl.NumberFormat('en-US');
 
   return (
@@ -317,12 +193,11 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
           alignItems: 'center',
           justifyContent: 'center',
           height: '80px',
-          boxShadow: '0px 10px 10px -5px rgba(0, 0, 0, 0.5)',
         }}
       >
         <FormControl
           sx={{
-            width: matches ? '50%' : '80%',
+            width: matches ? '70%' : '70%',
             marginRight: '10px',
           }}
         >
@@ -505,14 +380,14 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                 />
               </Stack>
 
-              <Typography
+              {/* <Typography
                 sx={{
                   fontWeight: 'bold',
                 }}
               >
                 Đặc điểm bất động sản
-              </Typography>
-              <FormControl>
+              </Typography> */}
+              {/* <FormControl>
                 <InputLabel>Trình trạng</InputLabel>
                 <Select
                   value={selectHandOver}
@@ -637,11 +512,11 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                     );
                   })}
                 </Select>
-              </FormControl>
-              <Autocomplete
+              </FormControl> */}
+              {/* <Autocomplete
                 options={options}
                 renderInput={(params) => <TextField {...params} label='Tình trạng nội thất' />}
-              />
+              /> */}
 
               <Stack>
                 <Typography
@@ -653,13 +528,20 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                 </Typography>
 
                 <Stack>
-                  <RadioGroup aria-labelledby='demo-row-radio-buttons-group-label' name='row-radio-buttons-group'>
+                  <RadioGroup
+                    aria-labelledby='demo-row-radio-buttons-group-label'
+                    name='row-radio-buttons-group'
+                    value={sortBy}
+                    onChange={(e) => {
+                      setSortBy((e.target as HTMLInputElement).value);
+                    }}
+                  >
                     <FormControlLabel
                       sx={{
                         justifyContent: 'space-between',
                       }}
                       labelPlacement='start'
-                      value='new'
+                      value='posted_date'
                       control={<Radio />}
                       label='Tin mới trước'
                     />
@@ -671,15 +553,6 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                       value='price'
                       control={<Radio />}
                       label='Giá thấp trước'
-                    />
-                    <FormControlLabel
-                      sx={{
-                        justifyContent: 'space-between',
-                      }}
-                      labelPlacement='start'
-                      value='other'
-                      control={<Radio />}
-                      label='Gần đây nhất'
                     />
                   </RadioGroup>
                 </Stack>
@@ -695,13 +568,20 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                 </Typography>
 
                 <Stack>
-                  <RadioGroup aria-labelledby='demo-row-radio-buttons-group-label' name='row-radio-buttons-group'>
+                  <RadioGroup
+                    aria-labelledby='demo-row-radio-buttons-group-label'
+                    name='row-radio-buttons-group'
+                    value={postBy}
+                    onChange={(e) => {
+                      setPostBy((e.target as HTMLInputElement).value);
+                    }}
+                  >
                     <FormControlLabel
                       sx={{
                         justifyContent: 'space-between',
                       }}
                       labelPlacement='start'
-                      value='canhan'
+                      value={true}
                       control={<Radio />}
                       label='Cá nhân'
                     />
@@ -710,7 +590,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                         justifyContent: 'space-between',
                       }}
                       labelPlacement='start'
-                      value='mogioi'
+                      value={false}
                       control={<Radio />}
                       label='Môi giới'
                     />
@@ -723,6 +603,9 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                   variant='text'
                   sx={{
                     color: '#1E7B5F',
+                  }}
+                  onClick={() => {
+                    handCancle();
                   }}
                 >
                   Đặt lại

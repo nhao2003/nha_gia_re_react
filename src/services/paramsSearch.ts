@@ -15,16 +15,42 @@ const params = {
 
 export function getParsedParams(params: Record<string, any>): any {
   const parsedParams: any = {};
+
+  if (params.search !== undefined){
+    parsedParams.search = params.search
+  }
+
   if (params.page !== undefined) {
     parsedParams.page = params.page;
   }
 
   if (params.province_code !== undefined) {
-    parsedParams['post_address->>province_code[eq]'] = params.province_code;
+    parsedParams['post_address->>province_code[eq]'] = `%27${params.province_code}%27`;
   }
 
   if (params.type_id !== undefined) {
-    parsedParams['post_type_id[eq]'] = params.type_id;
+    parsedParams['post_type_id[eq]'] = `%27${params.type_id}%27`;
+  }
+
+  if (params.minPrice > 0 || params.maxPrice < 120000000000){
+    parsedParams['post_price[btw]'] = `${params.minPrice}, ${params.maxPrice}`
+  }
+
+  if (params.minArea > 0 || params.maxArea < 10000){
+    parsedParams['post_area[btw]'] = `${params.minArea}, ${params.maxArea}`
+  }
+
+  if (params.sortBy !== undefined) {
+    if (params.sortBy === 'posted_date'){
+      parsedParams.orders = `-${params.sortBy}`;
+    }else {
+      parsedParams.orders = `${params.sortBy}`;
+    }
+    
+  }
+
+  if (params.postBy !== undefined){
+    parsedParams['post_is_pro_seller[eq]'] = params.postBy
   }
 
   return parsedParams;
