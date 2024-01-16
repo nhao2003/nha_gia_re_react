@@ -48,6 +48,10 @@ const Header: React.FC = () => {
     navigate('/personal');
   };
 
+  const handlePackagePage = () => {
+    navigate('/package');
+  };
+
   return (
     // <AppBar position='static'>
     //   <Toolbar>
@@ -134,6 +138,19 @@ const Header: React.FC = () => {
           onClick={handlePersonalPage}
         >
           Hồ Sơ
+        </Button>
+
+        <Button
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            display: matches1440 ? 'block' : 'none',
+          }}
+          onClick={handlePackagePage}
+        >
+          Gói dịch vụ
         </Button>
       </Stack>
 
