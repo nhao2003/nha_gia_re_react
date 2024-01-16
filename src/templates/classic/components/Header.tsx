@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer, Avatar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/images/logo.svg';
+import logo from '../assets/images/Logo.png';
 import CUSTOM_COLOR from '../constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
@@ -90,8 +90,8 @@ const Header: React.FC = () => {
         <img
           src={logo}
           style={{
-            width: '135px',
-            height: '80px',
+            width: '80px',
+            height: '60px',
             display: matches1440 ? 'block' : 'none',
           }}
           onClick={handleHome}
@@ -146,8 +146,7 @@ const Header: React.FC = () => {
           }}
           onClick={() => {
             navigate('/chat');
-          }
-          }
+          }}
         >
           Tin nhắn
         </Button>
@@ -167,9 +166,10 @@ const Header: React.FC = () => {
             <img
               src={logo}
               style={{
-                width: '135px',
-                height: '80px',
+                width: '80px',
+                height: '60px',
                 alignSelf: 'center',
+                marginLeft: '15px',
               }}
             />
           </Stack>
@@ -241,8 +241,9 @@ const Header: React.FC = () => {
       <img
         src={logo}
         style={{
-          width: '135px',
-          height: '80px',
+          width: '80px',
+          height: '60px',
+          alignSelf: 'center',
           display: matches1440 ? 'none' : 'block',
         }}
       />
