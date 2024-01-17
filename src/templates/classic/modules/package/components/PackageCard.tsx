@@ -60,6 +60,11 @@ const PackageCard: React.FC<PackageCardProps> = ({ key, packageItem, subscribeId
               width: '100%',
               padding: '10px 0px',
               marginBottom: '16px',
+              fontWeight: 'bold',
+              '&:disabled': {
+                backgroundColor: subscribeId === packageItem.id ? '#269938' : '#999999',
+                color: subscribeId === packageItem.id ? '#fff' : '#535151', // change color of disabled button
+              },
             }}
             onClick={() => {
               console.log(packageItem);
