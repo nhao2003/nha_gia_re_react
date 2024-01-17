@@ -77,6 +77,28 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (selectProvince !== null) {
+      const fetchDistricts = async () => {
+        const fetchedDistricts = addressUtils.getDistricts(selectProvince);
+        setDistricts(fetchedDistricts);
+      };
+
+      void fetchDistricts();
+    }
+  }, [selectProvince]);
+
+  useEffect(() => {
+    if (selectDistrict !== null && selectProvince !== null) {
+      const fetchWards = async () => {
+        const fetchedWards = addressUtils.getWards(selectProvince, selectDistrict);
+        setWards(fetchedWards);
+      };
+
+      void fetchWards();
+    }
+  }, [selectDistrict, selectProvince]);
+
   const [params, setParams] = React.useState({});
 
   const handleSearch = () => {
