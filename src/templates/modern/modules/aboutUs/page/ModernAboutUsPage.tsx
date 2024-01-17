@@ -1,223 +1,243 @@
 // About us page
 
 import React from 'react';
+// impor css
+// import '../assets/styles/general.css';
+// import '../assets/styles/queries.css';
+// import '../assets/styles/style.css';
+import '../../../../../assets/styles/css/general.css';
+import '../../../../../assets/styles/css/queries.css';
+import '../../../../../assets/styles/css/style.css'
+import nha from '../../../../../assets/img/nha.png';
+import trangchu from '../../../../../assets/img/trangchu.png';
+import trangdangtin from '../../../../../assets/img/trangdangtin.png';
+import trangcanhan from '../../../../../assets/img/trangcanhan.png';
+import hao from '../../../../../assets/img/hao.jpg';
+import minh from '../../../../../assets/img/minh.jpg';
+import sang from '../../../../../assets/img/sang.jpg';
+import huy from '../../../../../assets/img/huy.jpg';
+import thu from '../../../../../assets/img/thu.jpg';
+import tom_rumble from '../../../../../assets/img/tom_rumble.jpg';
+import home from '../../../../../assets/img/home.jpg';
+import image_3 from '../../../../../assets/img/image-3.jpg';
+import R from '../../../../../assets/img/R.jpg';
+import Screenshot_2_2_810x464 from '../../../../../assets/img/Screenshot_2-2-810x464.jpg';
+import Screenshot_2024_01_16_131714 from '../../../../../assets/img/Screenshot 2024-01-16 131714.png';
+import _2858_Interior_House_Scene_Sketchup_Model_By_VoDucDuy_Free_Download_3_768x432 from '../../../../../assets/img/2858-Interior-House-Scene-Sketchup-Model-By-VoDucDuy-Free-Download-3-768x432.jpg';
+import _0deb0675e670abff8f99a9b8269a37e6 from '../../../../../assets/img/0deb0675e670abff8f99a9b8269a37e6.jpg';
 
 function ModernAboutUsPage(): JSX.Element {
     return (
-        <div>
-            <section class="section-hero1">
-        <div class="hero">
-          <div class="hero-text-box">
-            <h1 class="heading-primary">
+      <div>
+      <section className="section-hero1">
+        <div className="hero">
+          <div className="hero-text-box">
+            <h1 className="heading-primary">
               Tìm nhà đúng chỗ - Đầu tư thông minh!
             </h1>
-            <p class="hero-description">
-              Tìm kiếm ngôi nhà ưng ý với trải nghiệm mua bán bất động sản thuận 
+            <p className="hero-description">
+              Tìm kiếm ngôi nhà ưng ý với trải nghiệm mua bán bất động sản thuận
               lợi. Đầu tư dễ dàng với sự đa dạng và tiện ích tuyệt vời.
             </p>
-            <a href="#cta" class="btn btn--full1 margin-right-sm">Bắt đầu trang web</a>
-
-            <a href="#how" class="btn btn--outline1">Tìm hiểu thêm &darr;</a>
+            <a href="#cta" className="btn btn--full1 margin-right-sm">
+              Bắt đầu trang web
+            </a>
+            <a href="#how" className="btn btn--outline1">
+              Tìm hiểu thêm ↓
+            </a>
           </div>
-          <div class="hero-img-box">
+          <div className="hero-img-box">
             <picture>
               <img
-                src="img/nha.png"
-                class="hero-img"
+                src={nha}
+                className="hero-img"
                 alt="Các dự án đang thi công, khu nhà cao cấp"
               />
             </picture>
           </div>
         </div>
       </section>
-
-
-      <section class="section-how" id="how">
-        <div class="container">
-          <span class="subheading1" style="font-size: x-large;">Giới thiệu</span>
-          <h2 class="heading-secondary">
-            Trang website có ba chức năng chính
-          </h2>
+      <section className="section-how" id="how">
+        <div className="container">
+          <span className="subheading1" style={{ fontSize: 'x-large' }}>
+            Giới thiệu
+          </span>
+          <h2 className="heading-secondary">Trang website có ba chức năng chính</h2>
         </div>
-
-        <div class="container grid grid--2-cols grid--center-v">
-          <div class="step-text-box">
-            <p class="step-number">01</p>
-            <h3 class="heading-tertiary">
+        <div className="container grid grid--2-cols grid--center-v">
+          <div className="step-text-box">
+            <p className="step-number">01</p>
+            <h3 className="heading-tertiary">
               Bạn có thể tìm kiếm các bài đăng về giao dịch bất động sản
             </h3>
-            <p class="step-description">
-              Trang mua bán và cho thuê sẽ giúp bạn có thể tìm được các ngôi nhà cần thiết cho mình.
-              bạn cũng có thể tìm được một để đặt văn phòng một cách dễ dàng.
+            <p className="step-description">
+              Trang mua bán và cho thuê sẽ giúp bạn có thể tìm được các ngôi nhà cần
+              thiết cho mình. bạn cũng có thể tìm được một để đặt văn phòng một cách
+              dễ dàng.
             </p>
           </div>
-
-          <div class="step-img-box1">
+          <div className="step-img-box1">
             <img
-              src="img/trangchu.png"
-              class="step-img"
+              src={trangchu}
+              className="step-img"
               alt="iPhone app
-            preferences selection screen"
+          preferences selection screen"
             />
           </div>
-
-          <div class="step-img-box1">
+          <div className="step-img-box1">
             <img
-              src="img/trangdangtin.png"
-              class="step-img"
+              src={trangdangtin}
+              className="step-img"
               alt="iPhone app
-            meal approving plan screen"
+          meal approving plan screen"
             />
           </div>
-          <div class="step-text-box">
-            <p class="step-number">02</p>
-            <h3 class="heading-tertiary">Bạn có thể đăng tin khi có nhu cầu giao dịch</h3>
-            <p class="step-description">
-              Không chỉ tìm các bất động sản muốn mua (thuê) bạn còn có thể đăng tin khi cần bán (cho thuê) một
-              ngôi nhà hoặc văn phòng một cách dễ dàng.
+          <div className="step-text-box">
+            <p className="step-number">02</p>
+            <h3 className="heading-tertiary">
+              Bạn có thể đăng tin khi có nhu cầu giao dịch
+            </h3>
+            <p className="step-description">
+              Không chỉ tìm các bất động sản muốn mua (thuê) bạn còn có thể đăng tin
+              khi cần bán (cho thuê) một ngôi nhà hoặc văn phòng một cách dễ dàng.
             </p>
           </div>
-
-
-          <div class="step-text-box">
-            <p class="step-number">03</p>
-            <h3 class="heading-tertiary">Bạn sẽ bảo mật các thông tin của mình</h3>
-            <p class="step-description">
-              Bạn có thể an tâm khi đăng tin trên trang web. Bạn sẽ được bảo mật các thông tin của mình
-              khi đăng ký tài khoản.
+          <div className="step-text-box">
+            <p className="step-number">03</p>
+            <h3 className="heading-tertiary">
+              Bạn sẽ bảo mật các thông tin của mình
+            </h3>
+            <p className="step-description">
+              Bạn có thể an tâm khi đăng tin trên trang web. Bạn sẽ được bảo mật các
+              thông tin của mình khi đăng ký tài khoản.
             </p>
           </div>
-          <div class="step-img-box1">
+          <div className="step-img-box1">
             <img
-              src="img/trangcanhan.png"
-              class="step-img"
+              src={trangcanhan}
+              className="step-img"
               alt="iPhone app
-            delivery screen"
+          delivery screen"
             />
           </div>
         </div>
       </section>
-
-      <section class="section-testimonials1" id="testimonials">
-        <div class="testimonials-container">
-          <span class="subheading1" style="font-size: x-large;">Thành viên</span>
-          
-          <div class="testimonials">
-            <figure class="testimonial">
+      <section className="section-testimonials1" id="testimonials">
+        <div className="testimonials-container">
+          <span className="subheading1" style={{ fontSize: "x-large" }}>
+            Thành viên
+          </span>
+          <div className="testimonials">
+            <figure className="testimonial">
               <img
-                class="testimonial-img"
+                className="testimonial-img"
                 alt="Photo of customer Dave Bryson"
-                src="img/hao.jpg"
+                src={hao}
               />
-              <p class="testimonial-name"> Nguyễn Nhật Hào - 21522046</p>
+              <p className="testimonial-name"> Nguyễn Nhật Hào - 21522046</p>
             </figure>
-
-            <figure class="testimonial">
+            <figure className="testimonial">
               <img
-                class="testimonial-img"
+                className="testimonial-img"
                 alt="Photo of customer Ben Hadley"
-                src="img/minh.jpg"
+                src={minh}
               />
-              <p class="testimonial-name"> Phan Văn Minh - 21522345</p>
+              <p className="testimonial-name"> Phan Văn Minh - 21522345</p>
             </figure>
-
-            <figure class="testimonial">
+            <figure className="testimonial">
               <img
-                class="testimonial-img"
+                className="testimonial-img"
                 alt="Photo of customer Steve Miller"
-                src="img/sang.jpg"
+                src={sang}
               />
-              <p class="testimonial-name">Thạch Sang - 21522546</p>
+              <p className="testimonial-name">Thạch Sang - 21522546</p>
             </figure>
-
-            <figure class="testimonial">
+            <figure className="testimonial">
               <img
-                class="testimonial-img"
+                className="testimonial-img"
                 alt="Photo of customer Hannah Smith"
-                src="img/huy.jpg"
+                src={huy}
               />
-              <p class="testimonial-name">Đào Xuân Huy - 21520913</p>
+              <p className="testimonial-name">Đào Xuân Huy - 21520913</p>
             </figure>
-
-            <figure class="testimonial">
+            <figure className="testimonial">
               <img
-                class="testimonial-img"
+                className="testimonial-img"
                 alt="Photo of customer Hannah Smith"
-                src="img/thu.jpg"
+                src={thu}
               />
-              <p class="testimonial-name">Đặng Ngọc Minh Thư - 21521487</p>
+              <p className="testimonial-name">Đặng Ngọc Minh Thư - 21521487</p>
             </figure>
           </div>
         </div>
-
-        <div class="gallery">
-          <figure class="gallery-item">
+        <div className="gallery">
+          <figure className="gallery-item">
             <img
-              src="img/tom_rumble.jpg"
+              src={tom_rumble}
               alt="Photo of beautifully
-            arranged food"
-            />
-           
-          </figure>
-          <figure class="gallery-item">
-            <img
-              src="img/nha.jpg"
-              alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item">
             <img
-              src="img/home.jpg"
+              src={nha}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item">
             <img
-              src="img/0deb0675e670abff8f99a9b8269a37e6.jpg"
+              src={home}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item" style="margin-top: 4.5rem;">
+          <figure className="gallery-item">
             <img
-              src="img/Screenshot 2024-01-16 131714.png"
+              src={_0deb0675e670abff8f99a9b8269a37e6}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item" style={{ marginTop: "4.5rem" }}>
             <img
-              src="img/image-3.jpg"
+              src={Screenshot_2024_01_16_131714}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item">
             <img
-              src="img/2858-Interior-House-Scene-Sketchup-Model-By-VoDucDuy-Free-Download-3-768x432.jpg"
+              src={image_3}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item">
             <img
-              src="img/R.jpg"
+              src={_2858_Interior_House_Scene_Sketchup_Model_By_VoDucDuy_Free_Download_3_768x432}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
             />
           </figure>
-          <figure class="gallery-item">
+          <figure className="gallery-item">
             <img
-              src="img/Screenshot_2-2-810x464.jpg"
+              src={R}
               alt="Photo of beautifully
-            arranged food"
+          arranged food"
+            />
+          </figure>
+          <figure className="gallery-item">
+            <img
+              src={Screenshot_2_2_810x464}
+              alt="Photo of beautifully
+          arranged food"
             />
           </figure>
         </div>
       </section>
-        </div>
+    </div>
+    
     );
 }
 

@@ -16,10 +16,10 @@ import PostCreate from './modules/postManagement/PostCreate';
 import Package from './modules/package/Package';
 import DetailedPackage from './modules/package/DetailedPackage';
 import PaymentResult from './modules/package/PaymentResult';
-
 import './assets/styles/index.css'
 import Header from './components/Header';
 import ClassicChatPage from './modules/chat/ClassicChatPage';
+import ClassicAboutUsPage from './modules/aboutUs/page/ClassicAboutUsPage';
 
 
 
@@ -165,6 +165,16 @@ function App(): JSX.Element {
           </div>
         }
       />
+
+      <Route
+        path='/about-us'
+        element={
+          <DashboardPage>
+            <ClassicAboutUsPage />
+          </DashboardPage>
+        }
+      />
+
     </Routes>
   );
 }
