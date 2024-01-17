@@ -2,9 +2,10 @@ import { CircularProgress, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import PaymentCard from '../components/PaymentCard';
+import AuthService from '../../../../../services/auth.service';
 
 const PaymentHistory = () => {
-  const userId = localStorage.getItem('userId');
+  const userId = AuthService.getInstance().getUserIdFromToken();
   const token = localStorage.getItem('access_token');
   const [paymentItems, setPaymentItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);

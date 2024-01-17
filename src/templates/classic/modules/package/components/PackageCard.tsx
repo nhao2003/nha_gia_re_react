@@ -9,9 +9,10 @@ import { useNavigate } from 'react-router-dom';
 interface PackageCardProps {
   key: string;
   packageItem: any;
+  isSubcribed: boolean;
 }
 
-const PackageCard: React.FC<PackageCardProps> = ({ packageItem, ...props }) => {
+const PackageCard: React.FC<PackageCardProps> = ({ packageItem, isSubcribed, ...props }) => {
   const navigate = useNavigate();
 
   const navigateToDetails = (id: any) => {
@@ -61,6 +62,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ packageItem, ...props }) => {
               console.log(packageItem);
               navigateToDetails(packageItem.id);
             }}
+            disabled={isSubcribed}
           >
             Mua ngay
           </Button>
