@@ -1,4 +1,14 @@
-import { Box, CircularProgress, IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { ProvinceListComponent } from './components/ProvinceListComponent';
@@ -9,6 +19,9 @@ import React from 'react';
 import type RealEstatePost from '../../../../models/RealEstatePost';
 
 export function ModernHomePage(): JSX.Element {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -75,12 +88,13 @@ export function ModernHomePage(): JSX.Element {
       <Stack
         style={{
           objectFit: 'cover',
-          width: '100%',
+          width: matches ? '100%' : '95%',
           maxWidth: '1000px',
           minWidth: '390px',
+          margin: '0 10px',
         }}
       >
-        <Carousel slides={slides} />
+        <Carousel slides={slides} style={{ width: '100%' }} />
         {/* Text file tìm kiếm */}
         <OutlinedInput
           onClick={handleClick}

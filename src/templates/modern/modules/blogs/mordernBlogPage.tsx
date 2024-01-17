@@ -85,7 +85,9 @@ function ModernBlogPage(): JSX.Element {
         sx={{
           objectFit: 'cover',
           width: '100%',
-          maxWidth: '75%',
+          maxWidth: matches ? '75%' : '95%',
+          marginLeft: matches ? '10px' : '0',
+          marginRight: matches ? '10px' : '0',
           flexDirection: 'column',
         }}
       >
