@@ -23,10 +23,6 @@
 /**************************/
 
 @media (max-width: 75em) {
-  html {
-    /* 9px / 16px  */
-    font-size: 56.25%;
-  }
 
   .grid {
     column-gap: 4.8rem;
@@ -63,11 +59,6 @@
 /**************************/
 
 @media (max-width: 59em) {
-  html {
-    /* 8px / 16px = 0.5 = 50% */
-    font-size: 50%;
-  }
-
   .hero {
     grid-template-columns: 1fr;
     padding: 0 8rem;
