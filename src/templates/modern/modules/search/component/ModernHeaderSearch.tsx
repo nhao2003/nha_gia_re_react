@@ -129,7 +129,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const [params, setParams] = React.useState({});
 
   const handleSearch = () => {
-    if (search.length === 0) {
+    if (search.length !== 0) {
       setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
     } else {
       setParams((params) => ({ ...params, search: undefined }));
@@ -246,7 +246,6 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   // Debounce search
   let timeout: NodeJS.Timeout | null = null;
   const handleSearchChange = (value: string) => {
-
     if (timeout !== null) {
       clearTimeout(timeout);
       timeout = null;
@@ -256,7 +255,6 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
     timeout = setTimeout(async () => {
       const result = await PostService.getInstance().getSearchSuggestion(value);
       setSearchKeywords(result);
-
     }, 300);
   };
 
@@ -269,10 +267,8 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
         clearTimeout(timeout);
         timeout = null;
       }
-    }
+    };
   }, [search]);
-
-
 
   const handleProvinceChange = (event: SelectChangeEvent<string>) => {
     const selectedProvince = Number(event.target.value);
@@ -311,19 +307,13 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
           <Autocomplete
             freeSolo
             options={searchKeywords}
-            filterOptions={
-              (options, state) => {
-                return options;
-              }
-            }
+            filterOptions={(options, state) => {
+              return options;
+            }}
             inputValue={search}
-            onChange={
-              (e: any, value: any) => {
-                setSearch(value);
-              }
-            }
-            
-            
+            onChange={(e: any, value: any) => {
+              setSearch(value);
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -334,14 +324,12 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                   height: '45px',
                 }}
                 placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
-                onChange={
-                  (e: ChangeEvent<HTMLInputElement>) => {
-                    setSearch(e.target.value);
-                  }
-                }
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSearch(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    console.log("Search", search);
+                    console.log('Search', search);
                     handleSearch();
                   }
                 }}

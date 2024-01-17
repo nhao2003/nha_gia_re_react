@@ -5,9 +5,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import SubscriptionPackageCard from '../components/SubscriptionPackageCard';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import { useNavigate } from 'react-router-dom';
+import AuthService from '../../../../../services/auth.service';
 
 const SubcriptionPackage = () => {
-  const userId = localStorage.getItem('userId');
+  const userId = AuthService.getInstance().getUserIdFromToken();
   const token = localStorage.getItem('access_token');
   const [packageItem, setPackageItem] = React.useState<any>(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -66,6 +67,7 @@ const SubcriptionPackage = () => {
       .then((data) => {
         console.log(data);
         if (data.status === 'success') {
+          setPackageItem(null);
           setIsLoading(false);
         } else {
           console.log(data.message);
