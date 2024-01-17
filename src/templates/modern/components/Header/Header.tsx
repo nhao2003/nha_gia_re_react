@@ -13,9 +13,7 @@ const Header: React.FC = () => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
-
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const toggleDrawer = () => {
     setOpenDrawer(false);
   };
@@ -28,7 +26,6 @@ const Header: React.FC = () => {
 
   const headerItems = [
     { id: 'home', href: '/', label: 'Mua bán' },
-    { id: 'chothue', href: '/cho-thue', label: 'Cho thuê' },
     { id: 'blogs', href: '/blogs', label: 'Blogs' },
     { id: 'blog', href: '/blog', label: 'Blog' },
     { id: 'dangtin', href: '/create-post', label: 'Đăng tin' },
@@ -107,19 +104,6 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('chothue')}
-        >
-          Cho thuê
-        </Button>
-
-        <Button
-          variant='text'
-          sx={{
-            color: CUSTOM_COLOR.black,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            display: matches1440 ? 'block' : 'none',
-          }}
           onClick={() => {
             handleNavigate('blogs');
           }}
@@ -160,7 +144,6 @@ const Header: React.FC = () => {
             color: CUSTOM_COLOR.black,
             fontWeight: 'bold',
             fontSize: '16px',
-            // display: matches1440 ? 'block' : 'none'
           }}
           onClick={() => handleNavigate('chat')}
         >
@@ -172,7 +155,6 @@ const Header: React.FC = () => {
             color: CUSTOM_COLOR.black,
             fontWeight: 'bold',
             fontSize: '16px',
-            // display: matches1440 ? 'block' : 'none'
           }}
           onClick={() => handleNavigate('about-us')}
         >
@@ -184,7 +166,6 @@ const Header: React.FC = () => {
             color: CUSTOM_COLOR.black,
             fontWeight: 'bold',
             fontSize: '16px',
-            // display: matches1440 ? 'block' : 'none'
           }}
           onClick={() => handleNavigate('purchase')}
         >
