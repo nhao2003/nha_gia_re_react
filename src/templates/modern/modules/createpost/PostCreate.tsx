@@ -25,7 +25,7 @@ import addressUtils from '../../../../utils/addressUtils';
 import type { AparmentFeatures, HouseFeatures, LandFeatures, MotelFeatures, OfficeFeatures, PropertyListing } from '../../../../services/CreatePostData';
 import PostService from '../../../../services/post.service';
 import { LoadingButton } from '@mui/lab';
-import { error } from 'console';
+import payment from '../../assets/illustrations/payment.svg';
 export interface FormValues {
     purposeType: string;
     apartmentType: string;
@@ -478,7 +478,51 @@ const PostCreate: React.FC = () => {
                         Số lượng bài đăng trong tháng: {checkPostLimit.countPostInMonth}/{checkPostLimit.limitPostInMonth}
                     </Typography>
 
-                    
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <Typography variant="h5" gutterBottom component="div">
+                            Gói PRO
+                        </Typography>
+                        <Typography variant="body1" gutterBottom component="div">
+                            Là gói dịch vụ dành cho nhà đăng tin chuyên nghiệp; giúp tối ưu chi phí, thời gian và hiệu quả đăng tin.
+                        </Typography>
+                        <img src={payment}
+                            alt="Limit post"
+                            style={
+                                {
+                                    width: '50%',
+                                    height: '50%',
+                                    alignSelf: 'center',
+
+                                }
+                            }
+                        />
+
+                        <Button variant="contained"
+                            sx={
+                                {
+                                    backgroundColor: '#026D4D',
+                                    color: '#DEFAF5',
+                                    ':hover': {
+                                        backgroundColor: '#026D4D',
+                                        color: '#DEFAF5',
+                                    }
+                                }
+                            }
+                            onClick={() => { window.location.href = '/purchase'; }}>Nâng cấp tài khoản</Button>
+                        <Button 
+                        sx={
+                            {
+                                backgroundColor: '#DEFAF5',
+                                color: '#026D4D',
+                                ':hover': {
+                                    backgroundColor: '#DEFAF5',
+                                    color: '#026D4D',
+                                }
+                            }
+                        }
+                        onClick={() => { window.location.href = '/'; }}>Trang chủ</Button>
+                    </Box>
+
                 </CustomCard>
             }
             {
