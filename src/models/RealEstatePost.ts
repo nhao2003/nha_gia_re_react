@@ -30,7 +30,7 @@ interface RealEstatePost {
   posted_date: Date;
   expiry_date: Date;
   images: string[];
-  // videos: string[];
+  videos?: string[] | null;
   is_pro_seller: boolean;
   info_message: string | null | undefined;
   display_priority_point: number;
