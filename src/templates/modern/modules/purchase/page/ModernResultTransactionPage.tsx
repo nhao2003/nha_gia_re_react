@@ -97,6 +97,7 @@ const ModernResultTransactionPage: React.FC = () => {
           textAlign: 'left',
           marginLeft: '20px',
           marginRight: '20px',
+          marginTop: '20px',
         }}
       >
         Kết quả giao dịch

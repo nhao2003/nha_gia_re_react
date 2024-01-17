@@ -5,8 +5,19 @@ import type RealEstatePost from '../../../../../models/RealEstatePost';
 import React from 'react';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import { getParsedParams } from '../../../../../services/paramsSearch';
+import { useLocation } from 'react-router-dom';
 
 export function SearchPage(): JSX.Element {
+  const type = useLocation().pathname.split('/')[2];
+  const [value, setValue] = React.useState<string>(useLocation().state as string);
+
+  console.log('TYPE', type);
+  console.log('VALUE', value);
+
+  // type: province || value: province code
+  // type: nearby, sell, lease || value: null
+  // type: relate || value: post title
+
   const [params, setParams] = React.useState({});
 
   const [posts, setPosts] = React.useState<{

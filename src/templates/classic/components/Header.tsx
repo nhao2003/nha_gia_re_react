@@ -1,6 +1,6 @@
 // Header.tsx
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer, Avatar } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Stack, useTheme, useMediaQuery, Drawer, Avatar, IconButton, Switch, FormControlLabel } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/Logo.png';
 import CUSTOM_COLOR from '../constants/colors';
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
         >
           Hồ Sơ
         </Button>
-        
+
         <Button
           variant='text'
           sx={{
@@ -178,11 +178,31 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => navigate('/about-us')}
+          onClick={() => { navigate('/about-us'); }}
         >
           Về chúng tôi
         </Button>
-
+        <FormControlLabel
+          value={localStorage.getItem('theme') === 'modern'}
+          control={
+            <Switch
+              sx={{
+                color: CUSTOM_COLOR.black,
+              }}
+            />
+          }
+          onChange={() => {
+            if (localStorage.getItem('theme') === 'modern') {
+              localStorage.setItem('theme', 'classic');
+              window.location.reload();
+            } else {
+              localStorage.setItem('theme', 'modern');
+              window.location.reload();
+            }
+          }
+          }
+          label={'Giao diện: ' + (localStorage.getItem('theme') === 'modern' ? 'Hiện đại' : 'Cổ điển')}
+        />
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -268,6 +288,18 @@ const Header: React.FC = () => {
           >
             Đăng tin
           </Button>
+          {/* Icon button Change Theme */}
+          <FormControlLabel
+            control={
+              <Switch
+                sx={{
+                  color: CUSTOM_COLOR.black,
+                }}
+              />
+            }
+            label='Change Theme'
+          />
+
         </Stack>
       </Drawer>
 

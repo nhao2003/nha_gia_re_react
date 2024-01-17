@@ -88,6 +88,7 @@ const MordenChoosePackagePage: React.FC = () => {
           textAlign: 'left',
           marginLeft: '20px',
           marginRight: '20px',
+          marginTop: '20px',
         }}
       >
         {curPackage.name}

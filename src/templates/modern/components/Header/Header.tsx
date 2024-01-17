@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton, Avatar } from '@mui/material';
+import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton, Avatar, FormControlLabel, Switch, TextField, MenuItem, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -41,7 +41,16 @@ const Header: React.FC = () => {
     if (href == null) return;
     navigate(href);
   };
+  const themes = [
+    { value: 'modern', label: 'Hiện đại' },
+    { value: 'classic', label: 'Cổ điển' },
+  ];
+  const currentTheme = localStorage.getItem('theme') ?? 'modern';
 
+  const handleThemeChange = (value: string) => {
+    localStorage.setItem('theme', value);
+    window.location.reload();
+  };
   return (
     <Stack
       direction={'row'}
@@ -145,7 +154,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('chat')}
+          onClick={() => { handleNavigate('chat'); }}
         >
           Tin nhắn
         </Button>
@@ -157,7 +166,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('purchase')}
+          onClick={() => { handleNavigate('purchase'); }}
         >
           Thanh toán
         </Button>
@@ -169,10 +178,12 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => handleNavigate('about-us')}
+          onClick={() => { handleNavigate('about-us'); }}
         >
           Về chúng tôi
         </Button>
+
+
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -234,7 +245,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('profile')}
+            onClick={() => { handleNavigate('profile'); }}
           >
             Hồ sơ
           </Button>
@@ -246,7 +257,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('chat')}
+            onClick={() => { handleNavigate('chat'); }}
           >
             Tin nhắn
           </Button>
@@ -258,7 +269,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('purchase')}
+            onClick={() => { handleNavigate('purchase'); }}
           >
             Thanh toán
           </Button>
@@ -270,7 +281,7 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => handleNavigate('about-us')}
+            onClick={() => { handleNavigate('about-us'); }}
           >
             Về chúng tôi
           </Button>
@@ -284,7 +295,7 @@ const Header: React.FC = () => {
                   fontSize: '16px',
                   display: !matches ? 'inherit' : 'none',
                 }}
-                onClick={() => handleNavigate('signup')}
+                onClick={() => { handleNavigate('signup'); }}
               >
                 Đăng ký
               </Button>
@@ -297,7 +308,7 @@ const Header: React.FC = () => {
                   fontSize: '16px',
                   display: !matches ? 'inherit' : 'none',
                 }}
-                onClick={() => handleNavigate('signin')}
+                onClick={() => { handleNavigate('signin'); }}
               >
                 Đăng nhập
               </Button>
@@ -319,12 +330,32 @@ const Header: React.FC = () => {
       />
 
       <Stack direction={'row'} alignItems={'center'} spacing={2} marginRight={2}>
-        <NotificationsNoneIcon
-          sx={{
-            width: '30px',
-            height: '30px',
-          }}
-        />
+      <ButtonGroup
+            variant='contained'
+            aria-label='outlined primary button group'
+            sx={{
+              display: matches1440 ? 'block' : 'none',
+            }}
+          >
+            {themes.map((theme) => (
+              <Button
+                key={theme.value}
+                sx={{
+                  backgroundColor: theme.value === currentTheme ? CUSTOM_COLOR.green : CUSTOM_COLOR.white,
+                  color: theme.value === currentTheme ? CUSTOM_COLOR.white : CUSTOM_COLOR.black,
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  ':hover': {
+                    backgroundColor: theme.value === currentTheme ? CUSTOM_COLOR.green : CUSTOM_COLOR.white,
+                    color: theme.value === currentTheme ? CUSTOM_COLOR.white : CUSTOM_COLOR.black,
+                  },
+                }}
+                onClick={() => handleThemeChange(theme.value)}
+              >
+                {theme.label}
+              </Button>
+            ))}
+          </ButtonGroup>
 
         {localStorage.getItem('access_token') === null ? (
           <>
