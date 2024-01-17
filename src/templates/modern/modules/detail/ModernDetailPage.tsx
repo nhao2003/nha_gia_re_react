@@ -34,7 +34,7 @@ export function ModernDetailPage(): JSX.Element {
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
-  
+
   // Get state
   const [post, setPost] = React.useState<RealEstatePost>(useLocation().state as RealEstatePost);
   const id = useLocation().pathname.split('/')[2];
@@ -173,7 +173,6 @@ export function ModernDetailPage(): JSX.Element {
 
   const features: any = post.features;
 
-
   return post === null ? (
     <Box
       sx={{
@@ -195,7 +194,7 @@ export function ModernDetailPage(): JSX.Element {
             maxWidth: '1200px',
             minWidth: '390px',
           }}
-          direction={'row'}
+          direction={matches ? 'row' : 'column'}
         >
           <Stack
             sx={{
@@ -209,7 +208,12 @@ export function ModernDetailPage(): JSX.Element {
             <Stack
               direction={'column'}
               spacing={1}
-              style={{ backgroundColor: CUSTOM_COLOR.backgroundCard, padding: '20px', borderRadius: '10px' }}
+              style={{
+                backgroundColor: CUSTOM_COLOR.backgroundCard,
+                padding: '20px',
+                borderRadius: '10px',
+                width: '95%',
+              }}
             >
               <Typography
                 width={'100%'}
@@ -243,7 +247,7 @@ export function ModernDetailPage(): JSX.Element {
                   </Button>
                 </Stack>
               </Stack>
- 
+
               <Stack
                 direction={'row'}
                 alignSelf={'start'}
@@ -305,43 +309,47 @@ export function ModernDetailPage(): JSX.Element {
                   }}
                   spacing={1}
                 >
-                  {                  
-                                features?.is_hand_over !== null ??
-                                       <TileIcon
-                                       icon={HomeWorkIcon}
-                                       title="Tình trạng bàn giao"
-                                       value={features.is_hand_over === true ? "Đã bàn giao" : "Chưa bàn giao"}
-                                   />
-                            }
-
+                  {features?.is_hand_over !== null ?? (
+                    <TileIcon
+                      icon={HomeWorkIcon}
+                      title='Tình trạng bàn giao'
+                      value={features.is_hand_over === true ? 'Đã bàn giao' : 'Chưa bàn giao'}
+                    />
+                  )}
 
                   <TileIcon
                     icon={MonetizationOnOutlinedIcon}
                     title='Giá'
                     value={post.price / post.area}
                     unit={
-                      <><span>VND/m</span><sup style={{ fontSize: '12px' }}>2</sup></>
+                      <>
+                        <span>VND/m</span>
+                        <sup style={{ fontSize: '12px' }}>2</sup>
+                      </>
                     }
                   />
-                      {
-                                       
-                          <TileIcon
-                          icon={WcIcon}
-                          title="Số phòng vệ sinh"
-                          value={features?.num_of_toilets ?? "Không có"}
-                          unit={"phòng"}
-                          />
-                        
-                      }
-                   <TileIcon
-                      icon={LocationCityIcon}
-                      title="Loại hình căn hộ"
-                      value={post.type_id === PropertyTypes.apartment ? "Căn hộ" : 
-                      post.type_id === PropertyTypes.house ? "Nhà ở" :
-                      post.type_id === PropertyTypes.land ? "Đất" :
-                      post.type_id === PropertyTypes.motel ? "Nhà trọ" :
-                      "Văn phòng"
-                      }
+                  {
+                    <TileIcon
+                      icon={WcIcon}
+                      title='Số phòng vệ sinh'
+                      value={features?.num_of_toilets ?? 'Không có'}
+                      unit={'phòng'}
+                    />
+                  }
+                  <TileIcon
+                    icon={LocationCityIcon}
+                    title='Loại hình căn hộ'
+                    value={
+                      post.type_id === PropertyTypes.apartment
+                        ? 'Căn hộ'
+                        : post.type_id === PropertyTypes.house
+                          ? 'Nhà ở'
+                          : post.type_id === PropertyTypes.land
+                            ? 'Đất'
+                            : post.type_id === PropertyTypes.motel
+                              ? 'Nhà trọ'
+                              : 'Văn phòng'
+                    }
                   />
                 </Stack>
 
@@ -366,7 +374,7 @@ export function ModernDetailPage(): JSX.Element {
                   <TileIcon
                     icon={BedroomParentOutlinedIcon}
                     title='Số phòng ngủ'
-                    value={features?.num_of_bed_rooms ?? "Không có"}
+                    value={features?.num_of_bed_rooms ?? 'Không có'}
                     unit={
                       <>
                         <span>triệu/m</span>
@@ -374,31 +382,34 @@ export function ModernDetailPage(): JSX.Element {
                       </>
                     }
                   />
-                 {
-                        features?.main_door_direction ??
-
-                        <TileIcon
-                        icon={MeetingRoomOutlinedIcon}
-                        title="Hướng cửa chính"
-                        value={features.main_door_direction === Direction.north ? "Bắc" :
-                        features.main_door_direction === Direction.south ? "Nam" :
-                        features.main_door_direction === Direction.west ? "Tây" : "Đông"
-                        }
-                        
-                    />
-                    }
-                      {
-                            features?.legal_document_status ??
-                            <TileIcon
-                          icon={ReceiptLongOutlinedIcon}
-                          title="Giấy tờ pháp lý"
-                          value={ features.legal_document_status === LegalDocumentStatus.have_certificates ? "Đã có giấy tờ" :
-                          features.legal_document_status === LegalDocumentStatus.waiting_for_certificates ? "Chờ giấy tờ" : "Giấy tờ khác" 
-                          }
-                          />
-
-
+                  {features?.main_door_direction ?? (
+                    <TileIcon
+                      icon={MeetingRoomOutlinedIcon}
+                      title='Hướng cửa chính'
+                      value={
+                        features.main_door_direction === Direction.north
+                          ? 'Bắc'
+                          : features.main_door_direction === Direction.south
+                            ? 'Nam'
+                            : features.main_door_direction === Direction.west
+                              ? 'Tây'
+                              : 'Đông'
                       }
+                    />
+                  )}
+                  {features?.legal_document_status ?? (
+                    <TileIcon
+                      icon={ReceiptLongOutlinedIcon}
+                      title='Giấy tờ pháp lý'
+                      value={
+                        features.legal_document_status === LegalDocumentStatus.have_certificates
+                          ? 'Đã có giấy tờ'
+                          : features.legal_document_status === LegalDocumentStatus.waiting_for_certificates
+                            ? 'Chờ giấy tờ'
+                            : 'Giấy tờ khác'
+                      }
+                    />
+                  )}
                 </Stack>
               </Stack>
 
@@ -424,10 +435,12 @@ export function ModernDetailPage(): JSX.Element {
           <Stack
             sx={{
               backgroundColor: CUSTOM_COLOR.backgroundCard,
-              width: matches ? '30%' : '100%',
+              width: matches ? '30%' : '95%',
               height: 'fit-content',
               padding: '10px',
               borderRadius: '10px',
+              marginLeft: matches ? '0px' : '20px',
+              marginTop: matches ? '0px' : '10px',
             }}
           >
             <Stack direction={'row'} spacing={2} alignItems={'center'}>
@@ -467,6 +480,7 @@ export function ModernDetailPage(): JSX.Element {
         minWidth={'390px'}
         sx={{
           display: 'flex',
+          marginLeft: matches ? '0px' : '20px',
         }}
       >
         {isLoading ? (

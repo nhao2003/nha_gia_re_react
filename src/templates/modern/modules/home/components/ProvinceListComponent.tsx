@@ -1,4 +1,4 @@
-import { Grid, Stack } from '@mui/material';
+import { Grid, Stack, useMediaQuery } from '@mui/material';
 import { ProvinceComponent } from './ProvinceComponent';
 
 interface Province {
@@ -56,10 +56,10 @@ const handleProvinceClick = (provinceName: string) => {
 
 export const ProvinceListComponent: React.FC = () => {
   return (
-    <Stack alignContent={'center'} justifyContent={'center'} marginTop={2} marginBottom={2}>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 10, md: 15 }}>
+    <Stack alignItems={'center'} alignContent={'center'} justifyContent={'center'} marginTop={2} marginBottom={2}>
+      <Grid container spacing={{ xs: 1, md: 1 }} columns={{ xs: 5, sm: 10, md: 15 }} sx={{ justifyContent: 'center' }}>
         {provinceList.map((province, index) => (
-          <Grid item xs={2} sm={4} md={3} key={index}>
+          <Grid item xs={5} sm={5} md={3} lg={3} key={index} sx={{ textAlign: 'center' }}>
             <ProvinceComponent
               sx={{
                 width: '100%', // Chiều rộng 100% của ô chứa

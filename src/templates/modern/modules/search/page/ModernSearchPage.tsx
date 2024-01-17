@@ -15,16 +15,17 @@ export function ModernSearchPage(): JSX.Element {
   }>({ numOfPages: 1, posts: [] });
 
   async function fetchPosts() {
-    const query = new ApiServiceBuilder()
-      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
-      .withUrl('/posts')
-      .withParams(getParsedParams(params))
-      .build();
+    const params = new URLSearchParams(window.location.search);
+    console.log('GET PARAMS', getParsedParams(params));
+    const query = new ApiServiceBuilder().withUrl('/posts').withParams(getParsedParams(params)).build();
     const response = await query.get();
-    console.log(response.data);
     return response.data as any;
   }
 
+  const [posts, setPosts] = React.useState<any[]>([]);
+  const [numOfPages, setNumOfPages] = React.useState<number>(0);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const navigate = useNavigate();
   React.useEffect(() => {
     console.log('params', getParsedParams(params));
     console.log('sanggg', params);
@@ -44,8 +45,12 @@ export function ModernSearchPage(): JSX.Element {
   return (
     <Stack>
       <ModernHeaderSearch
-        onFilterButtonClick={(params) => {
-          setParams(params);
+        onFilterButtonClick={(filterParams) => {
+          const newParams = new URLSearchParams(window.location.search);
+          filterParams.forEach((value, key) => {
+            newParams.set(key, value);
+          });
+          navigate('/search?' + newParams.toString());
         }}
       />
       <ModernItemSearch

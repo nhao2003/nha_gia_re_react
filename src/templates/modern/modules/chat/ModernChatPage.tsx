@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { Box, Avatar, Typography, List, ListItemAvatar, ListItemText, Divider, ListItemButton } from '@mui/material';
+
 import ChatContent from './components/ChatContent';
 import { MessageTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
@@ -9,11 +11,13 @@ import type Conversation from '../../../../models/interfaces/IConversation';
 import type IMessage from '../../../../models/interfaces/IMessage';
 import type IParticipant from '../../../../models/interfaces/IParticipant';
 import type { IUser } from '../../../../models/interfaces/IUser';
+import dateUtils from '../../../../utils/dateUtils';
 
 function ModernChatPage() {
   const [messages, setMessages] = useState<Record<string, IMessage[]>>({});
   const [conversations, setConversations] = useState<any>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+
   const userId = AuthService.getInstance().getUserIdFromToken();
 
   // Get id from url
@@ -141,9 +145,22 @@ function ModernChatPage() {
                         <Typography sx={{ display: 'inline' }} component='span' variant='body2' color='text.primary'>
                           {conversation.last_message === undefined || conversation.last_message === null
                             ? 'Bắt đầu cuộc trò chuyện'
-                            : conversation.last_message.type === MessageTypes.text
+                            : conversation.last_message.content_type === MessageTypes.text
                               ? conversation.last_message.content.text
                               : 'Đã gửi phương tiện'}
+                        </Typography>
+                        
+                        <Typography
+                          sx={{ display: 'inline', float: 'right' }}
+                          component='span'
+                          variant='body2'
+                          color='text.primary'
+                        >
+                          {dateUtils.getTimeAgoVi(
+                            (conversation.last_message === undefined || conversation.last_message === null)
+                              ? new Date()
+                              : conversation.last_message.sent_at
+                          )}
                         </Typography>
                       </React.Fragment>
                     }
@@ -168,6 +185,7 @@ function ModernChatPage() {
       />
     </Box>
   );
+
 }
 
 export default ModernChatPage;

@@ -1,12 +1,13 @@
 import { AxiosError } from 'axios';
 import { ApiServiceBuilder } from './api.service';
 import AuthService from './auth.service';
-import type { Socket } from 'socket.io-client';
-import { connect } from 'socket.io-client';
+// import type { Socket } from 'socket.io-client';
+// import { connect } from 'socket.io-client';
 import type IMessage from '../models/interfaces/IMessage';
 import type IConversation from '../models/interfaces/IConversation';
 import { MessageTypes } from '../constants/enums';
 import mediaServices from './media.services';
+import { connect, type Socket } from 'socket.io-client';
 enum SocketEvent {
   Init = 'init',
   New = 'new',
@@ -71,9 +72,7 @@ class ConversationService {
     isExist: boolean;
   }> {
     try {
-      // const accessToken = await AuthService.getInstance().getAccessToken();
-      const accessToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6IjcxMTM3MjE3LTk3NTEtNDcyMS05MWMyLTcyOWI4Y2MyMDU2NyIsImlhdCI6MTcwNTEzNDExNCwiZXhwIjoxNzA3NzI2MTE0fQ.vBNFB6szeFToK6rWKh6MxTriJXSUPhRfdJ56xVAA1Rk';
+      const accessToken = await AuthService.getInstance().getAccessToken();
       const existingConversation = this.conversations.find(
         (conv) => conv.participants[0].user_id === otherUserId || conv.participants[1].user_id === otherUserId,
       );
@@ -233,11 +232,9 @@ class ConversationService {
         token: accessToken,
       },
     });
-
     this.socket.on('conversations', (data: { type: SocketEvent; data: any }) => {
       this.handleConversationEvent(data.type, data.data);
     });
-
     this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
       console.log('On messages: ', data);
       this.handleMessageEvent(data.type, data);

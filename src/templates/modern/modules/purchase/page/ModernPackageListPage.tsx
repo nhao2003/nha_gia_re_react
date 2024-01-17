@@ -3,10 +3,13 @@ import ServicePackage from '../component/ServicePackage';
 import { useNavigate } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { formatMoney } from '../../../../../services/fortmat.service';
 
 const ModernPackageListPage: React.FC = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const navigate = useNavigate();
 
   const handleClick = (pack: IMembershipPackage) => {
@@ -66,7 +69,7 @@ const ModernPackageListPage: React.FC = () => {
       <CircularProgress />
     </Box>
   ) : (
-    <div style={{ textAlign: 'center', margin: '0 20%' }}>
+    <div style={{ textAlign: 'center', margin: matches ? '0 10px' : '0 20%' }}>
       <div
         style={{
           marginBottom: '20px',
@@ -82,24 +85,26 @@ const ModernPackageListPage: React.FC = () => {
         <hr style={{ width: '100%', border: '2px solid #026D4D' }} />
       </div>
       <div>
-        {packages.packages.map((item, index) => (
-          <ServicePackage
-            key={index}
-            name={item.name}
-            price={formatMoney(item.price_per_month)}
-            description={item.description}
-            infoList={[
-              { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
-              { check: true, text: 'Huy hiệu xác minh' },
-              { check: item.display_priority_point > 0, text: 'Ưu tiên hiển thị tin' },
-              { check: item.post_approval_priority_point > 0, text: 'Ưu tiên duyệt tin' },
-            ]}
-            onButtonClick={() => {
-              // Xử lý khi button được click
-              handleClick(item);
-            }}
-          />
-        ))}
+        {packages.packages.map((item, index) =>
+          item.is_active ? (
+            <ServicePackage
+              key={index}
+              name={item.name}
+              price={formatMoney(item.price_per_month)}
+              description={item.description}
+              infoList={[
+                { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
+                { check: true, text: 'Huy hiệu xác minh' },
+                { check: item.display_priority_point > 0, text: 'Ưu tiên hiển thị tin' },
+                { check: item.post_approval_priority_point > 0, text: 'Ưu tiên duyệt tin' },
+              ]}
+              onButtonClick={() => {
+                // Xử lý khi button được click
+                handleClick(item);
+              }}
+            />
+          ) : null,
+        )}
       </div>
     </div>
   );

@@ -29,9 +29,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import addressUtils, { type Ward, type District } from '../../../../../utils/addressUtils';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
-import React, { useEffect } from 'react';
+import React, { type ChangeEvent, useEffect, useState } from 'react';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useNavigate } from 'react-router-dom';
+import PostService from '../../../../../services/post.service';
 
 interface HeaderSearchProps {
   onFilterButtonClick: (params: Record<string, any>) => void;
@@ -71,7 +72,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const searchParams = new URLSearchParams(location.search);
   const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
 
-  const [search, setSearch] = React.useState<string | null>(null);
+  const [search, setSearch] = React.useState<string>('');
   const [open, setOpen] = React.useState(false);
 
   const provices = addressUtils.getProvinces().map((provice, index) => provice.name);
@@ -85,10 +86,9 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const [wards, setWards] = React.useState<Ward[]>([]);
 
   const [value, setValue] = React.useState<string | null>(types[0].value);
-  const [inputValue, setInputValue] = React.useState('');
 
   const minDistancePrice = 1000000000;
-  const [price, setPrice] = React.useState<number[]>([0, 120000000000]);
+  const [price, setPrice] = React.useState<number[]>([0, 10000000000]);
 
   const minDistanceArea = 1000;
   const [area, setArea] = React.useState<number[]>([0, 10000]);
@@ -129,7 +129,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const [params, setParams] = React.useState({});
 
   const handleSearch = () => {
-    if (search !== null) {
+    if (search.length === 0) {
       setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
     } else {
       setParams((params) => ({ ...params, search: undefined }));
@@ -201,7 +201,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
 
     if (newValue[1] - newValue[0] < minDistancePrice) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 120000000000 - minDistancePrice);
+        const clamped = Math.min(newValue[0], 10000000000 - minDistancePrice);
         setPrice([clamped, clamped + minDistancePrice]);
       } else {
         const clamped = Math.max(newValue[1], minDistancePrice);
@@ -240,6 +240,39 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   }, [selectProvince]);
 
   const numberFormat = new Intl.NumberFormat('en-US');
+  const [searchKeywords, setSearchKeywords] = useState<string[]>([]);
+  // await PostService.getInstance().getSearchSuggestion(searchTerm);
+
+  // Debounce search
+  let timeout: NodeJS.Timeout | null = null;
+  const handleSearchChange = (value: string) => {
+
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    timeout = setTimeout(async () => {
+      const result = await PostService.getInstance().getSearchSuggestion(value);
+      setSearchKeywords(result);
+
+    }, 300);
+  };
+
+  useEffect(() => {
+    console.log(search);
+    handleSearchChange(search);
+
+    return () => {
+      if (timeout !== null) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+    }
+  }, [search]);
+
+
 
   const handleProvinceChange = (event: SelectChangeEvent<string>) => {
     const selectedProvince = Number(event.target.value);
@@ -275,31 +308,52 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
             marginRight: '10px',
           }}
         >
-          <OutlinedInput
-            sx={{
-              '& fieldset': {
-                borderRadius: '10px',
-              },
-              height: '45px',
-            }}
-            defaultValue={searchTerm}
-            placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch();
+          <Autocomplete
+            freeSolo
+            options={searchKeywords}
+            inputValue={search}
+            onChange={
+              (e: any, value: any) => {
+                setSearch(value);
               }
-            }}
-            endAdornment={
-              <InputAdornment position='end'>
-                <IconButton edge='end' onClick={() => handleSearch()}>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
             }
+            
+            
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                sx={{
+                  '& fieldset': {
+                    borderRadius: '10px',
+                  },
+                  height: '45px',
+                }}
+                placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
+                onChange={
+                  (e: ChangeEvent<HTMLInputElement>) => {
+                    setSearch(e.target.value);
+                  }
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    console.log("Search", search);
+                    handleSearch();
+                  }
+                }}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton edge='end' onClick={handleSearch}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
         </FormControl>
-
         <Fab
           sx={{
             marginLeft: '10px',

@@ -13,31 +13,27 @@ import PostService from '../../../../services/post.service';
 import addressUtils from '../../../../utils/addressUtils';
 import { on } from 'events';
 import { set } from 'immer/dist/internal';
+import AuthService from '../../../../services/auth.service';
 
 
 async function getPost(status?: 'approved' | 'pending' | 'rejected' | 'expired', page: number = 1) {
   const queryStatus = status === 'expired' ? 'approved' : status;
   const queryParams: Record<string, any> = {
-    'post_status[eq]': `'${queryStatus}'`,
+    'post_status[eq]': '\'' + queryStatus + '\'',
+    'post_is_active[eq]': true,
+    'user_id[eq]': '\'' + AuthService.getInstance().getUserIdFromToken() + '\'',
   };
   if (status === 'expired') {
-    queryParams['post_expiry_date[lt]'] = `'${new Date().toISOString()}'`;
+    queryParams['post_expiry_date[lt]'] = 'now()';
   } else if (status === 'approved') {
-    queryParams['post_expiry_date[gt]'] = `'${new Date().toISOString()}'`;
+    queryParams['post_expiry_date[gte]'] = 'now()';
   }
   const data = await PostService.getInstance().getAllPosts(
     {
       page,
-      queryParams: {
-        'post_status[eq]': queryStatus,
-        'post_is_active[eq]': true,
-        'user_id[eq]': '\'1a9a5785-721a-4bb5-beb7-9d752e2070d4\'',
-        ...queryParams,
-      },
+      queryParams,
     }
   );
-  console.log('queryStatus', queryStatus);
-  console.log('data', data);
   return data;
 }
 interface TabPanelProps {
@@ -55,7 +51,7 @@ function TabPanel(props: TabPanelProps) {
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
-     
+
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
@@ -70,6 +66,9 @@ function a11yProps(index: number) {
   return {
     id: `full-width-tab-${index}`,
     'aria-controls': `full-width-tabpanel-${index}`,
+    style: {
+      color: '#026D4D',
+    },
   };
 }
 
@@ -97,7 +96,6 @@ export default function ModernPostManagement() {
     setIsLoading(true);
     getPost(type, page).then((res) => {
       const data = res.result as RealEstatePost[];
-      console.log(res);
       const numOfPages = Number(res.num_of_pages);
       switch (type) {
         case 'approved':
@@ -130,7 +128,7 @@ export default function ModernPostManagement() {
           break;
       }
     }).catch((err) => {
-      alert(err);
+      console.log("Get Error: ", err);
     }).finally(() => {
       setIsLoading(false);
     });
@@ -256,26 +254,34 @@ export default function ModernPostManagement() {
     handleClose();
   }
   return (
-    <Box sx={{ bgcolor: 'background.paper', width: '100%', padding: '0px', margin: '0px' }}>
-      <AppBar position="static">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          sx={{
-            color: '#026D4D',
-            backgroundColor: '#FFFFFF',
-            indicatorColor: '#026D4D',
-          }} // Set text color
-          variant="fullWidth"
-          aria-label="full width tabs example"
-          centered
-        >
-          <Tab label="Chờ duyệt" {...a11yProps(0)} />
-          <Tab label="Đã duyệt" {...a11yProps(1)} />
-          <Tab label="Bị Từ chối" {...a11yProps(2)} />
-          <Tab label="Đã hết hạn" {...a11yProps(3)} />
-        </Tabs>
-      </AppBar>
+    <Box sx={{
+      flex: '1',
+      padding: '0px',
+      margin: '0px'
+    }}>
+
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        sx={{
+          color: '#026D4D',
+          backgroundColor: '#FFFFFF',
+          indicatorColor: '#026D4D',
+          '& .MuiTabs-indicator': {
+            backgroundColor: '#026D4D',
+          },
+
+        }} // Set text color
+        variant="fullWidth"
+        aria-label="full width tabs example"
+      // centered
+      >
+        <Tab label="Chờ duyệt" {...a11yProps(0)} />
+        <Tab label="Đã duyệt" {...a11yProps(1)} />
+        <Tab label="Bị Từ chối" {...a11yProps(2)} />
+        <Tab label="Đã hết hạn" {...a11yProps(3)} />
+      </Tabs>
+
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"

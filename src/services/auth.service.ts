@@ -69,6 +69,8 @@ class AuthService {
         const newAccessToken = await this.refreshToken();
         return newAccessToken;
       } catch (error) {
+        // Set access token to null
+        localStorage.setItem('access_token', '');
         return null;
       }
     }
@@ -129,11 +131,13 @@ class AuthService {
       .build();
     try {
       const response = await changePassword.post();
+      console.log("Change password response: ", response.data);
       return {
         status: true,
         message: 'Thay đổi mật khẩu thành công',
       };
     } catch (error: any) {
+      console.log("Change password error: ", error.response.data);
       const message = error.response.data.code === 108 ? 'Mật khẩu hiện tại không đúng' : 'Thay đổi mật khẩu thất bại';
       return {
         status: false,

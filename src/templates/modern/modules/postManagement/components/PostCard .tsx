@@ -19,13 +19,13 @@ const PostCard: React.FC<PostCardProps> = (post: PostCardProps) => {
         switch (post.status) {
             case 'approved':
                 if (post.expiredDate > new Date())
-                    return 'Hiển thị đến ' + post.expiredDate?.toLocaleDateString();
+                    return 'Hiển thị đến ' + post.expiredDate?.toLocaleDateString('vi-VN') 
                 else
-                    return 'Đã hết hạn từ ' + post.expiredDate?.toLocaleDateString();
+                    return 'Đã hết hạn từ ' + post.expiredDate?.toLocaleDateString('vi-VN')
             case 'pending':
                 return 'Đang chờ duyệt';
             case 'rejected':
-                return post?.info_message ?? 'Bị từ chối';
+                return post.info_message === undefined ? 'Đã bị từ chối' : 'Đã bị từ chối: ' + post.info_message;
             default:
                 return 'Đang chờ duyệt';
         }
