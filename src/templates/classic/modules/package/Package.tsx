@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Package = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = React.useState([]);
-  const [isSubcribed, setIsSubcribed] = React.useState(false);
+  const [subscribeId, setSubscribeId] = React.useState('');
   const token = localStorage.getItem('access_token');
 
   async function fetchPackages() {
@@ -52,7 +52,7 @@ const Package = () => {
               console.log(subData.result);
               if (subData.status === 'success') {
                 if (subData.result !== null) {
-                  setIsSubcribed(true);
+                  setSubscribeId(subData.result.membership_package.id);
                 }
               } else {
                 console.log(subData.message);
@@ -134,7 +134,7 @@ const Package = () => {
         </Stack>
         <Stack direction='row' spacing={2}>
           {packages.map((item: any) => (
-            <PackageCard key={item.id} packageItem={item} isSubcribed={isSubcribed} />
+            <PackageCard key={item.id} packageItem={item} subscribeId={subscribeId} />
           ))}
         </Stack>
       </Stack>
