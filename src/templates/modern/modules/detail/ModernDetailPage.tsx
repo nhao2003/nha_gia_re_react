@@ -63,7 +63,9 @@ export function ModernDetailPage(): JSX.Element {
 
           if (firstPost !== undefined) {
             setPost(firstPost);
-            setListImage(formatImages(firstPost.images));
+            // Add 2 array images and videos
+            const medias = [...firstPost.images, ...(firstPost.videos ?? [])];
+            setListImage(formatImages(medias));
             setIsMe(firstPost.user.id === userId);
           }
         })
@@ -71,7 +73,8 @@ export function ModernDetailPage(): JSX.Element {
           console.log(error);
         });
     else {
-      setListImage(formatImages(post.images));
+      const medias = [...post.images, ...(post.videos ?? [])];
+      setListImage(formatImages(medias));
       setIsMe(post.user.id === userId);
     }
   }, []);
@@ -220,7 +223,7 @@ export function ModernDetailPage(): JSX.Element {
             spacing={2}
             alignItems={'center'}
           >
-            <Carousel slides={listImage} style={{ width: '95%' }} />
+            <Carousel slides={listImage} style={{ width: '95%' } } isAutoPlay={false} />
 
             <Stack
               direction={'column'}
