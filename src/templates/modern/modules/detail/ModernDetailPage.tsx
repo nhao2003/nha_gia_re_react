@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
+import { Chat } from '@mui/icons-material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -28,12 +29,15 @@ import type RealEstatePost from '../../../../models/RealEstatePost';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 import dateUtils from '../../../../utils/dateUtils';
 import { Direction, LegalDocumentStatus, PropertyTypes } from '../../../../constants/enums';
+import AuthService from '../../../../services/auth.service';
 
 export function ModernDetailPage(): JSX.Element {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
+
+  const [isMe, setIsMe] = useState(false);
 
   // Get state
   const [post, setPost] = React.useState<RealEstatePost>(useLocation().state as RealEstatePost);
@@ -49,6 +53,7 @@ export function ModernDetailPage(): JSX.Element {
   }
 
   React.useEffect(() => {
+    const userId = AuthService.getInstance().getUserIdFromToken();
     if (post === null)
       fetchPost()
         .then((response) => {
@@ -58,14 +63,19 @@ export function ModernDetailPage(): JSX.Element {
 
           if (firstPost !== undefined) {
             setPost(firstPost);
-            setListImage(formatImages(firstPost.images));
+            // Add 2 array images and videos
+            const medias = [...firstPost.images, ...(firstPost.videos ?? [])];
+            setListImage(formatImages(medias));
+            setIsMe(firstPost.user.id === userId);
           }
         })
         .catch((error) => {
           console.log(error);
         });
     else {
-      setListImage(formatImages(post.images));
+      const medias = [...post.images, ...(post.videos ?? [])];
+      setListImage(formatImages(medias));
+      setIsMe(post.user.id === userId);
     }
   }, []);
 
@@ -136,6 +146,10 @@ export function ModernDetailPage(): JSX.Element {
 
   const navigateToProfile = () => {
     if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
+  };
+
+  const navigateToChat = () => {
+    if (post !== null) navigate(`/chat/${post.user.id}`);
   };
 
   // Get API Relate
@@ -211,7 +225,7 @@ export function ModernDetailPage(): JSX.Element {
             spacing={2}
             alignItems={'center'}
           >
-            <Carousel slides={listImage} style={{ width: '95%' }} />
+            <Carousel slides={listImage} style={{ width: '95%' } } isAutoPlay={false} />
 
             <Stack
               direction={'column'}
@@ -449,6 +463,23 @@ export function ModernDetailPage(): JSX.Element {
               </Stack>
             </Stack>
 
+            {!isMe && (
+              <Button
+                variant='contained'
+                sx={{
+                  marginTop: 1,
+                  width: '100%',
+                  backgroundColor: CUSTOM_COLOR.white,
+                  borderColor: CUSTOM_COLOR.green,
+                  borderWidth: '2px',
+                  color: CUSTOM_COLOR.green,
+                }}
+                endIcon={<Chat />}
+                onClick={navigateToChat}
+              >
+                Chat với người đăng
+              </Button>
+            )}
             <Button
               variant='contained'
               sx={{
@@ -477,27 +508,13 @@ export function ModernDetailPage(): JSX.Element {
           marginLeft: matches ? '0px' : '20px',
         }}
       >
-        {isLoading ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PostListComponent
-            title={'Bài đăng tương tự'}
-            posts={postsRelate.posts}
-            onViewMoreClick={() => {
-              handleNavigateMore('relate', post.title);
-            }}
-          />
-        )}
+        <PostListComponent
+          title={'Bài đăng tương tự'}
+          url={`/posts?post_is_active[eq]=true&user_status[eq]='verified'&post_expiry_date[gte]=now()&search=${post.title}`}
+          onViewMoreClick={() => {
+            handleNavigateMore('relate', post.title);
+          }}
+        />
       </Stack>
     </Stack>
   );

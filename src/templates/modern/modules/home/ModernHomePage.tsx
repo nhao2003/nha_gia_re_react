@@ -52,43 +52,6 @@ export function ModernHomePage(): JSX.Element {
     },
   ];
 
-  // fetch Api
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [posts, setPosts] = React.useState<{
-    numOfPages: number;
-    posts: RealEstatePost[];
-  }>({ numOfPages: 1, posts: [] });
-
-  const searchParams = new URLSearchParams(location.search);
-  const page = searchParams.get('page') ?? '1';
-  async function fetchPosts() {
-    const query = new ApiServiceBuilder()
-      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
-      .withUrl('/posts')
-      .withParams({
-        page: page,
-      })
-      .build();
-    const response = await query.get();
-    return response.data as any;
-  }
-  React.useEffect(() => {
-    setIsLoading(true);
-    fetchPosts()
-      .then((response) => {
-        setPosts({
-          numOfPages: response.num_of_pages,
-          posts: response.result,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [page]);
-
   return (
     <Stack alignItems={'center'}>
       <Stack
@@ -134,49 +97,33 @@ export function ModernHomePage(): JSX.Element {
           <ProvinceListComponent />
         </Stack>
         {/* Gần bạn */}
-
-        {isLoading ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PostListComponent
-            title={'Mua bán'}
-            posts={posts.posts}
-            onViewMoreClick={() => {
-              handleNavigate('sell', '');
-            }}
-          />
-        )}
-        {isLoading ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PostListComponent
-            title={'Cho thuê'}
-            posts={posts.posts}
-            onViewMoreClick={() => {
-              handleNavigate('rent', '');
-            }}
-          />
-        )}
+        <PostListComponent
+          title={'Gần bạn'}
+          url={"/posts?post_is_active[eq]=true&user_status[eq]='verified'&post_expiry_date[gte]=now()"}
+          onViewMoreClick={() => {
+            handleNavigate('nearby', '');
+          }}
+        />
+        <PostListComponent
+          title={'Mua bán'}
+          url={
+            "/posts?post_is_active[eq]=true&user_status[eq]='verified'&post_expiry_date[gte]=now()&post_is_lease[eq]=" +
+            false
+          }
+          onViewMoreClick={() => {
+            handleNavigate('sell', '');
+          }}
+        />
+        <PostListComponent
+          title={'Cho thuê'}
+          url={
+            "/posts?post_is_active[eq]=true&user_status[eq]='verified'&post_expiry_date[gte]=now()&post_is_lease[eq]=" +
+            true
+          }
+          onViewMoreClick={() => {
+            handleNavigate('rent', '');
+          }}
+        />
       </Stack>
     </Stack>
   );

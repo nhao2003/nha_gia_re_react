@@ -9,10 +9,15 @@ interface carouselInterface {
     alt: string;
   }>;
   style?: React.CSSProperties; // Thêm thuộc tính style
+  isAutoPlay?: boolean; // Thêm thuộc tính tự động cuộn slide
 }
 
-export const Carousel = ({ slides, style }: carouselInterface) => {
+export const Carousel = ({ slides, style, isAutoPlay = true }: carouselInterface) => {
   const [slide, setSlide] = useState(0);
+
+  function isVideo(src: string) {
+    return src.includes('video');
+  }
 
   const nextSlide = () => {
     setSlide((prevSlide) => (prevSlide === slides.length - 1 ? 0 : prevSlide + 1));
@@ -25,6 +30,7 @@ export const Carousel = ({ slides, style }: carouselInterface) => {
   // Tự động cuộn slide mỗi 3 giây
   useEffect(() => {
     const autoScrollInterval = setInterval(() => {
+      if (!isAutoPlay) return; // Nếu không tự động cuộn thì return luôn
       nextSlide();
     }, 3000);
 
@@ -34,23 +40,52 @@ export const Carousel = ({ slides, style }: carouselInterface) => {
 
   return (
     <div className='carousel' style={style}>
-      <BsArrowLeftCircleFill onClick={prevSlide} className='arrow arrow-left' />
+      <BsArrowLeftCircleFill
+        style={
+          {
+            zIndex: 1000,
+          }
+        }
+        onClick={prevSlide} className='arrow arrow-left' />
       {slides.map((item, idx) => {
         return (
-          <img
-            src={item.src}
-            alt={item.alt}
+          // <img
+          //   src={item.src}
+          //   alt={item.alt}
+          //   key={idx}
+          //   className={slide === idx ? 'slide' : 'slide slide-hidden'}
+          //   style={{ objectFit: 'cover' }}
+          // />
+          <div
             key={idx}
             className={slide === idx ? 'slide' : 'slide slide-hidden'}
             style={{ objectFit: 'cover' }}
-          />
+          >
+
+            {isVideo(item.src) ? (
+              <video autoPlay controls loop style={{ width: '100%', height: '100%' }}>
+                <source src={item.src} type='video/mp4' />
+              </video>
+            ) : (
+              <img src={item.src} alt={item.alt} style={{ width: '100%', height: '100%' }} />
+            )}
+          </div>
         );
       })}
-      <BsArrowRightCircleFill onClick={nextSlide} className='arrow arrow-right' />
+      <BsArrowRightCircleFill
+        style={
+          {
+            zIndex: 1000,
+          }
+        }
+        onClick={nextSlide} className='arrow arrow-right' />
       <span className='indicators'>
         {slides.map((_, idx) => {
           return (
             <button
+              style={{
+                zIndex: 1000,
+              }}
               key={idx}
               className={slide === idx ? 'indicator' : 'indicator indicator-inactive'}
               onClick={() => setSlide(idx)}
