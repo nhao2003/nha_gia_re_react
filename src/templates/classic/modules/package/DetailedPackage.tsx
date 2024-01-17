@@ -4,7 +4,7 @@ import PackageCard from './components/PackageCard';
 import { Button, Card, CardActions, CardContent, Radio, Stack, Typography } from '@mui/material';
 import PackageTimeCard from './components/PackageTimeCard';
 import checkIcon from '../../assets/images/check.svg';
-import unCheckIcon from '../../assets/images/uncheck.svg';
+import unCheckIcon from '../../assets/images/uncheckIcon.svg';
 import packageIcon from '../../assets/images/package_icon.svg';
 import { useParams } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../services/api.service';

@@ -209,7 +209,9 @@ export function PersonalPage(): JSX.Element {
           </List>
         </Grid>
         {selectedIndex === 0 ? (
-          <PersonalInformationPage userInfo={user} />
+          user !== null ? (
+            <PersonalInformationPage userInfo={user} />
+          ) : null
         ) : selectedIndex === 1 ? (
           <LovedNews />
         ) : selectedIndex === 2 ? (
