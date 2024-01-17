@@ -234,6 +234,8 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
     setArea([0, 10000]);
     setSortBy(null);
     setPostBy(null);
+    setSelectWard(null);
+    setSelectDistrict(null);
   };
   const options = ['Chung cư', 'Căn hộ'];
   const types = [
