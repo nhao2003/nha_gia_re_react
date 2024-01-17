@@ -1,14 +1,15 @@
-import { Grid, Pagination, Stack } from '@mui/material';
+import { Grid, Pagination, Stack, Typography } from '@mui/material';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
 import dateUtils from '../../../../../utils/dateUtils';
 import { useNavigate } from 'react-router-dom';
+import CUSTOM_COLOR from '../../../constants/colors';
 
 interface SearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
   currentPage: number;
-  onPageChange?: (page: number) => void;
+  onPageChange: (page: number) => void;
 }
 
 export const TabPanelSearch = (props: SearchProps) => {
@@ -46,7 +47,25 @@ export const TabPanelSearch = (props: SearchProps) => {
           padding: '10px',
         }}
       >
-        <Pagination count={10} size='large' />
+        {props.posts.length > 0 ? (
+          <Pagination
+            count={props.numOfPages}
+            size='large'
+            onChange={(e, page) => {
+              props.onPageChange(page);
+            }}
+          />
+        ) : (
+          <Typography
+            margin={5}
+            sx={{
+              color: CUSTOM_COLOR.grayScorpion,
+              fontSize: '18px',
+            }}
+          >
+            Không tìm thấy kết quả!
+          </Typography>
+        )}
       </Stack>
     </Grid>
   );

@@ -48,7 +48,13 @@ export function SearchPage(): JSX.Element {
           setParams(params);
         }}
       />
-      <ItemSearch posts={posts.posts} numOfPages={posts.numOfPages} />
+      <ItemSearch
+        posts={posts.posts}
+        numOfPages={posts.numOfPages}
+        onPageChange={(page) => {
+          setParams((params) => ({ ...params, page: page }));
+        }}
+      />
     </Stack>
   );
 }

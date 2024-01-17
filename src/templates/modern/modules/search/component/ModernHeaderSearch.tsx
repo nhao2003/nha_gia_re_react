@@ -16,6 +16,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  type SelectChangeEvent,
   Slider,
   Stack,
   SvgIcon,
@@ -26,7 +27,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import addressUtils from '../../../../../utils/addressUtils';
+import addressUtils, { type Ward, type District } from '../../../../../utils/addressUtils';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
 import React, { useEffect } from 'react';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
@@ -41,75 +42,6 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
 
-  const navigate = useNavigate();
-
-  const searchParams = new URLSearchParams(location.search);
-  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
-
-  const [search, setSearch] = React.useState<string | null>(null);
-  const [open, setOpen] = React.useState(false);
-
-  const provices = addressUtils.getProvinces().map((provice, index) => provice.name);
-
-  const [selectProvince, setSelectProvince] = React.useState<string | null>(null);
-  const [selectType, setSelectType] = React.useState<string | null>(null);
-
-  const [sortBy, setSortBy] = React.useState<string | null>(null);
-  const [postBy, setPostBy] = React.useState<string | null>(null);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [params, setParams] = React.useState({});
-
-  const handleSearch = () => {
-    if (search !== null) {
-      setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
-    }
-
-    if (selectType !== null) {
-      setParams((params) => ({ ...params, type_id: selectType }));
-    }
-
-    if (selectProvince !== null) {
-      setParams((params) => ({ ...params, province_code: selectProvince }));
-    }
-
-    if (price[0] > 0 || price[1] < 120000000000) {
-      setParams((params) => ({ ...params, minPrice: price[0], maxPrice: price[1] }));
-    }
-
-    if (area[0] > 0 || price[1] < 10000) {
-      setParams((params) => ({ ...params, minArea: area[0], maxArea: area[1] }));
-    }
-
-    if (sortBy !== null) {
-      setParams((params) => ({ ...params, sortBy: sortBy }));
-    }
-
-    if (postBy != null) {
-      setParams((params) => ({ ...params, postBy: postBy }));
-    }
-
-    console.log('province', selectProvince, selectType);
-
-    // navigate(`/search?${searchParams.toString()}`, { replace: true });
-    props.onFilterButtonClick(params);
-  };
-
-  const handCancle = () => {
-    setSelectProvince(null);
-    setSelectType(null);
-    setPrice([0, 120000000000]);
-    setArea([0, 10000]);
-    setSortBy(null);
-    setPostBy(null);
-  };
   const options = ['Chung cư', 'Căn hộ'];
   const types = [
     {
@@ -134,6 +66,24 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
     },
   ];
 
+  const navigate = useNavigate();
+
+  const searchParams = new URLSearchParams(location.search);
+  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
+
+  const [search, setSearch] = React.useState<string | null>(null);
+  const [open, setOpen] = React.useState(false);
+
+  const provices = addressUtils.getProvinces().map((provice, index) => provice.name);
+
+  const [selectProvince, setSelectProvince] = React.useState<number | null>(null);
+  const [selectDistrict, setSelectDistrict] = React.useState<number | null>(null);
+  const [selectWard, setSelectWard] = React.useState<number | null>(null);
+  const [selectType, setSelectType] = React.useState<string | null>(null);
+
+  const [districts, setDistricts] = React.useState<District[]>([]);
+  const [wards, setWards] = React.useState<Ward[]>([]);
+
   const [value, setValue] = React.useState<string | null>(types[0].value);
   const [inputValue, setInputValue] = React.useState('');
 
@@ -142,6 +92,107 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
 
   const minDistanceArea = 1000;
   const [area, setArea] = React.useState<number[]>([0, 10000]);
+
+  useEffect(() => {
+    if (selectProvince !== null) {
+      const fetchDistricts = async () => {
+        const fetchedDistricts = addressUtils.getDistricts(selectProvince);
+        setDistricts(fetchedDistricts);
+      };
+
+      void fetchDistricts();
+    }
+  }, [selectProvince]);
+
+  useEffect(() => {
+    if (selectDistrict !== null && selectProvince !== null) {
+      const fetchWards = async () => {
+        const fetchedWards = addressUtils.getWards(selectProvince, selectDistrict);
+        setWards(fetchedWards);
+      };
+
+      void fetchWards();
+    }
+  }, [selectDistrict, selectProvince]);
+
+  const [sortBy, setSortBy] = React.useState<string | null>(null);
+  const [postBy, setPostBy] = React.useState<string | null>(null);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [params, setParams] = React.useState({});
+
+  const handleSearch = () => {
+    if (search !== null) {
+      setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
+    } else {
+      setParams((params) => ({ ...params, search: undefined }));
+    }
+
+    if (selectType !== null) {
+      setParams((params) => ({ ...params, type_id: selectType }));
+    } else {
+      setParams((params) => ({ ...params, type_id: undefined }));
+    }
+
+    if (selectProvince !== null) {
+      setParams((params) => ({ ...params, province_code: selectProvince }));
+    } else {
+      setParams((params) => ({ ...params, province_code: undefined }));
+    }
+    if (selectDistrict !== null) {
+      setParams((params) => ({ ...params, district_code: selectDistrict }));
+    } else {
+      setParams((params) => ({ ...params, district_code: undefined }));
+    }
+    if (selectWard !== null) {
+      setParams((params) => ({ ...params, ward_code: selectWard }));
+    } else {
+      setParams((params) => ({ ...params, ward_code: undefined }));
+    }
+
+    if (price[0] > 0 || price[1] < 120000000000) {
+      setParams((params) => ({ ...params, minPrice: price[0], maxPrice: price[1] }));
+    }
+
+    if (area[0] > 0 || price[1] < 10000) {
+      setParams((params) => ({ ...params, minArea: area[0], maxArea: area[1] }));
+    }
+
+    if (sortBy !== null) {
+      setParams((params) => ({ ...params, sortBy: sortBy }));
+    } else {
+      setParams((params) => ({ ...params, sortBy: undefined }));
+    }
+
+    if (postBy != null) {
+      setParams((params) => ({ ...params, postBy: postBy }));
+    } else {
+      setParams((params) => ({ ...params, postBy: undefined }));
+    }
+
+    console.log('province', selectProvince, selectType);
+
+    // navigate(`/search?${searchParams.toString()}`, { replace: true });
+    props.onFilterButtonClick(params);
+  };
+
+  const handCancle = () => {
+    setSelectProvince(null);
+    setSelectDistrict(null);
+    setSelectWard(null);
+    setSelectType(null);
+    setPrice([0, 120000000000]);
+    setArea([0, 10000]);
+    setSortBy(null);
+    setPostBy(null);
+  };
 
   const handleChangePrice = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
@@ -181,9 +232,32 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
 
   useEffect(() => {
     handleSearch();
-  }, [selectProvince, selectType, price, area, sortBy, postBy]);
+  }, [selectProvince, selectType, price, area, sortBy, postBy, selectDistrict, selectWard]);
+
+  useEffect(() => {
+    setSelectDistrict(null);
+    setSelectWard(null);
+  }, [selectProvince]);
 
   const numberFormat = new Intl.NumberFormat('en-US');
+
+  const handleProvinceChange = (event: SelectChangeEvent<string>) => {
+    const selectedProvince = Number(event.target.value);
+    setSelectProvince(selectedProvince);
+    setSelectDistrict(null);
+    setSelectWard(null);
+  };
+
+  const handleDistrictChange = (event: SelectChangeEvent<string>) => {
+    const selectedDistrict = Number(event.target.value);
+    setSelectDistrict(selectedDistrict);
+    setSelectWard(null);
+  };
+
+  const handleWardChange = (event: SelectChangeEvent<string>) => {
+    const selectedWard = Number(event.target.value);
+    setSelectWard(selectedWard);
+  };
 
   return (
     <Stack direction={'column'}>
@@ -238,11 +312,18 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
         <Dialog fullWidth={true} maxWidth={'sm'} open={open} onClose={handleClose}>
           <DialogContent>
             <Stack spacing={2}>
+              <Typography
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                Lọc theo
+              </Typography>
               <FormControl>
                 <InputLabel>Tỉnh thành</InputLabel>
                 <Select
                   onChange={(e) => {
-                    setSelectProvince(e.target.value);
+                    handleProvinceChange(e as SelectChangeEvent<string>);
                   }}
                   value={selectProvince}
                   label='Tỉnh thành'
@@ -256,6 +337,39 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                   })}
                 </Select>
               </FormControl>
+
+              <TextField
+                select
+                label='Quận/Huyện'
+                value={selectDistrict}
+                fullWidth
+                margin='normal'
+                onChange={(e) => {
+                  handleDistrictChange(e as SelectChangeEvent<string>);
+                }}
+              >
+                {districts.map((district) => (
+                  <MenuItem key={district.code} value={district.code}>
+                    {district.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                select
+                label='Phường/Xã'
+                value={selectWard}
+                onChange={(e) => {
+                  handleWardChange(e as SelectChangeEvent<string>);
+                }}
+                fullWidth
+                margin='normal'
+              >
+                {wards.map((ward) => (
+                  <MenuItem key={ward.code} value={ward.code}>
+                    {ward.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
               <FormControl>
                 <InputLabel>Danh mục</InputLabel>

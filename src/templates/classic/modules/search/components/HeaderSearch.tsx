@@ -19,6 +19,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  type SelectChangeEvent,
   Slider,
   Stack,
   SvgIcon,
@@ -39,7 +40,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import React, { useEffect } from 'react';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
 import CUSTOM_COLOR from '../../../constants/colors';
-import addressUtils from '../../../../../utils/addressUtils';
+import addressUtils, { type District, type Ward } from '../../../../../utils/addressUtils';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
 interface HeaderSearchProps {
@@ -57,8 +58,13 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
   const [search, setSearch] = React.useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
 
-  const [selectProvince, setSelectProvince] = React.useState<string | null>(null);
+  const [selectProvince, setSelectProvince] = React.useState<number | null>(null);
+  const [selectDistrict, setSelectDistrict] = React.useState<number | null>(null);
+  const [selectWard, setSelectWard] = React.useState<number | null>(null);
   const [selectType, setSelectType] = React.useState<string | null>(null);
+
+  const [districts, setDistricts] = React.useState<District[]>([]);
+  const [wards, setWards] = React.useState<Ward[]>([]);
 
   const [sortBy, setSortBy] = React.useState<string | null>(null);
   const [postBy, setPostBy] = React.useState<string | null>(null);
@@ -152,9 +158,32 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
 
   useEffect(() => {
     handleSearch();
-  }, [selectProvince, selectType, price, area, sortBy, postBy]);
+  }, [selectProvince, selectType, price, area, sortBy, postBy, selectDistrict, selectWard]);
+
+  useEffect(() => {
+    setSelectDistrict(null);
+    setSelectWard(null);
+  }, [selectProvince]);
 
   const numberFormat = new Intl.NumberFormat('en-US');
+
+  const handleProvinceChange = (event: SelectChangeEvent<string>) => {
+    const selectedProvince = Number(event.target.value);
+    setSelectProvince(selectedProvince);
+    setSelectDistrict(null);
+    setSelectWard(null);
+  };
+
+  const handleDistrictChange = (event: SelectChangeEvent<string>) => {
+    const selectedDistrict = Number(event.target.value);
+    setSelectDistrict(selectedDistrict);
+    setSelectWard(null);
+  };
+
+  const handleWardChange = (event: SelectChangeEvent<string>) => {
+    const selectedWard = Number(event.target.value);
+    setSelectWard(selectedWard);
+  };
 
   const handCancle = () => {
     setSelectProvince(null);
@@ -251,7 +280,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
                 <InputLabel>Tỉnh thành</InputLabel>
                 <Select
                   onChange={(e) => {
-                    setSelectProvince(e.target.value);
+                    handleProvinceChange(e as SelectChangeEvent<string>);
                   }}
                   value={selectProvince}
                   label='Tỉnh thành'
@@ -265,6 +294,39 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
                   })}
                 </Select>
               </FormControl>
+
+              <TextField
+                select
+                label='Quận/Huyện'
+                value={selectDistrict}
+                fullWidth
+                margin='normal'
+                onChange={(e) => {
+                  handleDistrictChange(e as SelectChangeEvent<string>);
+                }}
+              >
+                {districts.map((district) => (
+                  <MenuItem key={district.code} value={district.code}>
+                    {district.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                select
+                label='Phường/Xã'
+                value={selectWard}
+                onChange={(e) => {
+                  handleWardChange(e as SelectChangeEvent<string>);
+                }}
+                fullWidth
+                margin='normal'
+              >
+                {wards.map((ward) => (
+                  <MenuItem key={ward.code} value={ward.code}>
+                    {ward.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
               <FormControl>
                 <InputLabel>Danh mục</InputLabel>

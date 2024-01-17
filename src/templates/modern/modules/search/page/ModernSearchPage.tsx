@@ -48,7 +48,13 @@ export function ModernSearchPage(): JSX.Element {
           setParams(params);
         }}
       />
-      <ModernItemSearch posts={posts.posts} numOfPages={posts.numOfPages} />
+      <ModernItemSearch
+        posts={posts.posts}
+        numOfPages={posts.numOfPages}
+        onPageChange={(page) => {
+          setParams((params) => ({ ...params, page: page }));
+        }}
+      />
     </Stack>
   );
 }

@@ -16,6 +16,10 @@ const params = {
 export function getParsedParams(params: Record<string, any>): any {
   const parsedParams: any = {};
 
+  if (params.page !== undefined){
+    parsedParams.page = params.page
+  }
+
   if (params.search !== undefined){
     parsedParams.search = params.search
   }
@@ -26,6 +30,12 @@ export function getParsedParams(params: Record<string, any>): any {
 
   if (params.province_code !== undefined) {
     parsedParams['post_address->>province_code[eq]'] = `%27${params.province_code}%27`;
+  }
+  if (params.district_code !== undefined) {
+    parsedParams['post_address->>district_code[eq]'] = `%27${params.district_code}%27`;
+  }
+  if (params.ward_code !== undefined) {
+    parsedParams['post_address->>ward_code[eq]'] = `%27${params.ward_code}%27`;
   }
 
   if (params.type_id !== undefined) {

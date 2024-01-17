@@ -25,6 +25,7 @@ import type RealEstatePost from '../../../../../models/RealEstatePost';
 interface ModernItemSearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
+  onPageChange: (page: number) => void;
 }
 
 export const ItemSearch = (props: ModernItemSearchProps) => {
@@ -110,10 +111,24 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
               </TabList>
             </Stack>
             <TabPanel value='1'>
-              <TabPanelSearch posts={posts} numOfPages={0} currentPage={0} />
+              <TabPanelSearch
+                posts={posts}
+                numOfPages={numOfPages}
+                currentPage={0}
+                onPageChange={(page) => {
+                  props.onPageChange(page);
+                }}
+              />
             </TabPanel>
             <TabPanel value='2'>
-              <TabPanelSearch posts={posts} numOfPages={0} currentPage={0} />
+              <TabPanelSearch
+                posts={posts}
+                numOfPages={numOfPages}
+                currentPage={0}
+                onPageChange={(page) => {
+                  props.onPageChange(page);
+                }}
+              />
             </TabPanel>
           </TabContext>
         </Box>
