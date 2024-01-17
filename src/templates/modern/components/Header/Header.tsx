@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-
-import { Button, useTheme, useMediaQuery, Stack, Drawer, IconButton, Avatar, FormControlLabel, Switch, TextField, MenuItem, ButtonGroup } from '@mui/material';
+import { Button, useTheme, useMediaQuery, Stack, Drawer, Avatar, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/images/logo_app.png';
 import avatar from '../../assets/images/user.png';
 import classes from './Header.module.css';
+import UserService from '../../../../services/user.service';
+import type { User } from '../../../../models/User';
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -51,6 +51,27 @@ const Header: React.FC = () => {
     localStorage.setItem('theme', value);
     window.location.reload();
   };
+
+  const [user, setUser] = useState<User | null>(null);
+  function getMyInfo() {
+    UserService.getInstance()
+      .getMyProfile()
+      .then((res: any) => {
+        if (res.status !== 'success') {
+          throw new Error(res.message);
+        }
+        console.log("Get user's info successfully", res);
+        setUser(res.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  React.useEffect(() => {
+    getMyInfo();
+  }, []);
+
   return (
     <Stack
       direction={'row'}
@@ -154,7 +175,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('chat'); }}
+          onClick={() => {
+            handleNavigate('chat');
+          }}
         >
           Tin nhắn
         </Button>
@@ -166,7 +189,9 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('purchase'); }}
+          onClick={() => {
+            handleNavigate('purchase');
+          }}
         >
           Thanh toán
         </Button>
@@ -178,12 +203,12 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => { handleNavigate('about-us'); }}
+          onClick={() => {
+            handleNavigate('about-us');
+          }}
         >
           Về chúng tôi
         </Button>
-
-
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>
@@ -245,7 +270,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('profile'); }}
+            onClick={() => {
+              handleNavigate('profile');
+            }}
           >
             Hồ sơ
           </Button>
@@ -257,7 +284,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('chat'); }}
+            onClick={() => {
+              handleNavigate('chat');
+            }}
           >
             Tin nhắn
           </Button>
@@ -269,7 +298,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('purchase'); }}
+            onClick={() => {
+              handleNavigate('purchase');
+            }}
           >
             Thanh toán
           </Button>
@@ -281,7 +312,9 @@ const Header: React.FC = () => {
               fontSize: '16px',
               // display: matches1440 ? 'block' : 'none'
             }}
-            onClick={() => { handleNavigate('about-us'); }}
+            onClick={() => {
+              handleNavigate('about-us');
+            }}
           >
             Về chúng tôi
           </Button>
@@ -295,7 +328,9 @@ const Header: React.FC = () => {
                   fontSize: '16px',
                   display: !matches ? 'inherit' : 'none',
                 }}
-                onClick={() => { handleNavigate('signup'); }}
+                onClick={() => {
+                  handleNavigate('signup');
+                }}
               >
                 Đăng ký
               </Button>
@@ -308,7 +343,9 @@ const Header: React.FC = () => {
                   fontSize: '16px',
                   display: !matches ? 'inherit' : 'none',
                 }}
-                onClick={() => { handleNavigate('signin'); }}
+                onClick={() => {
+                  handleNavigate('signin');
+                }}
               >
                 Đăng nhập
               </Button>
@@ -330,32 +367,32 @@ const Header: React.FC = () => {
       />
 
       <Stack direction={'row'} alignItems={'center'} spacing={2} marginRight={2}>
-      <ButtonGroup
-            variant='contained'
-            aria-label='outlined primary button group'
-            sx={{
-              display: matches1440 ? 'block' : 'none',
-            }}
-          >
-            {themes.map((theme) => (
-              <Button
-                key={theme.value}
-                sx={{
+        <ButtonGroup
+          variant='contained'
+          aria-label='outlined primary button group'
+          sx={{
+            display: matches1440 ? 'block' : 'none',
+          }}
+        >
+          {themes.map((theme) => (
+            <Button
+              key={theme.value}
+              sx={{
+                backgroundColor: theme.value === currentTheme ? CUSTOM_COLOR.green : CUSTOM_COLOR.white,
+                color: theme.value === currentTheme ? CUSTOM_COLOR.white : CUSTOM_COLOR.black,
+                fontWeight: 'bold',
+                fontSize: '16px',
+                ':hover': {
                   backgroundColor: theme.value === currentTheme ? CUSTOM_COLOR.green : CUSTOM_COLOR.white,
                   color: theme.value === currentTheme ? CUSTOM_COLOR.white : CUSTOM_COLOR.black,
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  ':hover': {
-                    backgroundColor: theme.value === currentTheme ? CUSTOM_COLOR.green : CUSTOM_COLOR.white,
-                    color: theme.value === currentTheme ? CUSTOM_COLOR.white : CUSTOM_COLOR.black,
-                  },
-                }}
-                onClick={() => handleThemeChange(theme.value)}
-              >
-                {theme.label}
-              </Button>
-            ))}
-          </ButtonGroup>
+                },
+              }}
+              onClick={() => handleThemeChange(theme.value)}
+            >
+              {theme.label}
+            </Button>
+          ))}
+        </ButtonGroup>
 
         {localStorage.getItem('access_token') === null ? (
           <>
@@ -407,8 +444,12 @@ const Header: React.FC = () => {
                 handleNavigate('profile');
               }}
             >
-              <Avatar sx={{ marginRight: '8px' }} src={avatar} alt='avatar' />
-              <span>User</span>
+              <Avatar sx={{ marginRight: '8px' }} src={user?.avatar ?? avatar} alt='avatar' />
+              <span>
+                {user?.first_name == null || user?.last_name == null
+                  ? 'Chưa cung cấp'
+                  : user?.first_name + ' ' + user?.last_name}
+              </span>
             </div>
           </>
         )}
