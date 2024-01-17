@@ -122,8 +122,8 @@ const PaymentResult = () => {
           <p>{transaction.app_trans_id}</p>
           <p>{formattedDate}</p>
           <p>Mua {name + ' ' + transaction.num_of_subscription_month} tháng</p>
-          <p>{formattedDate}</p>
-          <p>{formattedEndDate}</p>
+          <p>{isSuccess ? formattedDate : 'Không tồn tại'}</p>
+          <p>{isSuccess ? formattedEndDate : 'Không tồn tại'}</p>
         </div>
       </div>
 
