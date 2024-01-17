@@ -1,18 +1,9 @@
 import { Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material';
 import React from 'react';
 import checkIcon from '../../../assets/images/check.svg';
+import unCheckIcon from '../../../assets/images/uncheckIcon.svg';
 import packageIcon from '../../../assets/images/package_icon.svg';
 import { useNavigate } from 'react-router-dom';
-
-const item = [
-  '10 tin đăng - Hiển thị 14 ngày',
-  'Hiển thị tối đa 30 tin đăng',
-  'Báo cáo hiệu suất tin đăng',
-  'Thêm kênh liên hệ mới',
-  'Công cụ quản lý khách hàng tiềm năng',
-  'Ưu đãi nâng cấp lên tin nổi bật nhiều hình ảnh',
-  'Duyệt tin nhanh dưới 5 phút',
-];
 
 interface SubscriptionPackageCardProps {
   key: string;
@@ -57,27 +48,62 @@ const SubscriptionPackageCard: React.FC<SubscriptionPackageCardProps> = ({ packa
             </Stack>
           </Stack>
 
-          {item.map((item) => (
-            <Stack
-              key='123'
-              direction='row'
-              spacing={1}
-              alignItems='center'
-              sx={{
-                marginTop: '10px',
-                marginBottom: '10px',
+          <Stack
+            key='123'
+            direction='row'
+            spacing={1}
+            alignItems='center'
+            sx={{
+              marginBottom: '10px',
+            }}
+          >
+            <img src={checkIcon} alt='icon' />
+            <p
+              style={{
+                fontSize: 18,
               }}
             >
-              <img src={checkIcon} alt='icon' />
-              <p
-                style={{
-                  fontSize: 18,
-                }}
-              >
-                {item}
-              </p>
-            </Stack>
-          ))}
+              {packageItem.monthly_post_limit} tin đăng - Hiển thị 14 ngày
+            </p>
+          </Stack>
+
+          <Stack
+            key='123'
+            direction='row'
+            spacing={1}
+            alignItems='center'
+            sx={{
+              marginBottom: '10px',
+            }}
+          >
+            <img src={packageItem.display_priority_point !== 0 ? checkIcon : unCheckIcon} alt='icon' />
+            <p
+              style={{
+                fontSize: 18,
+              }}
+            >
+              Ưu tiên hiển thị tin đăng
+            </p>
+          </Stack>
+
+          <Stack
+            key='123'
+            direction='row'
+            spacing={1}
+            alignItems='center'
+            sx={{
+              marginBottom: '10px',
+            }}
+          >
+            <img src={packageItem.post_approval_priority_point !== 0 ? checkIcon : unCheckIcon} alt='icon' />
+            <p
+              style={{
+                fontSize: 18,
+              }}
+            >
+              Ưu tiên duyệt tin đăng
+            </p>
+          </Stack>
         </CardContent>
       </React.Fragment>
     </Card>
