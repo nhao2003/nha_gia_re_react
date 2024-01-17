@@ -17,23 +17,25 @@ export const TextFieldTitle = ({ title, placeholder, require, value }: PrivatePr
         marginTop: 2,
       }}
     >
-      <Stack
-        direction={'row'}
-        sx={{
-          width: '20%',
-        }}
-      >
-        <Typography variant='inherit'>{title}</Typography>
-        {require ? (
-          <Typography variant='inherit' color={'red'}>
-            (*)
-          </Typography>
-        ) : null}
-      </Stack>
+      {title !== '' && (
+        <Stack
+          direction={'row'}
+          sx={{
+            width: '20%',
+          }}
+        >
+          <Typography variant='inherit'>{title}</Typography>
+          {require ? (
+            <Typography variant='inherit' color={'red'}>
+              (*)
+            </Typography>
+          ) : null}
+        </Stack>
+      )}
 
       <FormControl
         sx={{
-          width: '80%',
+          width: '100%',
         }}
       >
         <TextField

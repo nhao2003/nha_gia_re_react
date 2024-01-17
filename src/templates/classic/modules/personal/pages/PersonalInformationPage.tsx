@@ -21,7 +21,13 @@ interface PersonalInformationPageProps {
 }
 
 export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = ({ userInfo, ...props }) => {
-  //   console.log( userInfo.dob);
+  const gender = userInfo === null ? '' : userInfo.gender === true ? 'Male' : 'Female';
+
+  const [genderValue, setGenderValue] = React.useState(gender);
+
+  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGenderValue((event.target as HTMLInputElement).value);
+  };
 
   return (
     <Box
@@ -94,7 +100,13 @@ export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = (
           <Typography variant='inherit'>Giới tính</Typography>
         </Stack>
 
-        <RadioGroup row aria-labelledby='demo-row-radio-buttons-group-label' name='row-radio-buttons-group'>
+        <RadioGroup
+          row
+          aria-labelledby='demo-row-radio-buttons-group-label'
+          name='row-radio-buttons-group'
+          value={genderValue}
+          onChange={handleGenderChange}
+        >
           <FormControlLabel value='Male' control={<Radio />} label='Nam' />
           <FormControlLabel value='Female' control={<Radio />} label='Nữ' />
         </RadioGroup>
@@ -123,12 +135,32 @@ export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = (
             width: '80%',
           }}
         >
-          <SelectAddress title={'Tỉnh/Thành phố'} require={true} placeholder={'Tỉnh/Thành phố'} />
+          <SelectAddress
+            title={'Tỉnh/Thành phố'}
+            require={true}
+            placeholder={'Tỉnh/Thành phố'}
+            addressCode={userInfo.address.province_code}
+          />
 
-          <SelectAddress title={'Quận/Huyện'} require={true} placeholder={'Quận/Huyện'} />
-          <SelectAddress title={'Phường/Xã'} require={true} placeholder={'Phường/Xã'} />
+          <SelectAddress
+            title={'Quận/Huyện'}
+            require={true}
+            placeholder={'Quận/Huyện'}
+            addressCode={userInfo.address.district_code}
+          />
+          <SelectAddress
+            title={'Phường/Xã'}
+            require={true}
+            placeholder={'Phường/Xã'}
+            addressCode={userInfo.address.ward_code}
+          />
 
-          <SelectAddress title={'Địa chỉ cụ thể'} require={true} placeholder={'Số nhà, đường'} />
+          <TextFieldTitle
+            title=''
+            placeholder={'--Số nhà, tên đường--'}
+            require={false}
+            value={userInfo !== null ? `${userInfo.address.detail}` : null}
+          />
         </Stack>
       </Stack>
 
