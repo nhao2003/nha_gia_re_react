@@ -160,6 +160,7 @@ function DetailPage(): JSX.Element {
   }, [page]);
 
   const features: any = post.features;
+  const numberFormat = new Intl.NumberFormat('en-US');
 
   return (
     <Stack alignItems={'center'}>
@@ -286,7 +287,7 @@ function DetailPage(): JSX.Element {
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'18px'} fontWeight={'600'}>
-                  {post.price} VND - {post.area} <span>m</span>
+                  {numberFormat.format(post.price).replaceAll(',', '.')} VND - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
@@ -434,21 +435,6 @@ function DetailPage(): JSX.Element {
                     value={features?.num_of_bed_rooms ?? 'Không có'}
                     unit={'phòng'}
                   />
-                  {features?.main_door_direction ?? (
-                    <TileIcon
-                      icon={MeetingRoomOutlinedIcon}
-                      title='Hướng cửa chính'
-                      value={
-                        features.main_door_direction === Direction.north
-                          ? 'Bắc'
-                          : features.main_door_direction === Direction.south
-                            ? 'Nam'
-                            : features.main_door_direction === Direction.west
-                              ? 'Tây'
-                              : 'Đông'
-                      }
-                    />
-                  )}
 
                   {features?.legal_document_status ?? (
                     <TileIcon
@@ -578,7 +564,7 @@ function DetailPage(): JSX.Element {
                   key={index}
                   image={post.images[0]}
                   title={post.title}
-                  price={`${post.price} VND/m2`}
+                  price={post.price}
                   address={post.address_detail ?? 'Chưa cập nhật'}
                   sx={{
                     overflow: 'hidden',

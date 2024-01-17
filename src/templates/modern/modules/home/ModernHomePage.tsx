@@ -134,27 +134,7 @@ export function ModernHomePage(): JSX.Element {
           <ProvinceListComponent />
         </Stack>
         {/* Gần bạn */}
-        {isLoading ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PostListComponent
-            title={'Gần bạn'}
-            posts={posts.posts}
-            onViewMoreClick={() => {
-              handleNavigate('nearby', '');
-            }}
-          />
-        )}
+
         {isLoading ? (
           <Box
             sx={{

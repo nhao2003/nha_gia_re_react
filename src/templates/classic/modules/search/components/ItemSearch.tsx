@@ -26,6 +26,9 @@ interface ModernItemSearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
   onPageChange: (page: number) => void;
+  isLease: boolean;
+  onIsLeaseChange?: (isLease: boolean) => void;
+  isLoading: boolean;
 }
 
 export const ItemSearch = (props: ModernItemSearchProps) => {
@@ -41,9 +44,10 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
   };
 
   const [value, setValue] = React.useState('1');
-
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+    if (props.onIsLeaseChange !== undefined) {
+      props.onIsLeaseChange(newValue === '1');
+    }
   };
 
   const breadcrumbs = [
@@ -89,11 +93,11 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
       </Typography>
       <Stack direction={'row'} justifyContent={'space-between'}>
         <Box sx={{ width: matches ? '98%' : '98%', typography: 'body1' }}>
-          <TabContext value={value}>
+          <TabContext value={props.isLease ? '1' : '2'}>
             <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label='tab dbs'>
                 <Tab
-                  label='Tất cả'
+                  label='Cho thuê'
                   value='1'
                   sx={{
                     textTransform: 'none',
@@ -101,7 +105,7 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
                   }}
                 />
                 <Tab
-                  label='Cá nhân'
+                  label='Mua bán'
                   value='2'
                   sx={{
                     textTransform: 'none',
@@ -118,6 +122,7 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
                 onPageChange={(page) => {
                   props.onPageChange(page);
                 }}
+                isLoading={props.isLoading}
               />
             </TabPanel>
             <TabPanel value='2'>
@@ -128,6 +133,7 @@ export const ItemSearch = (props: ModernItemSearchProps) => {
                 onPageChange={(page) => {
                   props.onPageChange(page);
                 }}
+                isLoading={props.isLoading}
               />
             </TabPanel>
           </TabContext>

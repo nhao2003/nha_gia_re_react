@@ -25,6 +25,7 @@ interface ModernItemSearchProps {
   onPageChange: (page: number) => void;
   isLease: boolean;
   onIsLeaseChange?: (isLease: boolean) => void;
+  isLoading: boolean;
 }
 
 export const ModernItemSearch = (props: ModernItemSearchProps) => {
@@ -124,6 +125,7 @@ export const ModernItemSearch = (props: ModernItemSearchProps) => {
                 onPageChange={(page) => {
                   props.onPageChange(page);
                 }}
+                isLoading={props.isLoading}
               />
             </TabPanel>
             <TabPanel value='2'>
@@ -134,6 +136,7 @@ export const ModernItemSearch = (props: ModernItemSearchProps) => {
                 onPageChange={(page) => {
                   props.onPageChange(page);
                 }}
+                isLoading={props.isLoading}
               />
             </TabPanel>
           </TabContext>

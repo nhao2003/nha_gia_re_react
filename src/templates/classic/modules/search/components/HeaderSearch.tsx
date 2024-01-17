@@ -135,7 +135,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
   };
 
   const minDistancePrice = 1000000000;
-  const [price, setPrice] = React.useState<number[]>([0, 120000000000]);
+  const [price, setPrice] = React.useState<number[]>([0, 10000000000]);
 
   const minDistanceArea = 1000;
   const [area, setArea] = React.useState<number[]>([0, 10000]);
@@ -147,7 +147,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
 
     if (newValue[1] - newValue[0] < minDistancePrice) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 120000000000 - minDistancePrice);
+        const clamped = Math.min(newValue[0], 1000000000 - minDistancePrice);
         setPrice([clamped, clamped + minDistancePrice]);
       } else {
         const clamped = Math.max(newValue[1], minDistancePrice);
@@ -208,7 +208,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
   const handCancle = () => {
     setSelectProvince(null);
     setSelectType(null);
-    setPrice([0, 120000000000]);
+    setPrice([0, 10000000000]);
     setArea([0, 10000]);
     setSortBy(null);
     setPostBy(null);
@@ -401,7 +401,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
                       borderRadius: 3,
                     }}
                   >
-                    <Typography>120.000.000.000đ</Typography>
+                    <Typography>10.000.000.000đ</Typography>
                   </Stack>
                 </Stack>
 
@@ -411,7 +411,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
                   onChange={handleChangePrice}
                   valueLabelDisplay='auto'
                   min={0}
-                  max={120000000000}
+                  max={10000000000}
                   step={100000000}
                   disableSwap
                   sx={{

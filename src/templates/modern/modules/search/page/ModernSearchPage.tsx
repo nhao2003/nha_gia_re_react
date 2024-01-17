@@ -21,6 +21,7 @@ export function ModernSearchPage(): JSX.Element {
   // const [params, setParams] = React.useState<URLSearchParams>(new URLSearchParams(window.location.search));
   const [params, setParams] = React.useState({});
   const [isLease, setIsLease] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [posts, setPosts] = React.useState<{
     numOfPages: number;
@@ -55,6 +56,7 @@ export function ModernSearchPage(): JSX.Element {
   React.useEffect(() => {
     console.log('params', getParsedParams(params));
     console.log('sanggg', params);
+    setIsLoading(true);
     fetchPosts()
       .then((response) => {
         setPosts({
@@ -65,6 +67,9 @@ export function ModernSearchPage(): JSX.Element {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [params]);
 
@@ -76,6 +81,7 @@ export function ModernSearchPage(): JSX.Element {
         }}
       />
       <ModernItemSearch
+        isLoading={isLoading}
         posts={posts.posts}
         numOfPages={posts.numOfPages}
         onPageChange={(page) => {

@@ -20,6 +20,8 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up(800));
 
+  const numberFormat = new Intl.NumberFormat('en-US');
+
   return (
     <Stack
       direction={'row'}
@@ -88,7 +90,7 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
             fontWeight: 'bold',
           }}
         >
-          {price}
+          {numberFormat.format(price).replaceAll(',', '.')} VNĐ
         </Typography>
 
         <Stack
