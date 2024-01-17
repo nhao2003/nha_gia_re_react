@@ -13,14 +13,7 @@ const params = {
   type_id: 'house',
 };
 
-export function getParsedParams(urlSearchParams: URLSearchParams): any {
-
-  const params: any = {};
-
-  urlSearchParams.forEach((value: string, key: string) => {
-    params[key] = value;
-  });
-
+export function getParsedParams(params: Record<string, any>): any {
   const parsedParams: any = {};
 
   if (params.page !== undefined){
@@ -69,32 +62,20 @@ export function getParsedParams(urlSearchParams: URLSearchParams): any {
   if (params.postBy !== undefined){
     parsedParams['post_is_pro_seller[eq]'] = params.postBy
   }
-  if (params.is_lease !== undefined) {
-    parsedParams['post_is_lease[eq]'] = params.is_lease;
-  }
-  if (params.search !== undefined && params.search !== '') {
-    parsedParams.search = params.search;
-  }
-  if (params.min_price !== undefined || params.max_price !== undefined) {
-    const minPrice = params.min_price !== undefined ? isNaN(params.min_price) ? 0 : params.min_price : 0;
-    const maxPrice = params.max_price !== undefined ? isNaN(params.max_price) ? 100000000000 : params.max_price : 100000000000;
-    parsedParams['post_price[btw]'] = minPrice + ',' + maxPrice;
-  }
-  
 
   return parsedParams;
 }
 
-// console.log(getParsedParams(params));
+console.log(getParsedParams(params));
 
-// new ApiServiceBuilder()
-//   .withUrl('/posts')
-//   .withParams(getParsedParams(params))
-//   .build()
-//   .get()
-//   .then((response: any) => {
-//     console.log(response.data);
-//   })
-//   .catch((error: any) => {
-//     console.log(error);
-//   });
+new ApiServiceBuilder()
+  .withUrl('/posts')
+  .withParams(getParsedParams(params))
+  .build()
+  .get()
+  .then((response: any) => {
+    console.log(response.data);
+  })
+  .catch((error: any) => {
+    console.log(error);
+  });

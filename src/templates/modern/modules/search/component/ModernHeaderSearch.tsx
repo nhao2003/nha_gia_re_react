@@ -311,6 +311,11 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
           <Autocomplete
             freeSolo
             options={searchKeywords}
+            filterOptions={
+              (options, state) => {
+                return options;
+              }
+            }
             inputValue={search}
             onChange={
               (e: any, value: any) => {
