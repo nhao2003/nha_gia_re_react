@@ -1,28 +1,28 @@
-import React from 'react'
-import classes from './SignUp.module.css'
-import TextInputField from './components/TextInputField'
-import { Link } from 'react-router-dom'
-import logo from './../../assets/images/Logo.png'
-import facebook from './../../assets/images/logos_facebook.svg'
-import google from './../../assets/images/devicon_google.svg'
+import React from 'react';
+import classes from './SignUp.module.css';
+import TextInputField from './components/TextInputField';
+import { Link } from 'react-router-dom';
+import logo from './../../assets/images/Logo.png';
+import facebook from './../../assets/images/logos_facebook.svg';
+import google from './../../assets/images/devicon_google.svg';
 
 const SignUp = () => {
-  const [enteredEmail, setEnteredEmail] = React.useState('')
-  const [enteredPassword, setEnteredPassword] = React.useState('')
+  const [enteredEmail, setEnteredEmail] = React.useState('');
+  const [enteredPassword, setEnteredPassword] = React.useState('');
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    console.log(enteredEmail, enteredPassword)
-  }
+    console.log(enteredEmail, enteredPassword);
+  };
 
   const changeEmailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredEmail(event.target.value)
-  }
+    setEnteredEmail(event.target.value);
+  };
 
   const changePasswordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredPassword(event.target.value)
-  }
+    setEnteredPassword(event.target.value);
+  };
 
   return (
     <div className={classes.signup}>
@@ -35,19 +35,13 @@ const SignUp = () => {
       <div className={classes.form}>
         {/* <form onSubmit={submitHandler}> */}
         <div className={classes.logo}>
-          <img src={logo} alt='logo' />
+          <img src={logo} alt='logo' style={{ width: '10rem' }} />
         </div>
         <h2>Đăng ký</h2>
         <form onSubmit={submitHandler}>
           <div className={`${classes.control} `}>
             <label htmlFor='email'>Email</label>
-            <input
-              type='email'
-              id='email'
-              placeholder='Email'
-              value={enteredEmail}
-              onChange={changeEmailHandler}
-            />
+            <input type='email' id='email' placeholder='Email' value={enteredEmail} onChange={changeEmailHandler} />
           </div>
           <div className={`${classes.control} `}>
             <label htmlFor='password'>Mật khẩu</label>
@@ -92,7 +86,7 @@ const SignUp = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
