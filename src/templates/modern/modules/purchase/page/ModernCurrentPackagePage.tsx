@@ -88,6 +88,7 @@ const MordenCurrentPackagePage: React.FC = () => {
           textAlign: 'left',
           marginLeft: '20px',
           marginRight: '20px',
+          marginTop: '20px',
         }}
       >
         Gói hiện tại
