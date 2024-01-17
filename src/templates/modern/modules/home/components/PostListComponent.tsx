@@ -14,9 +14,10 @@ import { useNavigate } from 'react-router-dom';
 interface PostListComponentProps {
   title: string;
   posts: RealEstatePost[];
+  onViewMoreClick: () => void;
 }
 
-const PostListComponent = ({ title, posts }: PostListComponentProps) => {
+const PostListComponent = ({ title, posts, onViewMoreClick }: PostListComponentProps) => {
   const { disableScroll, enableScroll } = usePreventBodyScroll();
   const navigate = useNavigate();
 
@@ -46,6 +47,7 @@ const PostListComponent = ({ title, posts }: PostListComponentProps) => {
           sx={{
             color: CUSTOM_COLOR.primary,
           }}
+          onClick={onViewMoreClick} // Attach onClick handler
         >
           <Typography>Xem thêm</Typography>
           <EastIcon />

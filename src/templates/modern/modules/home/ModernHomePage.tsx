@@ -28,6 +28,12 @@ export function ModernHomePage(): JSX.Element {
     navigate('/search');
   };
 
+  const handleNavigate = (type: string, value: string) => {
+    navigate(`/search/${type}`, {
+      state: value,
+    });
+  };
+
   const slides = [
     {
       id: 1,
@@ -140,7 +146,13 @@ export function ModernHomePage(): JSX.Element {
             <CircularProgress />
           </Box>
         ) : (
-          <PostListComponent title={'Gần bạn'} posts={posts.posts} />
+          <PostListComponent
+            title={'Gần bạn'}
+            posts={posts.posts}
+            onViewMoreClick={() => {
+              handleNavigate('nearby', '');
+            }}
+          />
         )}
         {isLoading ? (
           <Box
@@ -155,7 +167,13 @@ export function ModernHomePage(): JSX.Element {
             <CircularProgress />
           </Box>
         ) : (
-          <PostListComponent title={'Mua bán'} posts={posts.posts} />
+          <PostListComponent
+            title={'Mua bán'}
+            posts={posts.posts}
+            onViewMoreClick={() => {
+              handleNavigate('sell', '');
+            }}
+          />
         )}
         {isLoading ? (
           <Box
@@ -170,7 +188,13 @@ export function ModernHomePage(): JSX.Element {
             <CircularProgress />
           </Box>
         ) : (
-          <PostListComponent title={'Cho thuê'} posts={posts.posts} />
+          <PostListComponent
+            title={'Cho thuê'}
+            posts={posts.posts}
+            onViewMoreClick={() => {
+              handleNavigate('rent', '');
+            }}
+          />
         )}
       </Stack>
     </Stack>

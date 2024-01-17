@@ -4,9 +4,21 @@ import { ModernItemSearch } from '../component/ModernItemSearch';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import { getParsedParams } from '../../../../../services/paramsSearch';
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
 
 export function ModernSearchPage(): JSX.Element {
+  const type = useLocation().pathname.split('/')[2];
+  const [value, setValue] = React.useState<string>(useLocation().state as string);
+
+  console.log('TYPE', type);
+  console.log('VALUE', value);
+
+  // type: province || value: province code
+  // type: nearby, sell, lease || value: null
+  // type: relate || value: post title
+
+  // const [params, setParams] = React.useState<URLSearchParams>(new URLSearchParams(window.location.search));
   const [params, setParams] = React.useState({});
 
   const [posts, setPosts] = React.useState<{
@@ -24,6 +36,8 @@ export function ModernSearchPage(): JSX.Element {
     console.log(response.data);
     return response.data as any;
   }
+  
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     console.log('params', getParsedParams(params));
