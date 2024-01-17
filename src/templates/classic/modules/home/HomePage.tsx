@@ -21,7 +21,7 @@ import React from 'react';
 import PostService from '../../../../services/post.service';
 import type RealEstatePost from '../../../../models/RealEstatePost';
 import { PropertyTypes } from '../../../../constants/enums';
-import AddressUtils from '../../../../utils/addressUtils'
+import AddressUtils from '../../../../utils/addressUtils';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 
 function HomePage(): JSX.Element {
@@ -66,7 +66,6 @@ function HomePage(): JSX.Element {
     posts: RealEstatePost[];
   }>({ numOfPages: 1, posts: [] });
 
-
   const [postsRent, setPostsRent] = React.useState<{
     numOfPages: number;
     posts: RealEstatePost[];
@@ -76,44 +75,50 @@ function HomePage(): JSX.Element {
   const page = searchParams.get('page') ?? '1';
 
   async function fetchPostsPurChase() {
-
-      const query = new ApiServiceBuilder()
+    const query = new ApiServiceBuilder()
       .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
       .withUrl('/posts?post_is_lease[eq]=' + false)
       .withParams({
-        page: page
+        page: page,
       })
       .build();
-      const response = await query.get();
-
-      return response.data as any;
-    
-  }
-
-  async function fetchPostsRent() {
-
-    const query = new ApiServiceBuilder()
-    .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
-    .withUrl('/posts?post_is_lease[eq]=' + true)
-    .withParams({
-      page: page
-    })
-    .build();
     const response = await query.get();
 
     return response.data as any;
-  
-}
+  }
 
+  async function fetchPostsRent() {
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts?post_is_lease[eq]=' + true)
+      .withParams({
+        page: page,
+      })
+      .build();
+    const response = await query.get();
+
+    return response.data as any;
+  }
 
   const handleClickSearch = () => {
     navigate('/search');
   };
 
+  const handleNavigate = (type: string, value: string) => {
+    navigate(`/search/${type}`, {
+      state: value,
+    });
+  };
+
+  const handleProvinceClick = (provinceCode: number) => {
+    navigate(`/search/province`, {
+      state: provinceCode,
+    });
+  };
+
   const handleClickNews = () => {
     navigate('/news');
   };
-
 
   const stackStyle = {
     backgroundImage: `url(${tom_rumble})`,
@@ -123,61 +128,59 @@ function HomePage(): JSX.Element {
     // Other styles if needed
   };
 
-
-
   const [isLoadingPostPurchase, setIsLoadingPostPurchase] = React.useState<boolean>(true);
   const [isLoadingPostRent, setIsLoadingPostRent] = React.useState<boolean>(true);
-  React.useEffect(() =>{
+  React.useEffect(() => {
     setIsLoadingPostPurchase(true);
     setIsLoadingPostRent(true);
 
     fetchPostsPurChase()
-    .then((response) => {
-        console.log('post', response.result)
-        console.log('post12', typeof response.result)
-
+      .then((response) => {
+        console.log('post', response.result);
+        console.log('post12', typeof response.result);
 
         console.log(response);
         setPostsPurchase({
           numOfPages: response.num_of_pages,
           posts: response.result,
         });
-        console.log('postPurchase', postsPurchase.posts)
-        }).catch((error) => {
-            console.log(error);
-        }).finally(() => {
-          setIsLoadingPostPurchase(false);
+        console.log('postPurchase', postsPurchase.posts);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoadingPostPurchase(false);
       });
 
-      fetchPostsRent()
+    fetchPostsRent()
       .then((response) => {
-          console.log('post', response.result)
-          console.log('post12', typeof response.result)
-  
-  
-          console.log(response);
-          setPostsRent({
-            numOfPages: response.num_of_pages,
-            posts: response.result,
-          });
-          console.log('postPurchase', postsPurchase.posts)
-          }).catch((error) => {
-              console.log(error);
-          }).finally(() => {
-            setIsLoadingPostRent(false);
+        console.log('post', response.result);
+        console.log('post12', typeof response.result);
+
+        console.log(response);
+        setPostsRent({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
         });
+        console.log('postPurchase', postsPurchase.posts);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoadingPostRent(false);
+      });
 
-      // fetchPostsRent().then((result : any) => {
-      //   console.log(result);
-      //      setPostRent(result )
-      //   }).catch((error) => {
-      //       console.log(error);
-      //   }).finally(() => {
-      //     setIsLoadingPostRent(false);
-      // });
+    // fetchPostsRent().then((result : any) => {
+    //   console.log(result);
+    //      setPostRent(result )
+    //   }).catch((error) => {
+    //       console.log(error);
+    //   }).finally(() => {
+    //     setIsLoadingPostRent(false);
+    // });
   }, [page]);
-
-
 
   return (
     <Stack alignItems={'center'}>
@@ -343,6 +346,7 @@ function HomePage(): JSX.Element {
               place='TP. Hồ Chí Minh'
               news={2356}
               background='https://upload.wikimedia.org/wikipedia/commons/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg'
+              onClick={() => handleProvinceClick(79)}
             />
 
             <Stack
@@ -369,6 +373,7 @@ function HomePage(): JSX.Element {
                   place='Hà Nội'
                   news={2356}
                   background='https://vcdn1-dulich.vnecdn.net/2020/01/12/cover-1578768419-1710-1578769015.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=NVLGHkwAeKyDUpx9KW4p_g'
+                  onClick={() => handleProvinceClick(1)}
                 />
 
                 <Area
@@ -379,6 +384,7 @@ function HomePage(): JSX.Element {
                   place='Đà Nẵng'
                   news={2356}
                   background='https://cdn.tgdd.vn/Files/2021/06/15/1360375/diem-qua-10-dia-diem-du-lich-da-nang-ve-dem-khien-ban-me-man-quen-loi-ve-202206041218228136.jpg'
+                  onClick={() => handleProvinceClick(48)}
                 />
               </Stack>
 
@@ -398,6 +404,7 @@ function HomePage(): JSX.Element {
                   place='Bình Dương'
                   news={2356}
                   background='https://ranghammatsaigon.com/wp-content/uploads/2023/05/pho-di-bo-bach-dang-binh-duong.jpg'
+                  onClick={() => handleProvinceClick(74)}
                 />
 
                 <Area
@@ -408,6 +415,7 @@ function HomePage(): JSX.Element {
                   place='Đồng Nai'
                   news={2356}
                   background='https://baodongnai.com.vn/file/e7837c02876411cd0187645a2551379f/dataimages/202203/original/images2439574_14b.jpg'
+                  onClick={() => handleProvinceClick(75)}
                 />
               </Stack>
             </Stack>
@@ -439,7 +447,9 @@ function HomePage(): JSX.Element {
               sx={{
                 color: CUSTOM_COLOR.primary,
               }}
-              onClick = {handleClickSearch}
+              onClick={() => {
+                handleNavigate('sell', '');
+              }}
             >
               <Typography>Xem thêm</Typography>
               <EastIcon />
@@ -447,47 +457,42 @@ function HomePage(): JSX.Element {
           </Stack>
 
           <Stack direction={'row'} spacing={2}>
-
-
-            {isLoadingPostPurchase ? 
-             <Stack
-             width={'100%'}
-             alignItems={'center'}
-             height={'200px'}
-          >
-              <CircularProgress/> 
-         </Stack>
-              :
-            postsPurchase.posts.slice(0, endSlice).map((post, index) =>
-            {
-              const type = post.type_id === PropertyTypes.motel ? 'Nhà trọ' 
-                : post.type_id === PropertyTypes.house ? 'Nhà ở' 
-                : post.type_id === PropertyTypes.apartment ? 'Căn hộ' 
-                : post.type_id === PropertyTypes.land ? 'Đất' 
-                : 'Văn phòng'
-              return (
-                <HomeCard
-                key={index}
-                image= {post.images[0]}
-                title={post.title}  
-                price={`${post.price} VND/m2`}
-                address= {post.address_detail ?? "Chưa cập nhật"}
-                sx={{
-                  overflow: 'hidden',
-                }}
-                type= {type}
-                onClick={() => {
-                  navigate(`/details/${post.id}`, {
-                    state: post,
-                  });
-                }}
-              />
-             )
-            }
-           )}
-           
-
-
+            {isLoadingPostPurchase ? (
+              <Stack width={'100%'} alignItems={'center'} height={'200px'}>
+                <CircularProgress />
+              </Stack>
+            ) : (
+              postsPurchase.posts.slice(0, endSlice).map((post, index) => {
+                const type =
+                  post.type_id === PropertyTypes.motel
+                    ? 'Nhà trọ'
+                    : post.type_id === PropertyTypes.house
+                      ? 'Nhà ở'
+                      : post.type_id === PropertyTypes.apartment
+                        ? 'Căn hộ'
+                        : post.type_id === PropertyTypes.land
+                          ? 'Đất'
+                          : 'Văn phòng';
+                return (
+                  <HomeCard
+                    key={index}
+                    image={post.images[0]}
+                    title={post.title}
+                    price={`${post.price} VND/m2`}
+                    address={post.address_detail ?? 'Chưa cập nhật'}
+                    sx={{
+                      overflow: 'hidden',
+                    }}
+                    type={type}
+                    onClick={() => {
+                      navigate(`/details/${post.id}`, {
+                        state: post,
+                      });
+                    }}
+                  />
+                );
+              })
+            )}
           </Stack>
         </Stack>
 
@@ -516,7 +521,9 @@ function HomePage(): JSX.Element {
               sx={{
                 color: CUSTOM_COLOR.primary,
               }}
-              onClick = {handleClickSearch}
+              onClick={() => {
+                handleNavigate('rent', '');
+              }}
             >
               <Typography>Xem thêm</Typography>
               <EastIcon />
@@ -524,42 +531,42 @@ function HomePage(): JSX.Element {
           </Stack>
 
           <Stack direction={'row'} spacing={2}>
-          {isLoadingPostRent ? 
-              <Stack
-              width={'100%'}
-              alignItems={'center'}
-              height={'200px'}
-           >
-               <CircularProgress/> 
-          </Stack>
-              :
-            postsRent.posts.slice(0, endSlice).map((post, index) =>
-            {
-              const type = post.type_id === PropertyTypes.motel ? 'Nhà trọ' 
-                : post.type_id === PropertyTypes.house ? 'Nhà ở' 
-                : post.type_id === PropertyTypes.apartment ? 'Căn hộ' 
-                : post.type_id === PropertyTypes.land ? 'Đất' 
-                : 'Văn phòng;'
-              return (
-                <HomeCard
-                key={index}
-                image= {post.images[0]}
-                title={post.title}  
-                price={`${post.price} VND/m2`}
-                address= {post.address_detail ?? "Chưa cập nhật"}
-                sx={{
-                  overflow: 'hidden',
-                }}
-                type= {type}
-                onClick={() => {
-                  navigate(`/details/${post.id}`, {
-                    state: post,
-                  });
-                }}
-              />
-             )
-            }
-           )}
+            {isLoadingPostRent ? (
+              <Stack width={'100%'} alignItems={'center'} height={'200px'}>
+                <CircularProgress />
+              </Stack>
+            ) : (
+              postsRent.posts.slice(0, endSlice).map((post, index) => {
+                const type =
+                  post.type_id === PropertyTypes.motel
+                    ? 'Nhà trọ'
+                    : post.type_id === PropertyTypes.house
+                      ? 'Nhà ở'
+                      : post.type_id === PropertyTypes.apartment
+                        ? 'Căn hộ'
+                        : post.type_id === PropertyTypes.land
+                          ? 'Đất'
+                          : 'Văn phòng;';
+                return (
+                  <HomeCard
+                    key={index}
+                    image={post.images[0]}
+                    title={post.title}
+                    price={`${post.price} VND/m2`}
+                    address={post.address_detail ?? 'Chưa cập nhật'}
+                    sx={{
+                      overflow: 'hidden',
+                    }}
+                    type={type}
+                    onClick={() => {
+                      navigate(`/details/${post.id}`, {
+                        state: post,
+                      });
+                    }}
+                  />
+                );
+              })
+            )}
           </Stack>
         </Stack>
       </Stack>
