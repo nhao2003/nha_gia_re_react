@@ -178,7 +178,7 @@ const Header: React.FC = () => {
             fontSize: '16px',
             display: matches1440 ? 'block' : 'none',
           }}
-          onClick={() => navigate('about-us')}
+          onClick={() => navigate('/about-us')}
         >
           Về chúng tôi
         </Button>
