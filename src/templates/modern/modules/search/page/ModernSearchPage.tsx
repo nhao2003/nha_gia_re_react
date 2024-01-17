@@ -11,10 +11,7 @@ export function ModernSearchPage(): JSX.Element {
   async function fetchPosts() {
     const params = new URLSearchParams(window.location.search);
     console.log('GET PARAMS', getParsedParams(params));
-    const query = new ApiServiceBuilder()
-      .withUrl('/posts')
-      .withParams(getParsedParams(params))
-      .build();
+    const query = new ApiServiceBuilder().withUrl('/posts').withParams(getParsedParams(params)).build();
     const response = await query.get();
     return response.data as any;
   }
@@ -23,22 +20,21 @@ export function ModernSearchPage(): JSX.Element {
   const [numOfPages, setNumOfPages] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const navigate = useNavigate();
-  React.useEffect(() => {    
+  React.useEffect(() => {
     setIsLoading(true);
     fetchPosts()
-    .then((data) => {
-      setPosts(data.result);
-      setNumOfPages(data.num_of_pages);
-      console.log(data);  
-    })
-    .catch((error) => {
-      console.log(error);
-    }).finally(() => {
-      setIsLoading(false);
-    });
+      .then((data) => {
+        setPosts(data.result);
+        setNumOfPages(data.num_of_pages);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [location.search]);
-
-
 
   const [isLease, setIsLease] = React.useState(true);
 
@@ -53,19 +49,17 @@ export function ModernSearchPage(): JSX.Element {
           navigate('/search?' + newParams.toString());
         }}
       />
-      <ModernItemSearch 
+      <ModernItemSearch
         posts={posts}
         numOfPages={numOfPages}
         isLease={isLease}
-        onIsLeaseChange={(isLease) => {
+        onIsLeaseChange={(isLease: boolean) => {
           setIsLease(isLease);
           const newParams = new URLSearchParams(window.location.search);
           newParams.set('is_lease', isLease ? 'true' : 'false');
           navigate('/search?' + newParams.toString());
-        }
-        }
+        }}
         isLoading={isLoading}
-      
       />
     </Stack>
   );
