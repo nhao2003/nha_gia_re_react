@@ -90,6 +90,12 @@ export function ModernDetailPage(): JSX.Element {
     setSelectImage(index + indexImage);
   };
 
+  const handleNavigateMore = (type: string, value: string) => {
+    navigate(`/search/${type}`, {
+      state: value,
+    });
+  };
+
   const home = {
     title: 'Nhà Trệt Q4-CĂN GÓC 2 MẶT TIỀN- VỪA Ở VỪA KINH DOANH giá mềm 4xxx tỷ',
     price: 4.9,
@@ -496,7 +502,13 @@ export function ModernDetailPage(): JSX.Element {
             <CircularProgress />
           </Box>
         ) : (
-          <PostListComponent title={'Bài đăng tương tự'} posts={postsRelate.posts} />
+          <PostListComponent
+            title={'Bài đăng tương tự'}
+            posts={postsRelate.posts}
+            onViewMoreClick={() => {
+              handleNavigateMore('relate', post.title);
+            }}
+          />
         )}
       </Stack>
     </Stack>

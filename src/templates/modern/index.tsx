@@ -106,6 +106,15 @@ function App(): JSX.Element {
       />
 
       <Route
+        path='/search/:id'
+        element={
+          <ModernDashboardPage>
+            <ModernSearchPage />
+          </ModernDashboardPage>
+        }
+      />
+
+      <Route
         path='/purchase'
         element={
           <ModernDashboardPage>

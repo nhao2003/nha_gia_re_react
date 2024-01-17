@@ -169,6 +169,20 @@ const Header: React.FC = () => {
           Tin nhắn
 
         </Button>
+
+        <Button
+          variant='text'
+          sx={{
+            color: CUSTOM_COLOR.black,
+            fontWeight: 'bold',
+            fontSize: '16px',
+            display: matches1440 ? 'block' : 'none',
+          }}
+          onClick={() => navigate('about-us')}
+        >
+          Về chúng tôi
+        </Button>
+
       </Stack>
 
       <Drawer open={openDrawer} anchor={'left'} onClose={toggleDrawer}>

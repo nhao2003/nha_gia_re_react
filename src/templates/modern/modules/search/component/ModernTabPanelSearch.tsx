@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Pagination, Stack } from '@mui/material';
+import { Box, CircularProgress, Grid, Pagination, Stack, Typography } from '@mui/material';
 import { ModernHomeCardHorizontal } from './ModernHomeCardHorizontal';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
 import React from 'react';
@@ -6,24 +6,33 @@ import { ApiServiceBuilder } from '../../../../../services/api.service';
 import dateUtils from '../../../../../utils/dateUtils';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getParsedParams } from '../../../../../services/paramsSearch';
+import CUSTOM_COLOR from '../../../../classic/constants/colors';
 
 interface SearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
   currentPage: number;
-  isLoading: boolean;
-  onPageChange?: (page: number) => void;
+  onPageChange: (page: number) => void;
 }
 
 export function ModernTabPanelSearch(props: SearchProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [params, setParams] = React.useState({});
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const searchParams = new URLSearchParams(location.search);
-  const page = searchParams.get('page') ?? '1';
+  const { currentPage } = props;
+  const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
+  const [province, setProvince] = React.useState<string | undefined>(undefined);
 
-  return props.isLoading ? (
+  React.useEffect(() => {
+    setIsLoading(false);
+    console.log('num_of_page', props.numOfPages);
+  }, [props]);
+
+  return isLoading ? (
     <Box
       sx={{
         width: '100%',
@@ -42,9 +51,9 @@ export function ModernTabPanelSearch(props: SearchProps) {
           <ModernHomeCardHorizontal
             image={post.images[0]}
             title={post.title}
-            price={post.price + 'VNĐ'}
+            price={post.price + ' VNĐ'}
             address={post.address_detail ?? 'Chưa cập nhật'}
-            type={'personal'}
+            type={post.is_pro_seller}
             avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
             name={post.user.first_name + ' ' + post.user.last_name}
             time={dateUtils.getTimeAgoVi(post.posted_date)}
@@ -64,14 +73,25 @@ export function ModernTabPanelSearch(props: SearchProps) {
           padding: '10px',
         }}
       >
-        <Pagination
-          count={props.numOfPages}
-          size='large'
-          defaultPage={parseInt(page)}
-          onChange={(event, page) => {
-            props.onPageChange?.(page);
-          }}
-        />
+        {props.posts.length > 0 ? (
+          <Pagination
+            count={props.numOfPages}
+            size='large'
+            onChange={(e, page) => {
+              props.onPageChange(page);
+            }}
+          />
+        ) : (
+          <Typography
+            margin={5}
+            sx={{
+              color: CUSTOM_COLOR.grayScorpion,
+              fontSize: '18px',
+            }}
+          >
+            Không tìm thấy kết quả!
+          </Typography>
+        )}
       </Stack>
     </Grid>
   );
