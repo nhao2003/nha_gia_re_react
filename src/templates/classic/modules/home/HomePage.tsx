@@ -522,7 +522,7 @@ function HomePage(): JSX.Element {
                 color: CUSTOM_COLOR.primary,
               }}
               onClick={() => {
-                handleNavigate('rent', '');
+                handleNavigate('lease', '');
               }}
             >
               <Typography>Xem thêm</Typography>
