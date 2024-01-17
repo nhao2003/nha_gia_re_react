@@ -15,6 +15,7 @@ import {
     Snackbar,
     Alert,
     type SnackbarOrigin,
+    CircularProgress,
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { type SxProps, type Theme } from '@mui/system';
@@ -424,6 +425,29 @@ const PostCreate: React.FC = () => {
         }
     }
 
+    const [checkPostLimit, setCheckPostLimit] = useState<{
+        isExceeded: boolean;
+        limitPostInMonth: number;
+        countPostInMonth: number;
+    } | null>(null);
+
+
+    function handleCheckPostLimit() {
+        PostService.getInstance().checkLimitPost().then((res) => {
+            console.log("Check post limit: ", res);
+            if (res !== null) {
+                setCheckPostLimit(res);
+            }
+        }).catch((err) => {
+            console.log(err);
+            setState({ ...state, open: true, message: 'Đã có lỗi xảy ra. Vui lòng thử lại sau', isSuccessful: false });
+        });
+    }
+
+    React.useEffect(() => {
+        handleCheckPostLimit();
+    }, []);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingX: '20px', minHeight: '100vh', marginTop: '20px' }}>
             <Snackbar open={state.open} autoHideDuration={3000} anchorOrigin={{ vertical: state.vertical, horizontal: state.horizontal }} onClose={() => { setSnackBar(''); }}>
@@ -435,611 +459,638 @@ const PostCreate: React.FC = () => {
                     {state.message}
                 </Alert>
             </Snackbar>
-            <CustomCard>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {purposeTypes.map((option) => (
-                        <Chip
-                            key={option.value}
-                            sx={{
-                                backgroundColor: purposeType === option.value ? '#026D4D' : '#DEFAF5',
-                                color: purposeType === option.value ? '#DEFAF5' : '#026D4D',
-                            }}
-                            label={option.label}
-                            color={(option.value === propertyType) ? 'primary' : 'default'}
-                            onClick={() => {
-                                setPurposeType(option.value as 'rent' | 'sell');
-                                setPropertyType(null);
-                            }}
-                        />
-                    ))}
-                </div>
-                <TextField
-                    id="property-type-select"
-                    select
-                    label="Loại bất động sản"
-                    fullWidth
-                    value={propertyType}
-                    onChange={(e) => { handleSelectChange(e, setPropertyType); }}
-                    sx={{ marginTop: '16px' }}
-                >
-                    {propertyTypes.map((option) => (
-                        (option.value === 'motel' && purposeType === 'sell') ? null
-                            :
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                    ))}
-                </TextField>
-
-            </CustomCard>
             {
-                propertyType !== null &&
-                <>
+                checkPostLimit === null &&
+                <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <CircularProgress />
+                    <Typography variant="h6" gutterBottom component="div">
+                        Đang kiểm tra số lượng bài đăng trong tháng
+                    </Typography>
+                </CustomCard>
+            }
+            {
+                checkPostLimit !== null && checkPostLimit.isExceeded &&
+                <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography variant="h6" gutterBottom component="div">
+                        Bạn đã đăng quá số lượng bài đăng trong tháng
+                    </Typography>
+                    <Typography variant="body1" gutterBottom component="div">
+                        Số lượng bài đăng trong tháng: {checkPostLimit.countPostInMonth}/{checkPostLimit.limitPostInMonth}
+                    </Typography>
 
+                    
+                </CustomCard>
+            }
+            {
+                checkPostLimit !== null && !checkPostLimit.isExceeded &&
+                <div>
                     <CustomCard>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Bạn là
-                        </Typography>
-                        <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {userTypes.map((option) => (
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {purposeTypes.map((option) => (
                                 <Chip
                                     key={option.value}
                                     sx={{
-                                        backgroundColor: userType === option.value ? '#026D4D' : '#DEFAF5',
-                                        color: userType === option.value ? '#DEFAF5' : '#026D4D',
+                                        backgroundColor: purposeType === option.value ? '#026D4D' : '#DEFAF5',
+                                        color: purposeType === option.value ? '#DEFAF5' : '#026D4D',
                                     }}
                                     label={option.label}
-                                    color={userType === option.value ? 'primary' : 'default'}
-                                    onClick={() => { setUserType(option.value as 'personal' | 'proseller'); }}
+                                    color={(option.value === propertyType) ? 'primary' : 'default'}
+                                    onClick={() => {
+                                        setPurposeType(option.value as 'rent' | 'sell');
+                                        setPropertyType(null);
+                                    }}
                                 />
                             ))}
                         </div>
-                    </CustomCard>
-
-                    <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Thông tin bài đăng
-                        </Typography>
                         <TextField
-                            id="title"
-                            label="Tiêu đề"
+                            id="property-type-select"
+                            select
+                            label="Loại bất động sản"
                             fullWidth
-                            value={title}
-                            onChange={(e) => {
-                                handleStringInput(e.target.value, setTitle, setTitleError, 250, true);
-                            }}
-                            error={titleError !== null}
-                            helperText={titleError}
-                            inputProps={{ maxLength: 250 }}
-                        />
-                        <TextField
-                            id="description"
-                            label="Mô tả chi tiết"
-                            fullWidth
-                            multiline
-                            rows={4}
-                            value={description}
-                            onChange={(e) => {
-                                handleStringInput(e.target.value, setDescription, setDescriptionError, 1000, true);
-                            }}
-                            error={descriptionError !== null}
-                            helperText={descriptionError}
-                            inputProps={{ maxLength: 1000 }}
-                        />
+                            value={propertyType}
+                            onChange={(e) => { handleSelectChange(e, setPropertyType); }}
+                            sx={{ marginTop: '16px' }}
+                        >
+                            {propertyTypes.map((option) => (
+                                (option.value === 'motel' && purposeType === 'sell') ? null
+                                    :
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                            ))}
+                        </TextField>
+
                     </CustomCard>
-                    <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Địa chỉ và hình ảnh
-                        </Typography>
-                        {/* Chọn địa chỉ */}
-                        <TextField
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            id="address"
-                            label="Địa chỉ"
-                            fullWidth
-                            value={address}
-                            onClick={
-                                () => {
-                                    setAddressDialogOpen(true);
-                                }
-                            }
-                            error={addressError !== null}
-                            helperText={addressError}
-                        />
-                        <ModernAddressDialog
-                            open={addressDialogOpen}
-                            onClose={
-                                () => {
-                                    setAddressDialogOpen(false);
-                                }
-                            }
-                            onConfirm={(provinceIndex, districtIndex, wardIndex, detail) => {
-                                const addressVal = addressUtils.getDetailedAddress(provinceIndex, districtIndex, wardIndex) ?? '';
-                                const detailVal = ((detail?.trim() ?? ''.length > 0).length > 0) ? `${detail}, ` : '';
-                                setAddress(`${detailVal}${addressVal}`);
-                                setAddressDetail({
-                                    provinceIndex,
-                                    districtIndex,
-                                    wardIndex,
-                                    detail,
-                                });
-                            }}
-                        />
-                        <Box>
-                            <div>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    ref={fileInputRef}
-                                    multiple
-                                    style={{ display: 'none' }}
-                                />
+                    {
+                        propertyType !== null &&
+                        <>
 
-                                <Button
-                                    onClick={handleOpenDialog}
-                                    variant="contained"
-                                    startIcon={<AddPhotoAlternateIcon />}
-                                >
-                                    Chọn ảnh
-                                </Button>
-                            </div>
-                            <Box mt={2} sx={{
-                                // Border radius 12px and 1px border color #BDBDBD dotted
-                                borderRadius: '12px',
-                                border: '1px dashed #026D4D',
-                                overflow: 'hidden',
-                                padding: '8px',
-                            }}>
-                                {
-                                    selectedImages.length === 0 ? (
-                                        <Box sx={{
-                                            display: 'flex',
-                                            height: '340px',
-                                            flexDirection: 'column',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            gap: '14px',
-                                            alignSelf: 'stretch',
-                                        }}>
-                                            <AddPhotoAlternateIcon sx={{ fontSize: 36, color: '$026D4D' }} />
-                                            <Typography>Chưa có ảnh nào được chọn</Typography>
-                                        </Box>
-                                    ) :
-                                        <Grid container spacing={2}>
-                                            {selectedImages.map((image) => {
-                                                const imageUrl = URL.createObjectURL(image);
+                            <CustomCard>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Bạn là
+                                </Typography>
+                                <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                    {userTypes.map((option) => (
+                                        <Chip
+                                            key={option.value}
+                                            sx={{
+                                                backgroundColor: userType === option.value ? '#026D4D' : '#DEFAF5',
+                                                color: userType === option.value ? '#DEFAF5' : '#026D4D',
+                                            }}
+                                            label={option.label}
+                                            color={userType === option.value ? 'primary' : 'default'}
+                                            onClick={() => { setUserType(option.value as 'personal' | 'proseller'); }}
+                                        />
+                                    ))}
+                                </div>
+                            </CustomCard>
 
-                                                return (
-                                                    <Grid item key={imageUrl}>
-                                                        <Paper elevation={3} sx={{ maxWidth: '100px' }}>
-                                                            <Box position="relative" >
-                                                                <img
-                                                                    src={imageUrl}
-                                                                    alt="Selected"
-                                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                                />
-                                                                <IconButton
-                                                                    onClick={() => { handleRemoveImage(imageUrl); }}
-                                                                    style={{ position: 'absolute', top: 0, right: 0 }}
-                                                                >
-                                                                    <Typography>X</Typography>
-                                                                </IconButton>
-                                                            </Box>
-                                                        </Paper>
-
-                                                    </Grid>
-                                                )
-                                            })}
-                                        </Grid>
-                                }
-                            </Box>
-                        </Box>
-                    </CustomCard>
-
-                    <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Thông tin chi tiết
-                        </Typography>
-                        {/* Tên phân khu, Mã lô */}
-                        {
-                            ['land'].includes(propertyType ?? '') &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
+                            <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Thông tin bài đăng
+                                </Typography>
                                 <TextField
-                                    id="subdivision-name" label="Tên phân khu" fullWidth
-                                    inputProps={{ maxLength: 100 }}
-                                    value={subdivisionName} onChange={(e) => { setSubdivisionName(e.target.value); }}
+                                    id="title"
+                                    label="Tiêu đề"
+                                    fullWidth
+                                    value={title}
+                                    onChange={(e) => {
+                                        handleStringInput(e.target.value, setTitle, setTitleError, 250, true);
+                                    }}
+                                    error={titleError !== null}
+                                    helperText={titleError}
+                                    inputProps={{ maxLength: 250 }}
                                 />
-                                <TextField id="lot-number" label="Mã lô" fullWidth
-                                    inputProps={{ maxLength: 100 }}
-                                    value={lotNumber} onChange={(e) => { setLotNumber(e.target.value); }}
+                                <TextField
+                                    id="description"
+                                    label="Mô tả chi tiết"
+                                    fullWidth
+                                    multiline
+                                    rows={4}
+                                    value={description}
+                                    onChange={(e) => {
+                                        handleStringInput(e.target.value, setDescription, setDescriptionError, 1000, true);
+                                    }}
+                                    error={descriptionError !== null}
+                                    helperText={descriptionError}
+                                    inputProps={{ maxLength: 1000 }}
                                 />
-                            </Box>
-                        }
-                        {
-                            propertyType === 'land' &&
-                            <TextField id="land-type" select label="Loại đất" fullWidth
-                                value={landType} onChange={(e) => { setLandType(e.target.value as LandTypes); setLandTypeError(null); }}
-                                error={landTypeError !== null}
-                                helperText={landTypeError}
-                            >
+                            </CustomCard>
+                            <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Địa chỉ và hình ảnh
+                                </Typography>
+                                {/* Chọn địa chỉ */}
+                                <TextField
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    id="address"
+                                    label="Địa chỉ"
+                                    fullWidth
+                                    value={address}
+                                    onClick={
+                                        () => {
+                                            setAddressDialogOpen(true);
+                                        }
+                                    }
+                                    error={addressError !== null}
+                                    helperText={addressError}
+                                />
+                                <ModernAddressDialog
+                                    open={addressDialogOpen}
+                                    onClose={
+                                        () => {
+                                            setAddressDialogOpen(false);
+                                        }
+                                    }
+                                    onConfirm={(provinceIndex, districtIndex, wardIndex, detail) => {
+                                        const addressVal = addressUtils.getDetailedAddress(provinceIndex, districtIndex, wardIndex) ?? '';
+                                        const detailVal = ((detail?.trim() ?? ''.length > 0).length > 0) ? `${detail}, ` : '';
+                                        setAddress(`${detailVal}${addressVal}`);
+                                        setAddressDetail({
+                                            provinceIndex,
+                                            districtIndex,
+                                            wardIndex,
+                                            detail,
+                                        });
+                                    }}
+                                />
+                                <Box>
+                                    <div>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            ref={fileInputRef}
+                                            multiple
+                                            style={{ display: 'none' }}
+                                        />
+
+                                        <Button
+                                            onClick={handleOpenDialog}
+                                            variant="contained"
+                                            startIcon={<AddPhotoAlternateIcon />}
+                                        >
+                                            Chọn ảnh
+                                        </Button>
+                                    </div>
+                                    <Box mt={2} sx={{
+                                        // Border radius 12px and 1px border color #BDBDBD dotted
+                                        borderRadius: '12px',
+                                        border: '1px dashed #026D4D',
+                                        overflow: 'hidden',
+                                        padding: '8px',
+                                    }}>
+                                        {
+                                            selectedImages.length === 0 ? (
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    height: '340px',
+                                                    flexDirection: 'column',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    gap: '14px',
+                                                    alignSelf: 'stretch',
+                                                }}>
+                                                    <AddPhotoAlternateIcon sx={{ fontSize: 36, color: '$026D4D' }} />
+                                                    <Typography>Chưa có ảnh nào được chọn</Typography>
+                                                </Box>
+                                            ) :
+                                                <Grid container spacing={2}>
+                                                    {selectedImages.map((image) => {
+                                                        const imageUrl = URL.createObjectURL(image);
+
+                                                        return (
+                                                            <Grid item key={imageUrl}>
+                                                                <Paper elevation={3} sx={{ maxWidth: '100px' }}>
+                                                                    <Box position="relative" >
+                                                                        <img
+                                                                            src={imageUrl}
+                                                                            alt="Selected"
+                                                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                                        />
+                                                                        <IconButton
+                                                                            onClick={() => { handleRemoveImage(imageUrl); }}
+                                                                            style={{ position: 'absolute', top: 0, right: 0 }}
+                                                                        >
+                                                                            <Typography>X</Typography>
+                                                                        </IconButton>
+                                                                    </Box>
+                                                                </Paper>
+
+                                                            </Grid>
+                                                        )
+                                                    })}
+                                                </Grid>
+                                        }
+                                    </Box>
+                                </Box>
+                            </CustomCard>
+
+                            <CustomCard sx={{ gap: '16px', display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Thông tin chi tiết
+                                </Typography>
+                                {/* Tên phân khu, Mã lô */}
                                 {
-                                    Object.values(LandTypes).map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {landTypeToString(option)}
-                                        </MenuItem>
-                                    ))
+                                    ['land'].includes(propertyType ?? '') &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField
+                                            id="subdivision-name" label="Tên phân khu" fullWidth
+                                            inputProps={{ maxLength: 100 }}
+                                            value={subdivisionName} onChange={(e) => { setSubdivisionName(e.target.value); }}
+                                        />
+                                        <TextField id="lot-number" label="Mã lô" fullWidth
+                                            inputProps={{ maxLength: 100 }}
+                                            value={lotNumber} onChange={(e) => { setLotNumber(e.target.value); }}
+                                        />
+                                    </Box>
                                 }
-                            </TextField>
-                        }
-                        {
-                            // Loại văn phòng
-                            propertyType === 'office' &&
-                            <TextField id="office-type" select label="Loại văn phòng" fullWidth
-                                value={officeType} onChange={(e) => { setOfficeType(e.target.value as OfficeTypes); setOfficeTypeError(null); }}
-                                error={officeTypeError !== null}
-                                helperText={officeTypeError}
-                            >
                                 {
-                                    Object.values(OfficeTypes).map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {officeTypeToString(option)}
-                                        </MenuItem>
-                                    ))
+                                    propertyType === 'land' &&
+                                    <TextField id="land-type" select label="Loại đất" fullWidth
+                                        value={landType} onChange={(e) => { setLandType(e.target.value as LandTypes); setLandTypeError(null); }}
+                                        error={landTypeError !== null}
+                                        helperText={landTypeError}
+                                    >
+                                        {
+                                            Object.values(LandTypes).map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {landTypeToString(option)}
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
                                 }
-                            </TextField>
-                        }
-                        {/* Tình trạng bàn giao */
-                            propertyType === 'apartment' &&
-                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                {isHandedOvers.map((option) => (
-                                    <Chip
-                                        key={option.value.toString()}
-                                        sx={{
-                                            backgroundColor: isHandOver === option.value ? '#026D4D' : '#DEFAF5',
-                                            color: isHandOver === option.value ? '#DEFAF5' : '#026D4D',
+                                {
+                                    // Loại văn phòng
+                                    propertyType === 'office' &&
+                                    <TextField id="office-type" select label="Loại văn phòng" fullWidth
+                                        value={officeType} onChange={(e) => { setOfficeType(e.target.value as OfficeTypes); setOfficeTypeError(null); }}
+                                        error={officeTypeError !== null}
+                                        helperText={officeTypeError}
+                                    >
+                                        {
+                                            Object.values(OfficeTypes).map((option) => (
+                                                <MenuItem key={option} value={option}>
+                                                    {officeTypeToString(option)}
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
+                                }
+                                {/* Tình trạng bàn giao */
+                                    propertyType === 'apartment' &&
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        {isHandedOvers.map((option) => (
+                                            <Chip
+                                                key={option.value.toString()}
+                                                sx={{
+                                                    backgroundColor: isHandOver === option.value ? '#026D4D' : '#DEFAF5',
+                                                    color: isHandOver === option.value ? '#DEFAF5' : '#026D4D',
+                                                }}
+                                                label={option.label}
+                                                color={isHandOver === option.value ? 'primary' : 'default'}
+                                                onClick={() => {
+                                                    setIsHandOver(option.value);
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                }
+                                {
+                                    propertyType === 'apartment' &&
+                                    <TextField id="apartment-type-select" select label="Loại căn hộ" fullWidth
+                                        value={apartmentType} onChange={(e) => { setApartmentType(e.target.value as ApartmentTypes); setApartmentTypeError(null); }}
+                                        error={apartmentTypeError !== null}
+                                        helperText={apartmentTypeError}
+                                    >
+                                        {Object.values(ApartmentTypes).map((option) => (
+                                            <MenuItem key={option} value={option}>
+                                                {apartmentTypeToString(option)}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+                                {
+                                    propertyType === 'house' &&
+                                    <TextField id="house-type-select" select label="Loại nhà ở"
+                                        value={houseType}
+                                        error={houseTypeError !== null}
+                                        fullWidth onChange={(e) => {
+                                            setHouseTypeError(null);
+                                            setHouseType(e.target.value as HouseTypes);
+                                        }} >
+                                        {Object.values(HouseTypes).map((option) => (
+                                            <MenuItem key={option} value={option}>
+                                                {houseTypeToString(option)}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+                                {
+                                    ['house', 'apartment'].includes(propertyType ?? '') &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField id="number-of-bedroom" label="Số phòng ngủ"
+                                            value={numberOfBedroom}
+                                            // Minimum value is 0
+                                            inputProps={{ min: 0 }}
+                                            fullWidth onChange={(e) => {
+                                                setNumberOfBedroom(e.target.value.length === 0 ? null : Number.parseInt(e.target.value));
+                                            }} type='number' />
+                                        <TextField id="number-of-bathroom" label="Số phòng vệ sinh"
+                                            value={numberOfBathroom}
+                                            // Minimum value is 0
+                                            inputProps={{ min: 0 }}
+                                            fullWidth onChange={(e) => {
+                                                setNumberOfBathroom(e.target.value.length === 0 ? null : Number.parseInt(e.target.value));
+                                            }} type='number' />
+                                    </Box>
+                                }
+
+                                {
+                                    propertyType === 'apartment' &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField id="number-of-floor" label="Số tầng" fullWidth
+                                            value={numberOfFloor}
+                                            inputProps={{ min: 0 }}
+                                            type='number'
+                                            onChange={(e) => {
+                                                setNumberOfFloor(Number.parseInt(e.target.value));
+                                            }} />
+
+                                        <TextField
+                                            id="balcony-direction"
+                                            label="Hướng ban công"
+                                            fullWidth
+                                            select
+                                            value={balconyDirection}
+                                            onChange={(e) => {
+                                                setBalconyDirection(e.target.value as Direction);
+                                            }}
+                                        >
+                                            {Object.values(Direction).map((direction) => (
+                                                <MenuItem key={direction} value={direction}>
+                                                    {directionEnumToString(direction)}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Box>
+                                }
+                                {
+                                    ['house', 'land', 'office'].includes(propertyType ?? '') &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField
+                                            id="main-direction"
+                                            label={['house', 'office'].includes(propertyType ?? '') ? 'Hướng cửa chính' : 'Hướng đất'}
+                                            fullWidth
+                                            select
+                                            value={mainDirection}
+                                            onChange={(e) => {
+                                                setMainDirection(e.target.value as Direction);
+                                            }}
+
+                                        >
+                                            {Object.values(Direction).map((direction) => (
+                                                <MenuItem key={direction} value={direction}>
+                                                    {directionEnumToString(direction)}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Box>
+                                }
+
+
+                                {
+                                    propertyType === 'apartment' &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField id="floor" label="Tầng" fullWidth
+                                            value={floor}
+                                            onChange={(e) => {
+                                                setFloor(e.target.value);
+                                            }} />
+                                        <TextField id="block" label="Block/Tháp"
+                                            value={block}
+                                            fullWidth onChange={(e) => {
+                                                setBlock(e.target.value);
+                                            }} />
+                                    </Box>
+                                }
+                                {
+                                    // Tiền điện, tiền nước
+                                    propertyType === 'motel' &&
+                                    <Box sx={{ display: 'flex', gap: '16px' }}>
+                                        <TextField id="electricity-price" label="Tiền điện" fullWidth
+                                            type='number'
+                                            inputProps={{ min: 0 }}
+                                            value={electricityPrice} onChange={(e) => {
+                                                handleNumberInput(e.target.value, setElectricityPrice, setElectricityPriceError, minElectricityPrice, maxElectricityPrice);
+                                            }}
+                                            error={electricityPriceError !== null}
+                                            helperText={electricityPriceError}
+                                        />
+                                        <TextField id="water-price" label="Tiền nước" fullWidth
+                                            type='number'
+                                            inputProps={{ min: 0 }}
+                                            value={waterPrice} onChange={(e) => {
+                                                handleNumberInput(e.target.value, setWaterPrice, setWaterPriceError, minWaterPrice, maxWaterPrice);
+                                            }}
+                                            error={waterPriceError !== null}
+                                            helperText={waterPriceError}
+                                        />
+                                    </Box>
+                                }
+
+                            </CustomCard>
+
+                            <CustomCard>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Diện tích và giá
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: '16px' }}>
+                                    <TextField
+                                        id="area"
+                                        label="Diện tích (m2)"
+                                        fullWidth
+                                        onChange={(e) => {
+                                            handleNumberInput(e.target.value, setArea, setAreaError, minMeter, maxMeter);
                                         }}
-                                        label={option.label}
-                                        color={isHandOver === option.value ? 'primary' : 'default'}
-                                        onClick={() => {
-                                            setIsHandOver(option.value);
-                                        }}
+                                        type='number'
+                                        inputProps={{ min: 0 }}
+                                        error={areaError !== null}
+                                        helperText={areaError}
+                                        value={area}
                                     />
-                                ))}
-                            </div>
-                        }
-                        {
-                            propertyType === 'apartment' &&
-                            <TextField id="apartment-type-select" select label="Loại căn hộ" fullWidth
-                                value={apartmentType} onChange={(e) => { setApartmentType(e.target.value as ApartmentTypes); setApartmentTypeError(null); }}
-                                error={apartmentTypeError !== null}
-                                helperText={apartmentTypeError}
+                                    <TextField
+                                        id="price"
+                                        label="Giá"
+                                        fullWidth
+                                        onChange={(e) => {
+                                            handleNumberInput(e.target.value, setRentPrice, setPriceError, minPrice, maxPrice);
+                                        }}
+                                        type='number'
+                                        inputProps={{ min: 0 }}
+                                        error={rentPriceError !== null}
+                                        helperText={rentPriceError}
+                                    />
+                                </Box>
+                                {/* Diện tích sử dụng */}
+                                {
+                                    propertyType === 'house' &&
+                                    <TextField
+                                        id="used-area"
+                                        label="Diện tích sử dụng (m2)"
+                                        fullWidth
+                                        sx={{ marginTop: '16px' }}
+                                        onChange={(e) => { setUsedArea(Number.parseInt(e.target.value)); }}
+                                        value={usedArea}
+                                        type='number'
+                                        inputProps={{ min: 0 }}
+
+                                    />
+                                }
+                                {/* Chiều ngang, chiều dài */}
+                                {
+                                    ['house', 'land'].includes(propertyType ?? '') &&
+                                    <Box sx={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
+                                        <TextField
+                                            id="width"
+                                            label="Chiều ngang (m)"
+                                            fullWidth
+                                            value={mWidth}
+                                            onChange={(e) => {
+                                                handleNumberInput(e.target.value, setWidth, setWidthError, minMeter, maxMeter);
+                                            }}
+                                            type='number'
+                                            inputProps={{ min: 0 }}
+                                            error={widthError !== null}
+                                            helperText={widthError}
+                                        />
+                                        <TextField
+                                            id="length"
+                                            label="Chiều dài (m)"
+                                            fullWidth
+                                            value={mLength}
+                                            onChange={(e) => {
+                                                handleNumberInput(e.target.value, setLength, setLengthError, minMeter, maxMeter);
+                                            }}
+                                            type='number'
+                                            inputProps={{ min: 0 }}
+                                            error={lengthError !== null}
+                                            helperText={lengthError}
+                                        />
+                                    </Box>
+                                }
+
+                                {/* Giá đặt cọc */}
+                                {
+                                    purposeType === 'rent' &&
+                                    <TextField
+                                        id="deposit"
+                                        label="Giá đặt cọc"
+                                        fullWidth
+                                        sx={{ marginTop: '16px' }}
+                                        value={deposit}
+                                        onChange={(e) => {
+                                            handleNumberInput(e.target.value, setDeposit, setDepositError, minPrice, maxPrice);
+                                        }}
+                                        type='number'
+                                        inputProps={{ min: minPrice, max: maxPrice }}
+                                        error={depositError !== null}
+                                        helperText={depositError}
+                                    />
+                                }
+                            </CustomCard>
+                            {/* Tiện ích */}
+                            <CustomCard>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Tiện ích
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: '16px' }}>
+                                    {
+                                        propertyType !== 'land' &&
+                                        <TextField
+                                            id="furniture"
+                                            label="Tình trạng nội thất"
+                                            fullWidth
+                                            select
+                                            onChange={(e) => {
+                                                setFurnitureStatus(e.target.value as FurnitureStatus);
+                                            }}
+                                            value={furnitureStatus}
+                                        >
+                                            {
+                                                Object.values(FurnitureStatus).map((status) => (
+                                                    <MenuItem key={status} value={status}>{furnitureStatusToString(status)}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+                                    }
+                                    {
+                                        propertyType !== 'motel' &&
+                                        <TextField
+                                            id="lega;-document-status"
+                                            label="Tình trạng pháp lý"
+                                            fullWidth
+                                            select
+                                            value={legalDocumentStatus}
+                                            onChange={(e) => {
+                                                setLegalDocumentStatus(e.target.value as LegalDocumentStatus);
+                                            }}
+                                        >
+                                            {
+                                                Object.values(LegalDocumentStatus).map((status) => (
+                                                    <MenuItem key={status} value={status}>{legalDocumentStatusToString(status)}</MenuItem>
+                                                ))
+                                            }
+
+                                        </TextField>
+                                    }
+                                </Box>
+                                {/* Check box */}
+                                {
+                                    propertyType === 'apartment' &&
+                                    <FormControlLabel control={<Checkbox
+                                        checked={isCorner}
+                                        onChange={(e) => { setIsCorner(e.target.checked); }}
+                                    />} label="Căn góc"
+
+                                    />
+                                }
+                                {
+                                    ['house', 'land'].includes(propertyType ?? '')
+                                    && <>
+
+                                        <FormControlLabel control={<Checkbox
+                                            value={isHem}
+                                            onChange={(e) => { setIsHem(e.target.checked); }}
+                                        />} label="Hẻm xe hơi" />
+                                        <FormControlLabel control={<Checkbox
+                                            value={isNoHau}
+                                            onChange={(e) => { setIsNoHau(e.target.checked); }}
+                                        />} label="Nở hậu" /></>
+                                }
+                                {
+                                    ['house', 'land', 'office'].includes(propertyType ?? '') &&
+                                    <FormControlLabel control={<Checkbox
+                                        value={isMatTien}
+                                        onChange={(e) => { setIsMatTien(e.target.checked); }}
+                                    />} label="Mặt tiền" />
+                                }
+                            </CustomCard>
+                            <LoadingButton
+                                variant="contained"
+                                onClick={() => { onSubmit(); }}
+                                sx={{ backgroundColor: '#026D4D', color: '#FFFFFF' }}
+                                fullWidth
+                                loading={loading}
                             >
-                                {Object.values(ApartmentTypes).map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {apartmentTypeToString(option)}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        }
-                        {
-                            propertyType === 'house' &&
-                            <TextField id="house-type-select" select label="Loại nhà ở"
-                                value={houseType}
-                                error={houseTypeError !== null}
-                                fullWidth onChange={(e) => {
-                                    setHouseTypeError(null);
-                                    setHouseType(e.target.value as HouseTypes);
-                                }} >
-                                {Object.values(HouseTypes).map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {houseTypeToString(option)}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        }
-                        {
-                            ['house', 'apartment'].includes(propertyType ?? '') &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <TextField id="number-of-bedroom" label="Số phòng ngủ"
-                                    value={numberOfBedroom}
-                                    // Minimum value is 0
-                                    inputProps={{ min: 0 }}
-                                    fullWidth onChange={(e) => {
-                                        setNumberOfBedroom(e.target.value.length === 0 ? null : Number.parseInt(e.target.value));
-                                    }} type='number' />
-                                <TextField id="number-of-bathroom" label="Số phòng vệ sinh"
-                                    value={numberOfBathroom}
-                                    // Minimum value is 0
-                                    inputProps={{ min: 0 }}
-                                    fullWidth onChange={(e) => {
-                                        setNumberOfBathroom(e.target.value.length === 0 ? null : Number.parseInt(e.target.value));
-                                    }} type='number' />
-                            </Box>
-                        }
-
-                        {
-                            propertyType === 'apartment' &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <TextField id="number-of-floor" label="Số tầng" fullWidth
-                                    value={numberOfFloor}
-                                    inputProps={{ min: 0 }}
-                                    type='number'
-                                    onChange={(e) => {
-                                        setNumberOfFloor(Number.parseInt(e.target.value));
-                                    }} />
-
-                                <TextField
-                                    id="balcony-direction"
-                                    label="Hướng ban công"
-                                    fullWidth
-                                    select
-                                    value={balconyDirection}
-                                    onChange={(e) => {
-                                        setBalconyDirection(e.target.value as Direction);
-                                    }}
-                                >
-                                    {Object.values(Direction).map((direction) => (
-                                        <MenuItem key={direction} value={direction}>
-                                            {directionEnumToString(direction)}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Box>
-                        }
-                        {
-                            ['house', 'land', 'office'].includes(propertyType ?? '') &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <TextField
-                                    id="main-direction"
-                                    label={['house', 'office'].includes(propertyType ?? '') ? 'Hướng cửa chính' : 'Hướng đất'}
-                                    fullWidth
-                                    select
-                                    value={mainDirection}
-                                    onChange={(e) => {
-                                        setMainDirection(e.target.value as Direction);
-                                    }}
-
-                                >
-                                    {Object.values(Direction).map((direction) => (
-                                        <MenuItem key={direction} value={direction}>
-                                            {directionEnumToString(direction)}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Box>
-                        }
-
-
-                        {
-                            propertyType === 'apartment' &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <TextField id="floor" label="Tầng" fullWidth
-                                    value={floor}
-                                    onChange={(e) => {
-                                        setFloor(e.target.value);
-                                    }} />
-                                <TextField id="block" label="Block/Tháp"
-                                    value={block}
-                                    fullWidth onChange={(e) => {
-                                        setBlock(e.target.value);
-                                    }} />
-                            </Box>
-                        }
-                        {
-                            // Tiền điện, tiền nước
-                            propertyType === 'motel' &&
-                            <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <TextField id="electricity-price" label="Tiền điện" fullWidth
-                                    type='number'
-                                    inputProps={{ min: 0 }}
-                                    value={electricityPrice} onChange={(e) => {
-                                        handleNumberInput(e.target.value, setElectricityPrice, setElectricityPriceError, minElectricityPrice, maxElectricityPrice);
-                                    }}
-                                    error={electricityPriceError !== null}
-                                    helperText={electricityPriceError}
-                                />
-                                <TextField id="water-price" label="Tiền nước" fullWidth
-                                    type='number'
-                                    inputProps={{ min: 0 }}
-                                    value={waterPrice} onChange={(e) => {
-                                        handleNumberInput(e.target.value, setWaterPrice, setWaterPriceError, minWaterPrice, maxWaterPrice);
-                                    }}
-                                    error={waterPriceError !== null}
-                                    helperText={waterPriceError}
-                                />
-                            </Box>
-                        }
-
-                    </CustomCard>
-
-                    <CustomCard>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Diện tích và giá
-                        </Typography>
-                        <Box sx={{ display: 'flex', gap: '16px' }}>
-                            <TextField
-                                id="area"
-                                label="Diện tích (m2)"
-                                fullWidth
-                                onChange={(e) => {
-                                    handleNumberInput(e.target.value, setArea, setAreaError, minMeter, maxMeter);
-                                }}
-                                type='number'
-                                inputProps={{ min: 0 }}
-                                error={areaError !== null}
-                                helperText={areaError}
-                                value={area}
-                            />
-                            <TextField
-                                id="price"
-                                label="Giá"
-                                fullWidth
-                                onChange={(e) => {
-                                    handleNumberInput(e.target.value, setRentPrice, setPriceError, minPrice, maxPrice);
-                                }}
-                                type='number'
-                                inputProps={{ min: 0 }}
-                                error={rentPriceError !== null}
-                                helperText={rentPriceError}
-                            />
-                        </Box>
-                        {/* Diện tích sử dụng */}
-                        {
-                            propertyType === 'house' &&
-                            <TextField
-                                id="used-area"
-                                label="Diện tích sử dụng (m2)"
-                                fullWidth
-                                sx={{ marginTop: '16px' }}
-                                onChange={(e) => { setUsedArea(Number.parseInt(e.target.value)); }}
-                                value={usedArea}
-                                type='number'
-                                inputProps={{ min: 0 }}
-
-                            />
-                        }
-                        {/* Chiều ngang, chiều dài */}
-                        {
-                            ['house', 'land'].includes(propertyType ?? '') &&
-                            <Box sx={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-                                <TextField
-                                    id="width"
-                                    label="Chiều ngang (m)"
-                                    fullWidth
-                                    value={mWidth}
-                                    onChange={(e) => {
-                                        handleNumberInput(e.target.value, setWidth, setWidthError, minMeter, maxMeter);
-                                    }}
-                                    type='number'
-                                    inputProps={{ min: 0 }}
-                                    error={widthError !== null}
-                                    helperText={widthError}
-                                />
-                                <TextField
-                                    id="length"
-                                    label="Chiều dài (m)"
-                                    fullWidth
-                                    value={mLength}
-                                    onChange={(e) => {
-                                        handleNumberInput(e.target.value, setLength, setLengthError, minMeter, maxMeter);
-                                    }}
-                                    type='number'
-                                    inputProps={{ min: 0 }}
-                                    error={lengthError !== null}
-                                    helperText={lengthError}
-                                />
-                            </Box>
-                        }
-
-                        {/* Giá đặt cọc */}
-                        {
-                            purposeType === 'rent' &&
-                            <TextField
-                                id="deposit"
-                                label="Giá đặt cọc"
-                                fullWidth
-                                sx={{ marginTop: '16px' }}
-                                value={deposit}
-                                onChange={(e) => {
-                                    handleNumberInput(e.target.value, setDeposit, setDepositError, minPrice, maxPrice);
-                                }}
-                                type='number'
-                                inputProps={{ min: minPrice, max: maxPrice }}
-                                error={depositError !== null}
-                                helperText={depositError}
-                            />
-                        }
-                    </CustomCard>
-                    {/* Tiện ích */}
-                    <CustomCard>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Tiện ích
-                        </Typography>
-                        <Box sx={{ display: 'flex', gap: '16px' }}>
-                            {
-                                propertyType !== 'land' &&
-                                <TextField
-                                    id="furniture"
-                                    label="Tình trạng nội thất"
-                                    fullWidth
-                                    select
-                                    onChange={(e) => {
-                                        setFurnitureStatus(e.target.value as FurnitureStatus);
-                                    }}
-                                    value={furnitureStatus}
-                                >
-                                    {
-                                        Object.values(FurnitureStatus).map((status) => (
-                                            <MenuItem key={status} value={status}>{furnitureStatusToString(status)}</MenuItem>
-                                        ))
-                                    }
-                                </TextField>
-                            }
-                            {
-                                propertyType !== 'motel' &&
-                                <TextField
-                                    id="lega;-document-status"
-                                    label="Tình trạng pháp lý"
-                                    fullWidth
-                                    select
-                                    value={legalDocumentStatus}
-                                    onChange={(e) => {
-                                        setLegalDocumentStatus(e.target.value as LegalDocumentStatus);
-                                    }}
-                                >
-                                    {
-                                        Object.values(LegalDocumentStatus).map((status) => (
-                                            <MenuItem key={status} value={status}>{legalDocumentStatusToString(status)}</MenuItem>
-                                        ))
-                                    }
-
-                                </TextField>
-                            }
-                        </Box>
-                        {/* Check box */}
-                        {
-                            propertyType === 'apartment' &&
-                            <FormControlLabel control={<Checkbox
-                                checked={isCorner}
-                                onChange={(e) => { setIsCorner(e.target.checked); }}
-                            />} label="Căn góc"
-
-                            />
-                        }
-                        {
-                            ['house', 'land'].includes(propertyType ?? '')
-                            && <>
-
-                                <FormControlLabel control={<Checkbox
-                                    value={isHem}
-                                    onChange={(e) => { setIsHem(e.target.checked); }}
-                                />} label="Hẻm xe hơi" />
-                                <FormControlLabel control={<Checkbox
-                                    value={isNoHau}
-                                    onChange={(e) => { setIsNoHau(e.target.checked); }}
-                                />} label="Nở hậu" /></>
-                        }
-                        {
-                            ['house', 'land', 'office'].includes(propertyType ?? '') &&
-                            <FormControlLabel control={<Checkbox
-                                value={isMatTien}
-                                onChange={(e) => { setIsMatTien(e.target.checked); }}
-                            />} label="Mặt tiền" />
-                        }
-                    </CustomCard>
-                    <LoadingButton
-                        variant="contained"
-                        onClick={() => { onSubmit(); }}
-                        sx={{ backgroundColor: '#026D4D', color: '#FFFFFF' }}
-                        fullWidth
-                        loading={loading}
-                    >
-                        Đăng bài
-                    </LoadingButton>
-                </>
+                                Đăng bài
+                            </LoadingButton>
+                        </>
+                    }
+                </div>
             }
         </Box>
     );
