@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Pagination, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Pagination, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
@@ -12,6 +12,9 @@ interface ModernDetailPageProps {
 }
 
 export function ModernNewsPostedPage({ user }: ModernDetailPageProps): JSX.Element {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [posts, setPosts] = React.useState<{
@@ -54,13 +57,14 @@ export function ModernNewsPostedPage({ user }: ModernDetailPageProps): JSX.Eleme
   return (
     <Box
       sx={{
-        width: '50%',
+        width: matches ? '50%' : '95%',
         padding: 2,
         borderRadius: 2,
         border: '1px solid',
         borderColor: 'divider',
         backgroundColor: 'background.default',
         height: 'fit-content',
+        alignSelf: 'center',
       }}
     >
       <Typography

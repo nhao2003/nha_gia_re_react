@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Grid, Pagination, Stack, Typography } from '@mui/material';
 import { ModernHomeCardHorizontal } from './ModernHomeCardHorizontal';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import dateUtils from '../../../../../utils/dateUtils';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -13,6 +13,7 @@ interface SearchProps {
   numOfPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  isLoading: boolean;
 }
 
 export function ModernTabPanelSearch(props: SearchProps) {
@@ -32,47 +33,60 @@ export function ModernTabPanelSearch(props: SearchProps) {
     console.log('num_of_page', props.numOfPages);
   }, [props]);
 
-  return isLoading ? (
-    <Box
-      sx={{
-        width: '100%',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  ) : (
-    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} width={'100%'}>
-      {props.posts.map((post, index) => (
-        <Grid item xs={4} sm={8} md={12} key={index}>
-          <ModernHomeCardHorizontal
-            image={post.images[0]}
-            title={post.title}
-            price={post.price + ' VNĐ'}
-            address={post.address_detail ?? 'Chưa cập nhật'}
-            type={post.is_pro_seller}
-            avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
-            name={post.user.first_name + ' ' + post.user.last_name}
-            time={dateUtils.getTimeAgoVi(post.posted_date)}
-            onClick={() => {
-              navigate(`/details/${post.id}`, {
-                state: post,
-              });
+  const listRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (listRef.current !== null) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, [props.isLoading]);
+
+  return (
+    <Stack ref={listRef}>
+      {props.isLoading ? (
+        <Box
+          sx={{
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} width={'100%'}>
+          {props.posts.map((post, index) => (
+            <Grid item xs={4} sm={8} md={12} key={index}>
+              <ModernHomeCardHorizontal
+                image={post.images[0]}
+                title={post.title}
+                price={post.price}
+                address={post.address_detail ?? 'Chưa cập nhật'}
+                type={post.is_pro_seller}
+                avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
+                name={post.user.first_name + ' ' + post.user.last_name}
+                time={dateUtils.getTimeAgoVi(post.posted_date)}
+                onClick={() => {
+                  navigate(`/details/${post.id}`, {
+                    state: post,
+                  });
+                }}
+              />
+            </Grid>
+          ))}
+          <Stack
+            sx={{
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '10px',
             }}
-          />
+          ></Stack>
         </Grid>
-      ))}
-      <Stack
-        sx={{
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '10px',
-        }}
-      >
+      )}
+      <Stack direction={'row'} justifyContent={'center'}>
         {props.posts.length > 0 ? (
           <Pagination
             count={props.numOfPages}
@@ -93,6 +107,6 @@ export function ModernTabPanelSearch(props: SearchProps) {
           </Typography>
         )}
       </Stack>
-    </Grid>
+    </Stack>
   );
 }

@@ -478,7 +478,7 @@ function HomePage(): JSX.Element {
                     key={index}
                     image={post.images[0]}
                     title={post.title}
-                    price={`${post.price} VND/m2`}
+                    price={post.price}
                     address={post.address_detail ?? 'Chưa cập nhật'}
                     sx={{
                       overflow: 'hidden',
@@ -552,7 +552,7 @@ function HomePage(): JSX.Element {
                     key={index}
                     image={post.images[0]}
                     title={post.title}
-                    price={`${post.price} VND/m2`}
+                    price={post.price}
                     address={post.address_detail ?? 'Chưa cập nhật'}
                     sx={{
                       overflow: 'hidden',

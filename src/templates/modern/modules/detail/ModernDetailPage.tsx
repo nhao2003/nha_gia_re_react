@@ -193,6 +193,8 @@ export function ModernDetailPage(): JSX.Element {
 
   const features: any = post.features;
 
+  const numberFormat = new Intl.NumberFormat('en-US');
+
   return post === null ? (
     <Box
       sx={{
@@ -250,7 +252,7 @@ export function ModernDetailPage(): JSX.Element {
 
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} alignItems={'center'}>
                 <Typography fontSize={'22px'} fontWeight={'700'} color={CUSTOM_COLOR.orange}>
-                  {post.price} VNĐ - {post.area} <span>m</span>
+                  {numberFormat.format(post.price).replaceAll(',', '.')} VNĐ - {post.area} <span>m</span>
                   <sup style={{ fontSize: '12px' }}>2</sup>
                 </Typography>
 
@@ -402,21 +404,7 @@ export function ModernDetailPage(): JSX.Element {
                       </>
                     }
                   />
-                  {features?.main_door_direction ?? (
-                    <TileIcon
-                      icon={MeetingRoomOutlinedIcon}
-                      title='Hướng cửa chính'
-                      value={
-                        features.main_door_direction === Direction.north
-                          ? 'Bắc'
-                          : features.main_door_direction === Direction.south
-                            ? 'Nam'
-                            : features.main_door_direction === Direction.west
-                              ? 'Tây'
-                              : 'Đông'
-                      }
-                    />
-                  )}
+
                   {features?.legal_document_status ?? (
                     <TileIcon
                       icon={ReceiptLongOutlinedIcon}

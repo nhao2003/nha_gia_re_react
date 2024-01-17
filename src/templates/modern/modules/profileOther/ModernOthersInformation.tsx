@@ -1,9 +1,9 @@
-import { Avatar, Box, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import { Tile } from './component/Tile';
 import { ModernNewsPostedPage } from './component/ModernNewsPostedPage';
-import React from 'react';
+import React, { useState } from 'react';
 import type { User } from '../../../../models/User';
 import { useLocation } from 'react-router';
 import { ApiServiceBuilder } from '../../../../services/api.service';
@@ -12,8 +12,13 @@ import addressUtils from '../../../../utils/addressUtils';
 import { IconText } from '../home/components/IconText';
 import locationIcon from '../../assets/images/location-marker.svg';
 import calendarIcon from '../../assets/images/calendar.svg';
+import AuthService from '../../../../services/auth.service';
+import { Chat } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 export function ModernOthersInformation(): JSX.Element {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
   // Get state
   const [user, setUser] = React.useState<User | null>(useLocation().state as User | null);
   const id = useLocation().pathname.split('/')[2];
@@ -28,7 +33,10 @@ export function ModernOthersInformation(): JSX.Element {
     return response.data as any;
   }
 
+  const [isMe, setIsMe] = useState(false);
+
   React.useEffect(() => {
+    const userId = AuthService.getInstance().getUserIdFromToken();
     if (user === null)
       fetchUser()
         .then((response) => {
@@ -38,12 +46,20 @@ export function ModernOthersInformation(): JSX.Element {
 
           if (firstuser !== undefined) {
             setUser(firstuser);
+            setIsMe(firstuser.id === userId);
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    else setIsMe(user.id === userId);
   }, []);
+
+  const navigate = useNavigate();
+
+  const navigateToChat = () => {
+    if (user !== null) navigate(`/chat/${user.id}`);
+  };
 
   return user === null ? (
     <Box
@@ -57,8 +73,14 @@ export function ModernOthersInformation(): JSX.Element {
       <CircularProgress />
     </Box>
   ) : (
-    <Stack direction={'row'} spacing={2} justifyContent='center' marginTop={2}>
-      <Stack direction='column' alignItems='flex-start' marginBottom={2}>
+    <Stack direction={matches ? 'row' : 'column'} spacing={2} justifyContent='center' marginTop={2}>
+      <Stack
+        direction='column'
+        alignItems='flex-start'
+        marginBottom={2}
+        width={matches ? 'auto' : '95%'}
+        style={{ alignSelf: matches ? 'none' : 'center' }}
+      >
         {/* Hàng đầu */}
         <Grid
           container
@@ -106,6 +128,7 @@ export function ModernOthersInformation(): JSX.Element {
             backgroundColor: CUSTOM_COLOR.backgroundCard,
             padding: 2,
             paddingTop: 0,
+            width: matches ? 'auto' : '100%',
             height: 'fit-content',
           }}
         >
@@ -140,6 +163,24 @@ export function ModernOthersInformation(): JSX.Element {
             fontSize='5'
             maxLine={3}
           />
+
+          {!isMe && (
+            <Button
+              variant='contained'
+              sx={{
+                marginTop: 1,
+                width: '100%',
+                backgroundColor: CUSTOM_COLOR.white,
+                borderColor: CUSTOM_COLOR.green,
+                borderWidth: '2px',
+                color: CUSTOM_COLOR.green,
+              }}
+              endIcon={<Chat />}
+              onClick={navigateToChat}
+            >
+              Chat với người đăng
+            </Button>
+          )}
         </Stack>
       </Stack>
 

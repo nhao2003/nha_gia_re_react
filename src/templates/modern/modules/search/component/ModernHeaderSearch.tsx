@@ -157,7 +157,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
       setParams((params) => ({ ...params, ward_code: undefined }));
     }
 
-    if (price[0] > 0 || price[1] < 120000000000) {
+    if (price[0] > 0 || price[1] < 10000000000) {
       setParams((params) => ({ ...params, minPrice: price[0], maxPrice: price[1] }));
     }
 
@@ -471,7 +471,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                       borderRadius: 3,
                     }}
                   >
-                    <Typography>120.000.000.000đ</Typography>
+                    <Typography>10.000.000.000đ</Typography>
                   </Stack>
                 </Stack>
 
@@ -481,7 +481,7 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
                   onChange={handleChangePrice}
                   valueLabelDisplay='auto'
                   min={0}
-                  max={120000000000}
+                  max={10000000000}
                   step={100000000}
                   disableSwap
                   sx={{
