@@ -24,7 +24,9 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
     navigate('/details');
   };
 
-  return (   
+  const numberFormat = new Intl.NumberFormat('en-US');
+
+  return (
     <Stack
       onClick={onClick}
       direction={'column'}
@@ -51,7 +53,7 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
           height: '180px',
-          objectFit: 'cover'
+          objectFit: 'cover',
         }}
       />
 
@@ -72,18 +74,16 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
             fontWeight: 'bold',
           }}
         >
-          {price}
+          {numberFormat.format(price).replaceAll(',', '.')} VNĐ
         </Typography>
-       
       </Stack>
 
       <Stack
         sx={{
           marginLeft: '20px',
           marginRight: '20px',
-        
-          minHeight: '62px'
-      
+
+          minHeight: '62px',
         }}
       >
         <Typography
@@ -105,8 +105,7 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
         sx={{
           marginLeft: '20px',
           marginRight: '20px',
-          minHeight: '65px'
-      
+          minHeight: '65px',
         }}
       >
         <Typography
@@ -133,12 +132,11 @@ export const HomeCard = ({ image, price, title, address, type, sx, onClick }: Pr
       ></Stack>
 
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-evenly'} padding={1}>
-      <Typography
+        <Typography
           sx={{
             color: CUSTOM_COLOR.grayScorpion,
             fontSize: '20px',
             display: '-webkit-box',
-           
           }}
         >
           {type}

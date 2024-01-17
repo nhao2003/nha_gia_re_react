@@ -10,7 +10,7 @@ import { FacilityTag } from '../../../components/FacilityTag';
 
 interface PrivateProps {
   image: string;
-  price: any;
+  price: number;
   title: string;
   address: string;
   bedrooms: number;
@@ -29,6 +29,8 @@ export const HomeCardHorizontal = (props: PrivateProps) => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(700));
+
+  const numberFormat = new Intl.NumberFormat('en-US');
 
   return (
     <Stack
@@ -85,7 +87,7 @@ export const HomeCardHorizontal = (props: PrivateProps) => {
             fontWeight: 'bold',
           }}
         >
-          {price}
+          {numberFormat.format(price).replaceAll(',', '.')} VNĐ
         </Typography>
 
         <Stack direction={'row'} alignItems={'start'} justifyContent={'start'} spacing={2}>

@@ -11,6 +11,7 @@ import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import usePreventBodyScroll from './usePreventBodyScroll';
 import { useNavigate } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
+import dateUtils from '../../../../../utils/dateUtils';
 
 interface PostListComponentProps {
   title: string;
@@ -115,7 +116,7 @@ const PostListComponent = ({ title, url, onViewMoreClick }: PostListComponentPro
                     itemId={post.id}
                     image={post.images[0]}
                     title={post.title}
-                    price={`${post.price}VNĐ/m2`}
+                    price={post.price}
                     address={post.address_detail ?? 'Chưa cập nhật'}
                     time='1 ngày trước'
                     sx={{

@@ -23,6 +23,8 @@ export const PostNewCard = ({ itemId, image, price, title, address, time, onClic
 
   visibility.isItemVisible(itemId);
 
+  const numberFormat = new Intl.NumberFormat('en-US');
+
   return (
     <ButtonBase
       component={Stack}
@@ -92,7 +94,7 @@ export const PostNewCard = ({ itemId, image, price, title, address, time, onClic
             marginBottom: '5px',
           }}
           icon={moneyIcon}
-          title={price}
+          title={`${numberFormat.format(price).replaceAll(',', '.')} VNĐ`}
           color={CUSTOM_COLOR.orange}
           maxLine={1}
         />
