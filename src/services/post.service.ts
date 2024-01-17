@@ -143,6 +143,25 @@ class PostService {
       }
     }
   }
+
+  // GetSearchSuggestion
+  async getSearchSuggestion(keyword: string): Promise<string[]> {
+    try {
+      console.log("Keyword: ", keyword);
+      if (keyword.trim() === '') {
+        return [];
+      }
+      const response = await this.api()
+        .withUrl('/posts/search-suggestion')
+        .withParams({ keyword })
+        .build()
+        .get();
+        console.log(response.data);
+      return (response.data as any).result;
+    } catch (error: any) {
+      return [];
+    }
+  }
 }
 
 export default PostService;

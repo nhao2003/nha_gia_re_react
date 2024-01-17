@@ -7,7 +7,7 @@ import CropIcon from '@mui/icons-material/Crop';
 import TuneIcon from '@mui/icons-material/Tune';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HomeCardHorizontal } from './HomeCardHorizontal';
 import CUSTOM_COLOR from '../../../constants/colors';
 import addressUtils from '../../../../../utils/addressUtils';
@@ -19,7 +19,29 @@ export const HeaderSearch = () => {
     const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
     const matches = useMediaQuery(theme.breakpoints.up(950));
 
+    const [searchKeywords, setSearchKeywords] = useState([]);
+    const [inputValue, setInputValue] = useState('');
 
+    useEffect(() => {
+        console.log("inputValue: ", inputValue);
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://gateway.chotot.com/v2/public/search-suggestion/search?keywords=${inputValue}&site_id=3`);
+                const data = await response.json();
+                console.log(data);
+                setSearchKeywords(data.result);
+            } catch (error) {
+                console.error('Error fetching search suggestions:', error);
+            }
+        };
+
+        if (inputValue.trim() !== '') {
+            fetchData().catch(console.error);
+        } else {
+            // Reset the suggestions if the input is empty
+            setSearchKeywords([]);
+        }
+    }, [inputValue]);
     return (
         <Stack direction={'column'}>
             <Stack
@@ -36,7 +58,6 @@ export const HeaderSearch = () => {
                     width: matches ? '20%' : '80%'
                 }}>
                     <OutlinedInput
-
                         sx={{
 
                             '& fieldset': {
@@ -55,7 +76,15 @@ export const HeaderSearch = () => {
                                 </IconButton>
                             </InputAdornment>
                         }
-                    />
+                        onChange={(e) => setInputValue(e.target.value)}
+                    />      {/* Display search suggestions */}
+                    {searchKeywords.length > 0 && (
+                        <ul>
+                            {searchKeywords.map((keyword, index) => (
+                                <li key={index}>{keyword}</li>
+                            ))}
+                        </ul>
+                    )}
 
                 </FormControl>
 

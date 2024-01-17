@@ -28,9 +28,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import addressUtils from '../../../../../utils/addressUtils';
 import CUSTOM_COLOR from '../../../../classic/constants/colors';
-import React from 'react';
+import React, { type ChangeEvent, useEffect, useState } from 'react';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useNavigate } from 'react-router-dom';
+import PostService from '../../../../../services/post.service';
 
 interface HeaderSearchProps {
   onFilterButtonClick: (params: URLSearchParams) => void;
@@ -266,7 +267,6 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   ];
 
   const [value, setValue] = React.useState<string | null>(types[0].value);
-  const [inputValue, setInputValue] = React.useState('');
 
   const minDistancePrice = 1000000000;
   const [price, setPrice] = React.useState<number[]>([0, 10000000000]);
@@ -311,6 +311,39 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
   };
 
   const numberFormat = new Intl.NumberFormat('en-US');
+  const [searchKeywords, setSearchKeywords] = useState<string[]>([]);
+  // await PostService.getInstance().getSearchSuggestion(searchTerm);
+
+  // Debounce search
+  let timeout: NodeJS.Timeout | null = null;
+  const handleSearchChange = (value: string) => {
+
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    timeout = setTimeout(async () => {
+      const result = await PostService.getInstance().getSearchSuggestion(value);
+      setSearchKeywords(result);
+
+    }, 300);
+  };
+
+  useEffect(() => {
+    console.log(search);
+    handleSearchChange(search);
+
+    return () => {
+      if (timeout !== null) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+    }
+  }, [search]);
+
+
 
   return (
     <Stack direction={'column'}>
@@ -329,31 +362,52 @@ export const ModernHeaderSearch = (props: HeaderSearchProps) => {
             marginRight: '10px',
           }}
         >
-          <OutlinedInput
-            sx={{
-              '& fieldset': {
-                borderRadius: '10px',
-              },
-              height: '45px',
-            }}
-            defaultValue={searchTerm}
-            placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch();
+          <Autocomplete
+            freeSolo
+            options={searchKeywords}
+            inputValue={search}
+            onChange={
+              (e: any, value: any) => {
+                setSearch(value);
               }
-            }}
-            endAdornment={
-              <InputAdornment position='end'>
-                <IconButton edge='end' onClick={() => handleSearch()}>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
             }
+            
+            
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                sx={{
+                  '& fieldset': {
+                    borderRadius: '10px',
+                  },
+                  height: '45px',
+                }}
+                placeholder={'Từ khóa, nhà 3 tầng, nhà trọ...'}
+                onChange={
+                  (e: ChangeEvent<HTMLInputElement>) => {
+                    setSearch(e.target.value);
+                  }
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    console.log("Search", search);
+                    handleSearch();
+                  }
+                }}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton edge='end' onClick={handleSearch}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
         </FormControl>
-
         <Fab
           sx={{
             marginLeft: '10px',
