@@ -12,7 +12,6 @@ import SignIn from './modules/auth/SignIn';
 import SignUp from './modules/auth/SignUp';
 import DetailBlog from './modules/news/DetailBlog';
 import PostManagement from './modules/postManagement/postManagement';
-import PostCreate from './modules/postManagement/PostCreate';
 import Package from './modules/package/Package';
 import DetailedPackage from './modules/package/DetailedPackage';
 import PaymentResult from './modules/package/PaymentResult';
@@ -20,6 +19,7 @@ import './assets/styles/index.css'
 import Header from './components/Header';
 import ClassicChatPage from './modules/chat/ClassicChatPage';
 import ClassicAboutUsPage from './modules/aboutUs/page/ClassicAboutUsPage';
+import ClassicCreatePost from './modules/postManagement/PostCreate';
 
 
 
@@ -106,7 +106,7 @@ function App(): JSX.Element {
         path='/post_create'
         element={
           <DashboardPage>
-            <PostCreate />
+            <ClassicCreatePost />
           </DashboardPage>
         }
       />

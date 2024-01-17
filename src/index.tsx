@@ -14,7 +14,9 @@ root.render(
   <Provider store={store}>
     <BrowserRouter>
       <Routes>
-        <Route path='/*' element={<ModernApp />} />
+        <Route path='/*' element={
+          localStorage.getItem('theme') === 'classic' ? <ClassicApp /> : <ModernApp />
+        } />
       </Routes>
     </BrowserRouter>
   </Provider>,
