@@ -1,8 +1,10 @@
 import {
   Avatar,
+  Backdrop,
   Badge,
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   List,
@@ -32,12 +34,51 @@ import { LovedNews } from './pages/LovedNews';
 import SubcriptionPackage from './pages/SubcriptionPackage';
 import { useNavigate } from 'react-router-dom';
 import PaymentHistory from './pages/PaymentHistory';
+import { ApiServiceBuilder } from '../../../../services/api.service';
 
 const defaultTheme = createTheme();
 
 export function PersonalPage(): JSX.Element {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('access_token');
+  const [user, setUser] = React.useState<any>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  async function fetchUserProfile() {
+    try {
+      const response = await new ApiServiceBuilder()
+        .withUrl('/users/profile')
+        .withHeaders({ Authorization: `Bearer ${token}` })
+        .build()
+        .get();
+      return response.data as any;
+    } catch (error) {
+      console.log(error);
+      return (error as any).response.data;
+    }
+  }
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchUserProfile()
+      .then((data) => {
+        console.log(data.result);
+        if (data.status === 'success') {
+          setUser(data.result);
+        } else {
+          console.log(data.message);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  console.log(user);
 
   const handleListItemClick = (index: number) => (event: React.MouseEvent<Element, MouseEvent>) => {
     if (index === 5) {
@@ -55,6 +96,9 @@ export function PersonalPage(): JSX.Element {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
       <Stack direction={'row'} spacing={2} justifyContent='center' marginTop={2}>
         <Grid
           container
@@ -68,35 +112,39 @@ export function PersonalPage(): JSX.Element {
             height: 'fit-content',
           }}
         >
-          <Grid item marginRight={2}>
-            <Badge
-              overlap='circular'
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              badgeContent={
-                <RoundButton color='primary'>
-                  <CreateOutlinedIcon></CreateOutlinedIcon>
-                </RoundButton>
-              }
-            >
-              <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
-            </Badge>
-          </Grid>
+          {user !== null && (
+            <>
+              <Grid item marginRight={2}>
+                <Badge
+                  overlap='circular'
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  badgeContent={
+                    <RoundButton color='primary'>
+                      <CreateOutlinedIcon></CreateOutlinedIcon>
+                    </RoundButton>
+                  }
+                >
+                  <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
+                </Badge>
+              </Grid>
 
-          <Grid>
-            <Typography variant='h6'>Đào Xuân Huy</Typography>
-            <Typography variant='body2' color={'gray'}>
-              Chưa có đánh giá
-            </Typography>
-            <Stack direction={'row'}>
-              <Tile title={'Người theo dõi:'} value={0} />
-              <Box marginRight={2} />
-              <Tile title={'Đang theo dõi:'} value={0} />
-            </Stack>
+              <Grid>
+                <Typography variant='h6'>{user.first_name + ' ' + user.last_name}</Typography>
+                <Typography variant='body2' color={'gray'}>
+                  Chưa có đánh giá
+                </Typography>
+                <Stack direction={'row'}>
+                  <Tile title={'Người theo dõi:'} value={0} />
+                  <Box marginRight={2} />
+                  <Tile title={'Đang theo dõi:'} value={0} />
+                </Stack>
 
-            <Tile title={'SĐT:'} value={'Chưa cung cấp'} />
+                <Tile title={'SĐT:'} value={user.phone} />
 
-            <Tile title={'Địa chỉ:'} value={'Chưa cung cấp'} />
-          </Grid>
+                <Tile title={'Địa chỉ:'} value={user.address.detail} />
+              </Grid>
+            </>
+          )}
 
           <Button
             variant='contained'
@@ -161,7 +209,9 @@ export function PersonalPage(): JSX.Element {
           </List>
         </Grid>
         {selectedIndex === 0 ? (
-          <PersonalInformationPage />
+          user !== null ? (
+            <PersonalInformationPage userInfo={user} />
+          ) : null
         ) : selectedIndex === 1 ? (
           <LovedNews />
         ) : selectedIndex === 2 ? (

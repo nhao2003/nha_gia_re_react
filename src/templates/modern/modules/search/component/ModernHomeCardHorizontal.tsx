@@ -7,7 +7,7 @@ interface PrivateProps {
   price: any;
   title: string;
   address: string;
-  type: string;
+  type: boolean;
   avatar: string;
   name: string;
   time: any;
@@ -100,8 +100,8 @@ export const ModernHomeCardHorizontal = (props: PrivateProps) => {
           }}
         >
           <Stack direction={'row'} spacing={2} alignItems={'center'}>
-            {type === 'agency' ? <BusinessCenterIcon /> : <Avatar alt='Travis Howard' src={avatar} />}
-            {type === 'agency' ? <Typography>Môi giới</Typography> : <Typography>{name}</Typography>}
+            {!type ? <BusinessCenterIcon /> : <Avatar alt='Travis Howard' src={avatar} />}
+            {!type ? <Typography>Môi giới</Typography> : <Typography>{name}</Typography>}
             <Divider orientation='vertical' variant='middle' flexItem />
             <Typography>{time}</Typography>
           </Stack>

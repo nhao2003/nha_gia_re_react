@@ -69,6 +69,8 @@ class AuthService {
         const newAccessToken = await this.refreshToken();
         return newAccessToken;
       } catch (error) {
+        // Set access token to null
+        localStorage.setItem('access_token', '');
         return null;
       }
     }

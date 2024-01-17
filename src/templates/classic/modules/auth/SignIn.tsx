@@ -107,7 +107,7 @@ const SignIn = () => {
       <div className={classes.form}>
         {/* <form onSubmit={submitHandler}> */}
         <div className={classes.logo}>
-          <img src={logo} alt='logo' />
+          <img src={logo} alt='logo' style={{ width: '10rem' }} />
         </div>
         <Snackbar open={openAlert} autoHideDuration={600} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
           <Alert severity='success' sx={{ width: '100%' }}>

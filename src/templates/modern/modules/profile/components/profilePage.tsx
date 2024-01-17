@@ -40,7 +40,6 @@ import MordenCurrentPackagePage from '../../purchase/page/ModernCurrentPackagePa
 import ModernPackageListPage from '../../purchase/page/ModernPackageListPage';
 import ModernHistoryTransactionPage from '../../purchase/page/ModernHistoryTransactionPage';
 
-const drawerWidth = '20%';
 
 interface MenuItem {
   key: string;
@@ -60,7 +59,6 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phone }) => {
-  const navagate = useNavigate();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', gap: '10px' }}>
       <Avatar
@@ -76,7 +74,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ avatar, fullname, email, phon
       <Typography variant='h6' component='div'>
         {fullname}
       </Typography>
-      <ListItem disablePadding>
+      <ListItem disablePadding
+        sx={{
+          maxWidth: '100%',
+          justifyContent: 'center',
+        }}
+      >
         <ListItemIcon sx={{ alignItems: 'center' }}>
           <EmailOutlined />
         </ListItemIcon>
@@ -210,7 +213,7 @@ export const ProfilePage: React.FC = () => {
       <List>
         {items.map((item, index) =>
           item.children != null ? (
-            <React.Fragment key={item.title}>
+            <React.Fragment key={index}>
               <ListItemButton
                 onClick={() => {
                   console.log(item);
@@ -260,6 +263,7 @@ export const ProfilePage: React.FC = () => {
       </List>
     </Box>
   );
+  const drawerWidth = '30%';
 
   return user === null ? (
     <Box
@@ -299,7 +303,11 @@ export const ProfilePage: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label='mailbox folders'>
+      <Box component='nav' sx={{
+        width: {
+          sm: drawerWidth,
+        },
+      }} aria-label='mailbox folders'>
         <Drawer
           variant='temporary'
           open={mobileOpen}
@@ -309,7 +317,9 @@ export const ProfilePage: React.FC = () => {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: {
+              sm: drawerWidth,
+            } },
           }}
         >
           {drawer}
@@ -317,7 +327,7 @@ export const ProfilePage: React.FC = () => {
         <Box
           sx={{
             display: mobileOpen ? 'none' : { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '50%' },
           }}
         >
           {drawer}
@@ -329,7 +339,7 @@ export const ProfilePage: React.FC = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          // width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         {selectedItemKey === 'profile' ? (

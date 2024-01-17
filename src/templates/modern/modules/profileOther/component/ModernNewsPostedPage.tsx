@@ -94,7 +94,7 @@ export function ModernNewsPostedPage({ user }: ModernDetailPageProps): JSX.Eleme
                 title={post.title}
                 price={post.price + 'VNĐ'}
                 address={post.address_detail ?? 'Chưa cập nhật'}
-                type={'personal'}
+                type={post.is_pro_seller}
                 avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
                 name={post.user.first_name + ' ' + post.user.last_name}
                 time={dateUtils.getTimeAgoVi(post.posted_date)}

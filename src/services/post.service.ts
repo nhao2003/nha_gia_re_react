@@ -20,7 +20,7 @@ interface AppResponse {
 class PostService {
   private static instance: PostService;
 
-  api() : ApiServiceBuilder{
+  api(): ApiServiceBuilder {
     return new ApiServiceBuilder();
   }
 
@@ -100,13 +100,67 @@ class PostService {
     }
     const response = await this.api()
       .withUrl('/posts/' + id)
-      .withHeaders({ 
+      .withHeaders({
         Authorization: `Bearer ${accessToken}`,
       })
       .build()
       .delete();
     console.log(response);
     return response.data ?? null;
+  }
+
+  async checkLimitPost(): Promise<{
+    isExceeded: boolean;
+    limitPostInMonth: number;
+    countPostInMonth: number;
+  }> {
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    if (accessToken === null) {
+      throw new Error('Bạn chưa đăng nhập');
+    }
+    try {
+      const response = await this.api()
+        .withUrl('/posts/check-limit-post')
+        .withHeaders({
+          Authorization: `Bearer ${accessToken}`,
+        })
+        .build()
+        .get();
+      const result = (response.data as any).result;
+      return {
+        isExceeded: result.isExceeded,
+        limitPostInMonth: result.limit_post_in_month,
+        countPostInMonth: result.count_post_in_month,
+      };
+    } catch (error: any) {
+      // return error.response.data;
+      if (error.response.status === 401) {
+        throw Error('Bạn chưa đăng nhập', {
+          cause: error,
+        });
+      } else {
+        throw Error('Có lỗi xảy ra');
+      }
+    }
+  }
+
+  // GetSearchSuggestion
+  async getSearchSuggestion(keyword: string): Promise<string[]> {
+    try {
+      console.log("Keyword: ", keyword);
+      if (keyword.trim() === '') {
+        return [];
+      }
+      const response = await this.api()
+        .withUrl('/posts/search-suggestion')
+        .withParams({ keyword })
+        .build()
+        .get();
+        console.log(response.data);
+      return (response.data as any).result;
+    } catch (error: any) {
+      return [];
+    }
   }
 }
 

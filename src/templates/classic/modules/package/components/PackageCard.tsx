@@ -1,7 +1,8 @@
 import { Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material';
 import React from 'react';
 import checkIcon from '../../../assets/images/check.svg';
-import unCheckIcon from '../../../assets/images/uncheck.svg';
+// import unCheckIcon from '../../../assets/images/uncheck.svg';
+import unCheckIcon from '../../../assets/images/uncheckIcon.svg';
 import packageIcon from '../../../assets/images/package_icon.svg';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,7 @@ const PackageCard: React.FC<PackageCardProps> = ({ packageItem, ...props }) => {
           xs: '25%', // 25%% width on extra small screens
           sm: '50%', // 50% width on small screens
           md: '50%', // 50% width on medium screens
-          lg: '100%', // 25% width on large screens
+          lg: '28rem', // 25% width on large screens
         },
       }}
     >

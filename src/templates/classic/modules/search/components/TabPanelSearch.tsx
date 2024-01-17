@@ -1,36 +1,72 @@
-import { Grid, Pagination, Stack } from '@mui/material'
-import { HomeCardHorizontal } from './HomeCardHorizontal'
+import { Grid, Pagination, Stack, Typography } from '@mui/material';
+import { HomeCardHorizontal } from './HomeCardHorizontal';
+import type RealEstatePost from '../../../../../models/RealEstatePost';
+import dateUtils from '../../../../../utils/dateUtils';
+import { useNavigate } from 'react-router-dom';
+import CUSTOM_COLOR from '../../../constants/colors';
 
-export const TabPanelSearch = () => {
-    return (
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} width={'100%'}>
-            {Array.from(Array(6)).map((_, index) => (
-                <Grid item xs={4} sm={8} md={12} key={index}>
-                    <HomeCardHorizontal
-                        image='https://mediawinwin.vn/cosy/admin/upload/images/%E1%BA%A2nh%20N%E1%BB%99i%20Th%E1%BA%A5t/%E1%BA%A3nh%20n%E1%BB%99i%20th%E1%BA%A5t%2014.jpg'
-                        title='Căn hộ cao cấp sân vườn full nội thất'
-                        price={'6 tỷ 599 triệu'}
-                        loved={true}
-                        address='Q5, TP. Hồ Chí Minh'
-                        bedrooms={2}
-                        bathrooms={2}
-                        areas={234}
-                        type={'personal'}
-                        avatar={'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
-                        name={'Nguyễn Van A'}
-                        time={'Hôm nay'}
-                    />
-                </Grid>
-            ))}
-            <Stack sx={{
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '10px'
-            }}>
-                <Pagination count={10} size="large" />
-            </Stack>
-
-        </Grid>
-    )
+interface SearchProps {
+  posts: RealEstatePost[];
+  numOfPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
+
+export const TabPanelSearch = (props: SearchProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} width={'100%'}>
+      {props.posts.map((post, index) => (
+        <Grid item xs={4} sm={8} md={12} key={index}>
+          <HomeCardHorizontal
+            image={post.images[0]}
+            title={post.title}
+            price={post.price + ' VNĐ'}
+            address={post.address_detail ?? 'Chưa cập nhật'}
+            bedrooms={2}
+            bathrooms={2}
+            areas={234}
+            type={post.is_pro_seller}
+            avatar={post.user.avatar ?? 'https://i.pinimg.com/736x/24/21/85/242185eaef43192fc3f9646932fe3b46.jpg'}
+            name={post.user.first_name + ' ' + post.user.last_name}
+            time={dateUtils.getTimeAgoVi(post.posted_date)}
+            onClick={() => {
+              navigate(`/details/${post.id}`, {
+                state: post,
+              });
+            }}
+          />
+        </Grid>
+      ))}
+      <Stack
+        sx={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '10px',
+        }}
+      >
+        {props.posts.length > 0 ? (
+          <Pagination
+            count={props.numOfPages}
+            size='large'
+            onChange={(e, page) => {
+              props.onPageChange(page);
+            }}
+          />
+        ) : (
+          <Typography
+            margin={5}
+            sx={{
+              color: CUSTOM_COLOR.grayScorpion,
+              fontSize: '18px',
+            }}
+          >
+            Không tìm thấy kết quả!
+          </Typography>
+        )}
+      </Stack>
+    </Grid>
+  );
+};

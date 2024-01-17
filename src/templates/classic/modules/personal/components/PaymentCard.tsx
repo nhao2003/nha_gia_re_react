@@ -45,7 +45,7 @@ const PaymentCard: React.FC<PaymentCardProps> = ({ paymentItem, ...props }) => {
             <img src={paymentItem.status === 'paid' ? successIcon : failIcon} alt='icon' />
             <Stack spacing={0}>
               <Typography variant='h6' component='div' color={paymentItem.status === 'paid' ? '#0F2C59' : '#D00000'}>
-                {paymentItem.package.name}
+                {paymentItem.package.name + ' ' + paymentItem.num_of_subscription_month + ' tháng'}
               </Typography>
               <Typography variant='body2' color='#6A6A6A'>
                 Thời gian giao dịch: {formattedDate}
