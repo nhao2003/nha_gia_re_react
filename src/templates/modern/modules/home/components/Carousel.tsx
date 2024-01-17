@@ -63,7 +63,7 @@ export const Carousel = ({ slides, style, isAutoPlay = true }: carouselInterface
           >
 
             {isVideo(item.src) ? (
-              <video autoPlay controls loop style={{ width: '100%', height: '100%' }}>
+              <video autoPlay={false} controls loop style={{ width: '100%', height: '100%' }}>
                 <source src={item.src} type='video/mp4' />
               </video>
             ) : (
