@@ -9,55 +9,19 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import moment from 'moment';
 import { TextFieldTitle } from '../components/TextFieldTitle';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { SelectAddress } from '../components/SelectAddress';
 import CUSTOM_COLOR from '../../../constants/colors';
 import React from 'react';
-import { ApiServiceBuilder } from '../../../../../services/api.service';
 
 interface PersonalInformationPageProps {
   userInfo: any;
 }
 
 export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = ({ userInfo, ...props }) => {
-  //   const token = localStorage.getItem('access_token');
-  //   const [user, setUser] = React.useState<any>(null);
-  //   const [isLoading, setIsLoading] = React.useState(false);
-
-  //   async function fetchPayment() {
-  //     try {
-  //       const response = await new ApiServiceBuilder()
-  //         .withUrl('/users/profile')
-  //         .withHeaders({ Authorization: `Bearer ${token}` })
-  //         .build()
-  //         .get();
-  //       return response.data as any;
-  //     } catch (error) {
-  //       console.log(error);
-  //       return (error as any).response.data;
-  //     }
-  //   }
-
-  //   React.useEffect(() => {
-  //     setIsLoading(true);
-  //     fetchPayment()
-  //       .then((data) => {
-  //         console.log(data.result);
-  //         if (data.status === 'success') {
-  //           setUser(data.result);
-  //         } else {
-  //           console.log(data.message);
-  //         }
-  //         setIsLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setIsLoading(false);
-  //       });
-  //   }, []);
-
-  //   console.log(user);
+  //   console.log( userInfo.dob);
 
   return (
     <Box
@@ -79,7 +43,12 @@ export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = (
         Thông tin cá nhân
       </Typography>
 
-      <TextFieldTitle title={'Họ và tên'} placeholder={'Họ và tên'} require={true} />
+      <TextFieldTitle
+        title={'Họ và tên'}
+        placeholder={'Họ và tên'}
+        require={true}
+        value={userInfo !== null ? `${userInfo.last_name + ' ' + userInfo.first_name}` : null}
+      />
 
       <Stack
         direction={'row'}
@@ -173,9 +142,19 @@ export const PersonalInformationPage: React.FC<PersonalInformationPageProps> = (
       >
         Thông tin liên lạc
       </Typography>
-      <TextFieldTitle title={'Số điện thoại'} placeholder={''} require={true} />
+      <TextFieldTitle
+        title={'Số điện thoại'}
+        placeholder={''}
+        require={true}
+        value={userInfo !== null ? userInfo.phone : null}
+      />
 
-      <TextFieldTitle title={'Email'} placeholder={''} require={true} />
+      <TextFieldTitle
+        title={'Email'}
+        placeholder={''}
+        require={true}
+        value={userInfo !== null ? userInfo.email : null}
+      />
       <TextFieldTitle title={'CCCD/CMND'} placeholder={''} require={false} />
 
       <TextFieldTitle title={'Facebook'} placeholder={''} require={false} />
