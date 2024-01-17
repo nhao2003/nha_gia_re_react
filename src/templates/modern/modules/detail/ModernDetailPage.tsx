@@ -489,27 +489,13 @@ export function ModernDetailPage(): JSX.Element {
           marginLeft: matches ? '0px' : '20px',
         }}
       >
-        {isLoading ? (
-          <Box
-            sx={{
-              width: '100%',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <PostListComponent
-            title={'Bài đăng tương tự'}
-            posts={postsRelate.posts}
-            onViewMoreClick={() => {
-              handleNavigateMore('relate', post.title);
-            }}
-          />
-        )}
+        <PostListComponent
+          title={'Bài đăng tương tự'}
+          url={`/posts?post_is_active[eq]=true&user_status[eq]='verified'&post_expiry_date[gte]=now()&search=${post.title}`}
+          onViewMoreClick={() => {
+            handleNavigateMore('relate', post.title);
+          }}
+        />
       </Stack>
     </Stack>
   );
