@@ -3,7 +3,7 @@ import { ModernHeaderSearch } from '../component/ModernHeaderSearch';
 import { ModernItemSearch } from '../component/ModernItemSearch';
 import { ApiServiceBuilder } from '../../../../../services/api.service';
 import { getParsedParams } from '../../../../../services/paramsSearch';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type RealEstatePost from '../../../../../models/RealEstatePost';
 
@@ -36,8 +36,14 @@ export function ModernSearchPage(): JSX.Element {
     console.log(response.data);
     return response.data as any;
   }
-  
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type === 'province') {
+      setParams((params) => ({ ...params, province_code: value }));
+    }
+  }, [type, value]);
 
   React.useEffect(() => {
     console.log('params', getParsedParams(params));
