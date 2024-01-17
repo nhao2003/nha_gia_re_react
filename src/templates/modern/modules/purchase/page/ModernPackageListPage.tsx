@@ -5,6 +5,8 @@ import { ApiServiceBuilder } from '../../../../../services/api.service';
 import type IMembershipPackage from '../../../../../models/interfaces/IMembershipPackage';
 import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { formatMoney } from '../../../../../services/fortmat.service';
+import AuthService from '../../../../../services/auth.service';
+import type ISubscription from '../../../../../models/interfaces/ISubscription';
 
 const ModernPackageListPage: React.FC = () => {
   const theme = useTheme();
@@ -54,7 +56,38 @@ const ModernPackageListPage: React.FC = () => {
       .finally(() => {
         setIsLoading(false);
       });
+    handleGetmenberShip();
   }, [page]);
+
+  // get current package
+  const [curPackage, setCurPackage] = React.useState<ISubscription | null>(null);
+
+  async function fetchCurrentPackage() {
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    if (accessToken === null) {
+      throw new Error('Bạn chưa đăng nhập');
+    }
+    const query = new ApiServiceBuilder()
+      .withUrl('/membership-package/current-subscription')
+      .withHeaders({ Authorization: `Bearer ${accessToken}` })
+      .build();
+    const response = await query.get();
+    return response.data as any;
+  }
+
+  function handleGetmenberShip() {
+    setIsLoading(true);
+    fetchCurrentPackage()
+      .then((response) => {
+        setCurPackage(response.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   return isLoading ? (
     <Box
@@ -79,6 +112,7 @@ const ModernPackageListPage: React.FC = () => {
           textAlign: 'left',
           marginLeft: '20px',
           marginRight: '20px',
+          marginTop: '20px',
         }}
       >
         Danh sách các gói dịch vụ
@@ -92,6 +126,7 @@ const ModernPackageListPage: React.FC = () => {
               name={item.name}
               price={formatMoney(item.price_per_month)}
               description={item.description}
+              canBuy={curPackage === null}
               infoList={[
                 { check: true, text: `${item.monthly_post_limit} tin đăng/tháng (Hiển thị 14 ngày)` },
                 { check: true, text: 'Huy hiệu xác minh' },

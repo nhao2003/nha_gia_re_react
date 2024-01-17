@@ -12,10 +12,18 @@ export interface ServicePackageProps {
   price: string;
   description: string;
   infoList: InfoItem[];
+  canBuy: boolean;
   onButtonClick: () => void; // Prop callback cho button click
 }
 
-const ServicePackage: React.FC<ServicePackageProps> = ({ name, price, description, infoList, onButtonClick }) => (
+const ServicePackage: React.FC<ServicePackageProps> = ({
+  name,
+  price,
+  description,
+  infoList,
+  canBuy,
+  onButtonClick,
+}) => (
   <div style={{ border: '2px solid #026D4D', padding: '16px', margin: '16px', borderRadius: '8px', textAlign: 'left' }}>
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
@@ -44,25 +52,27 @@ const ServicePackage: React.FC<ServicePackageProps> = ({ name, price, descriptio
             </div>
           ))}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button
-            onClick={() => {
-              onButtonClick();
-            }}
-            style={{
-              width: '50%', // Chiều rộng 50%
-              backgroundColor: '#026D4D',
-              color: 'white',
-              fontWeight: 'bold',
-              borderRadius: '5px',
-              height: '50px',
-              boxShadow: 'none',
-              border: 'none',
-            }}
-          >
-            Mua ngay
-          </button>
-        </div>
+        {canBuy && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <button
+              onClick={() => {
+                onButtonClick();
+              }}
+              style={{
+                width: '50%', // Chiều rộng 50%
+                backgroundColor: '#026D4D',
+                color: 'white',
+                fontWeight: 'bold',
+                borderRadius: '5px',
+                height: '50px',
+                boxShadow: 'none',
+                border: 'none',
+              }}
+            >
+              Mua ngay
+            </button>
+          </div>
+        )}
       </div>
     </div>
   </div>

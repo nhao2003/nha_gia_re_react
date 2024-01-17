@@ -1,4 +1,3 @@
-
 import { Route, Routes } from 'react-router-dom';
 // import './templates/classic/assets/styles/App.css';
 import DashboardPage from './modules/DashboardPage';
@@ -16,13 +15,10 @@ import PostCreate from './modules/postManagement/PostCreate';
 import Package from './modules/package/Package';
 import DetailedPackage from './modules/package/DetailedPackage';
 import PaymentResult from './modules/package/PaymentResult';
-import './assets/styles/index.css'
+import './assets/styles/index.css';
 import Header from './components/Header';
 import ClassicChatPage from './modules/chat/ClassicChatPage';
 import ClassicAboutUsPage from './modules/aboutUs/page/ClassicAboutUsPage';
-
-
-
 
 function App(): JSX.Element {
   return (
@@ -70,6 +66,16 @@ function App(): JSX.Element {
           </DashboardPage>
         }
       />
+
+      <Route
+        path='/search/:id'
+        element={
+          <DashboardPage>
+            <SearchPage />
+          </DashboardPage>
+        }
+      />
+
       <Route
         path='/details/:id'
         element={
@@ -174,7 +180,6 @@ function App(): JSX.Element {
           </DashboardPage>
         }
       />
-
     </Routes>
   );
 }

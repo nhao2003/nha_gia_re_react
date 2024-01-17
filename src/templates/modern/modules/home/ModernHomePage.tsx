@@ -98,6 +98,7 @@ export function ModernHomePage(): JSX.Element {
           maxWidth: '1000px',
           minWidth: '390px',
           margin: '0 10px',
+          marginTop: '20px',
         }}
       >
         <Carousel slides={slides} style={{ width: '100%' }} />
