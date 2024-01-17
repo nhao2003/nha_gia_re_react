@@ -36,10 +36,7 @@ export function ModernSearchPage(): JSX.Element {
     console.log(response.data);
     return response.data as any;
   }
-
-  const [posts, setPosts] = React.useState<any[]>([]);
-  const [numOfPages, setNumOfPages] = React.useState<number>(0);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  
   const navigate = useNavigate();
 
   React.useEffect(() => {
