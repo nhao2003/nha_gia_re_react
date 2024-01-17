@@ -20,6 +20,7 @@ export function ModernSearchPage(): JSX.Element {
 
   // const [params, setParams] = React.useState<URLSearchParams>(new URLSearchParams(window.location.search));
   const [params, setParams] = React.useState({});
+  const [isLease, setIsLease] = React.useState(true);
 
   const [posts, setPosts] = React.useState<{
     numOfPages: number;
@@ -42,6 +43,12 @@ export function ModernSearchPage(): JSX.Element {
   useEffect(() => {
     if (type === 'province') {
       setParams((params) => ({ ...params, province_code: value }));
+    } else if (type === 'sell') {
+      setIsLease(false);
+      setParams((params) => ({ ...params, is_lease: false }));
+    } else if (type === 'lease') {
+      setIsLease(true);
+      setParams((params) => ({ ...params, is_lease: true }));
     }
   }, [type, value]);
 
@@ -73,6 +80,11 @@ export function ModernSearchPage(): JSX.Element {
         numOfPages={posts.numOfPages}
         onPageChange={(page) => {
           setParams((params) => ({ ...params, page: page }));
+        }}
+        isLease={isLease}
+        onIsLeaseChange={(isLease: boolean) => {
+          setIsLease(isLease);
+          setParams((params) => ({ ...params, is_lease: isLease }));
         }}
       />
     </Stack>
