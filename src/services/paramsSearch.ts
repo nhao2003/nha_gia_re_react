@@ -42,6 +42,10 @@ export function getParsedParams(params: Record<string, any>): any {
     parsedParams['post_type_id[eq]'] = `%27${params.type_id}%27`;
   }
 
+  if (params.is_lease !== undefined) {
+    parsedParams['post_is_lease[eq]'] = params.is_lease;
+  }
+
   if (params.minPrice > 0 || params.maxPrice < 120000000000){
     parsedParams['post_price[btw]'] = `${params.minPrice}, ${params.maxPrice}`
   }

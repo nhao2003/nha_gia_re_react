@@ -23,6 +23,8 @@ interface ModernItemSearchProps {
   posts: RealEstatePost[];
   numOfPages: number;
   onPageChange: (page: number) => void;
+  isLease: boolean;
+  onIsLeaseChange?: (isLease: boolean) => void;
 }
 
 export const ModernItemSearch = (props: ModernItemSearchProps) => {
@@ -41,7 +43,9 @@ export const ModernItemSearch = (props: ModernItemSearchProps) => {
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+    if (props.onIsLeaseChange !== undefined) {
+      props.onIsLeaseChange(newValue === '1');
+    }
   };
 
   const breadcrumbs = [
@@ -91,7 +95,7 @@ export const ModernItemSearch = (props: ModernItemSearchProps) => {
       </Typography>
       <Stack direction={'row'} justifyContent={'space-between'}>
         <Box sx={{ width: matches ? '100%' : '98%', typography: 'body1' }}>
-          <TabContext value={value}>
+          <TabContext value={props.isLease ? '1' : '2'}>
             <Stack direction={'row'} justifyContent={'space-between'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label='tab dbs'>
                 <Tab
