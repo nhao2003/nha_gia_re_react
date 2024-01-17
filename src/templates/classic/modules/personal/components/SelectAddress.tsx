@@ -10,6 +10,9 @@ interface PrivateProps {
 
 export const SelectAddress = ({ title, require, placeholder, addressCode }: PrivateProps) => {
   console.log(addressCode);
+  const provinces = addressUtils.getProvinces();
+  const districts = addressUtils.getDistricts(addressCode);
+  const wards = addressUtils.getWards(addressCode, addressCode);
 
   return (
     <Stack direction={'column'} marginBottom={2}>
@@ -36,13 +39,29 @@ export const SelectAddress = ({ title, require, placeholder, addressCode }: Priv
           }}
           defaultValue={addressCode}
         >
-          {addressUtils.getProvinces().map((e) => {
-            return (
-              <MenuItem value={e.code} key={e.code}>
-                {e.name}
-              </MenuItem>
-            );
-          })}
+          {title === 'Tỉnh/Thành phố'
+            ? provinces.map((e) => {
+                return (
+                  <MenuItem value={e.code} key={e.code}>
+                    {e.name}
+                  </MenuItem>
+                );
+              })
+            : title === 'Quận/Huyện'
+              ? districts.map((e) => {
+                  return (
+                    <MenuItem value={e.code} key={e.code}>
+                      {e.name}
+                    </MenuItem>
+                  );
+                })
+              : wards.map((e) => {
+                  return (
+                    <MenuItem value={e.code} key={e.code}>
+                      {e.name}
+                    </MenuItem>
+                  );
+                })}
         </Select>
       </FormControl>
     </Stack>

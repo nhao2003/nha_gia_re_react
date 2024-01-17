@@ -13,52 +13,69 @@ const params = {
   type_id: 'house',
 };
 
-export function getParsedParams(urlSearchParams: URLSearchParams): any {
-
-  const params: any = {};
-
-  urlSearchParams.forEach((value: string, key: string) => {
-    params[key] = value;
-  });
-
+export function getParsedParams(params: Record<string, any>): any {
   const parsedParams: any = {};
+
+  if (params.page !== undefined){
+    parsedParams.page = params.page
+  }
+
+  if (params.search !== undefined){
+    parsedParams.search = params.search
+  }
+
   if (params.page !== undefined) {
     parsedParams.page = params.page;
   }
 
   if (params.province_code !== undefined) {
-    parsedParams['post_address->>province_code[eq]'] = '\'' + params.province_code + '\'';
+    parsedParams['post_address->>province_code[eq]'] = `%27${params.province_code}%27`;
+  }
+  if (params.district_code !== undefined) {
+    parsedParams['post_address->>district_code[eq]'] = `%27${params.district_code}%27`;
+  }
+  if (params.ward_code !== undefined) {
+    parsedParams['post_address->>ward_code[eq]'] = `%27${params.ward_code}%27`;
   }
 
   if (params.type_id !== undefined) {
-    parsedParams['post_type_id[eq]'] = '\'' + params.type_id + '\'';
+    parsedParams['post_type_id[eq]'] = `%27${params.type_id}%27`;
   }
-  if (params.is_lease !== undefined) {
-    parsedParams['post_is_lease[eq]'] = params.is_lease;
+
+  if (params.minPrice > 0 || params.maxPrice < 120000000000){
+    parsedParams['post_price[btw]'] = `${params.minPrice}, ${params.maxPrice}`
   }
-  if (params.search !== undefined && params.search !== '') {
-    parsedParams.search = params.search;
+
+  if (params.minArea > 0 || params.maxArea < 10000){
+    parsedParams['post_area[btw]'] = `${params.minArea}, ${params.maxArea}`
   }
-  if (params.min_price !== undefined || params.max_price !== undefined) {
-    const minPrice = params.min_price !== undefined ? isNaN(params.min_price) ? 0 : params.min_price : 0;
-    const maxPrice = params.max_price !== undefined ? isNaN(params.max_price) ? 100000000000 : params.max_price : 100000000000;
-    parsedParams['post_price[btw]'] = minPrice + ',' + maxPrice;
+
+  if (params.sortBy !== undefined) {
+    if (params.sortBy === 'posted_date'){
+      parsedParams.orders = `-${params.sortBy}`;
+    }else {
+      parsedParams.orders = `${params.sortBy}`;
+    }
+    
   }
-  
+
+  if (params.postBy !== undefined){
+    parsedParams['post_is_pro_seller[eq]'] = params.postBy
+  }
 
   return parsedParams;
 }
 
-// console.log(getParsedParams(params));
+console.log(getParsedParams(params));
 
-// new ApiServiceBuilder()
-//   .withUrl('/posts')
-//   .withParams(getParsedParams(params))
-//   .build()
-//   .get()
-//   .then((response: any) => {
-//     console.log(response.data);
-//   })
-//   .catch((error: any) => {
-//     console.log(error);
-//   });
+new ApiServiceBuilder()
+  .withUrl('/posts')
+  .withParams(getParsedParams(params))
+  .build()
+  .get()
+  .then((response: any) => {
+    console.log(response.data);
+  })
+  .catch((error: any) => {
+    console.log(error);
+  });

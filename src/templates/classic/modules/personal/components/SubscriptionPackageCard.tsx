@@ -12,6 +12,7 @@ interface SubscriptionPackageCardProps {
 
 const SubscriptionPackageCard: React.FC<SubscriptionPackageCardProps> = ({ packageItem, ...props }) => {
   const membershipPackage = packageItem.membership_package;
+  console.log(packageItem);
 
   const date = new Date(packageItem.expiration_date);
 
@@ -63,7 +64,7 @@ const SubscriptionPackageCard: React.FC<SubscriptionPackageCardProps> = ({ packa
                 fontSize: 18,
               }}
             >
-              {packageItem.monthly_post_limit} tin đăng - Hiển thị 14 ngày
+              {membershipPackage !== undefined ? membershipPackage.monthly_post_limit : ''} tin đăng - Hiển thị 14 ngày
             </p>
           </Stack>
 

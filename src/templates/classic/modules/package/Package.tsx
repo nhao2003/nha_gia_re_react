@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 const Package = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = React.useState([]);
+  const [isSubcribed, setIsSubcribed] = React.useState(false);
+  const token = localStorage.getItem('access_token');
 
   async function fetchPackages() {
     try {
@@ -24,12 +26,42 @@ const Package = () => {
     }
   }
 
+  async function getCurrentSubcription() {
+    try {
+      const response = await new ApiServiceBuilder()
+        .withUrl('/membership-package/current-subscription')
+        .withHeaders({
+          Authorization: `Bearer ${token}`,
+        })
+        .build()
+        .get();
+      return response.data as any;
+    } catch (error) {
+      console.log(error);
+      return (error as any).response.data;
+    }
+  }
+
   React.useEffect(() => {
     fetchPackages()
       .then((data) => {
         console.log(data.result);
         if (data.status === 'success') {
-          setPackages(data.result);
+          getCurrentSubcription()
+            .then((subData) => {
+              console.log(subData.result);
+              if (subData.status === 'success') {
+                if (subData.result !== null) {
+                  setIsSubcribed(true);
+                }
+              } else {
+                console.log(subData.message);
+              }
+            })
+            .catch((error) => console.log(error))
+            .finally(() => {
+              setPackages(data.result);
+            });
         } else {
           console.log(data.message);
         }
@@ -102,7 +134,7 @@ const Package = () => {
         </Stack>
         <Stack direction='row' spacing={2}>
           {packages.map((item: any) => (
-            <PackageCard key={item.id} packageItem={item} />
+            <PackageCard key={item.id} packageItem={item} isSubcribed={isSubcribed} />
           ))}
         </Stack>
       </Stack>

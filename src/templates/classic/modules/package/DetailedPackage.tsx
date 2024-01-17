@@ -8,6 +8,7 @@ import unCheckIcon from '../../assets/images/uncheckIcon.svg';
 import packageIcon from '../../assets/images/package_icon.svg';
 import { useParams } from 'react-router-dom';
 import { ApiServiceBuilder } from '../../../../services/api.service';
+import AuthService from '../../../../services/auth.service';
 
 const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 
@@ -17,7 +18,7 @@ const DetailedPackage = () => {
   const [selectedValue, setSelectedValue] = React.useState('1');
 
   const packagePrice = packageItem.price_per_month * Number(selectedValue);
-  const userId = localStorage.getItem('userId');
+  const userId = AuthService.getInstance().getUserIdFromToken();
 
   async function fetchPackage() {
     try {

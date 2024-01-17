@@ -5,6 +5,7 @@ import { ApiServiceBuilder } from '../../../../../services/api.service';
 import { getParsedParams } from '../../../../../services/paramsSearch';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import type RealEstatePost from '../../../../../models/RealEstatePost';
 
 export function ModernSearchPage(): JSX.Element {
   const type = useLocation().pathname.split('/')[2];
@@ -18,11 +19,21 @@ export function ModernSearchPage(): JSX.Element {
   // type: relate || value: post title
 
   // const [params, setParams] = React.useState<URLSearchParams>(new URLSearchParams(window.location.search));
+  const [params, setParams] = React.useState({});
+
+  const [posts, setPosts] = React.useState<{
+    numOfPages: number;
+    posts: RealEstatePost[];
+  }>({ numOfPages: 1, posts: [] });
+
   async function fetchPosts() {
-    const params = new URLSearchParams(window.location.search);
-    console.log('GET PARAMS', getParsedParams(params));
-    const query = new ApiServiceBuilder().withUrl('/posts').withParams(getParsedParams(params)).build();
+    const query = new ApiServiceBuilder()
+      .setBaseUrl('https://nha-gia-re-server.onrender.com/api/v1')
+      .withUrl('/posts')
+      .withParams(getParsedParams(params))
+      .build();
     const response = await query.get();
+    console.log(response.data);
     return response.data as any;
   }
 
@@ -32,45 +43,34 @@ export function ModernSearchPage(): JSX.Element {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    setIsLoading(true);
+    console.log('params', getParsedParams(params));
+    console.log('sanggg', params);
     fetchPosts()
-      .then((data) => {
-        setPosts(data.result);
-        setNumOfPages(data.num_of_pages);
-        console.log(data);
+      .then((response) => {
+        setPosts({
+          numOfPages: response.num_of_pages,
+          posts: response.result,
+        });
+        console.log(11111);
       })
       .catch((error) => {
         console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, [location.search]);
-
-  const [isLease, setIsLease] = React.useState(true);
+  }, [params]);
 
   return (
     <Stack>
       <ModernHeaderSearch
-        onFilterButtonClick={(filterParams) => {
-          const newParams = new URLSearchParams(window.location.search);
-          filterParams.forEach((value, key) => {
-            newParams.set(key, value);
-          });
-          navigate('/search?' + newParams.toString());
+        onFilterButtonClick={(params) => {
+          setParams(params);
         }}
       />
       <ModernItemSearch
-        posts={posts}
-        numOfPages={numOfPages}
-        isLease={isLease}
-        onIsLeaseChange={(isLease: boolean) => {
-          setIsLease(isLease);
-          const newParams = new URLSearchParams(window.location.search);
-          newParams.set('is_lease', isLease ? 'true' : 'false');
-          navigate('/search?' + newParams.toString());
+        posts={posts.posts}
+        numOfPages={posts.numOfPages}
+        onPageChange={(page) => {
+          setParams((params) => ({ ...params, page: page }));
         }}
-        isLoading={isLoading}
       />
     </Stack>
   );
