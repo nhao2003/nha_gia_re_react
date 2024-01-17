@@ -7,6 +7,7 @@ import type IMessage from '../models/interfaces/IMessage';
 import type IConversation from '../models/interfaces/IConversation';
 import { MessageTypes } from '../constants/enums';
 import mediaServices from './media.services';
+import { connect, type Socket } from 'socket.io-client';
 enum SocketEvent {
   Init = 'init',
   New = 'new',
@@ -26,7 +27,7 @@ class ConversationService {
     return new ApiServiceBuilder();
   }
 
-  // private socket: Socket | null = null;
+  private socket: Socket | null = null;
 
   private readonly conversationsEventListeners: Array<(conversations: IConversation[]) => void> = [];
 
@@ -71,9 +72,7 @@ class ConversationService {
     isExist: boolean;
   }> {
     try {
-      // const accessToken = await AuthService.getInstance().getAccessToken();
-      const accessToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWE5YTU3ODUtNzIxYS00YmI1LWJlYjctOWQ3NTJlMjA3MGQ0Iiwic2Vzc2lvbl9pZCI6IjcxMTM3MjE3LTk3NTEtNDcyMS05MWMyLTcyOWI4Y2MyMDU2NyIsImlhdCI6MTcwNTEzNDExNCwiZXhwIjoxNzA3NzI2MTE0fQ.vBNFB6szeFToK6rWKh6MxTriJXSUPhRfdJ56xVAA1Rk';
+      const accessToken = await AuthService.getInstance().getAccessToken();
       const existingConversation = this.conversations.find(
         (conv) => conv.participants[0].user_id === otherUserId || conv.participants[1].user_id === otherUserId,
       );
@@ -191,61 +190,61 @@ class ConversationService {
   }
 
   public async sendMessage(conversationId: string, content: string | File[]): Promise<void> {
-    // if (this.socket === null) {
-    //   throw new Error('Socket is not connected');
-    // }
-    // // If content is array of files, upload them first
-    // if (Array.isArray(content)) {
-    //   const result = await mediaServices.uploadFiles(content, true);
-    //   this.socket.emit('send_message', {
-    //     type: MessageTypes.media,
-    //     conversation_id: conversationId,
-    //     content: result,
-    //   });
-    // } else {
-    //   this.socket.emit('send_message', {
-    //     type: MessageTypes.text,
-    //     conversation_id: conversationId,
-    //     content,
-    //   });
-    // }
+    if (this.socket === null) {
+      throw new Error('Socket is not connected');
+    }
+    // If content is array of files, upload them first
+    if (Array.isArray(content)) {
+      const result = await mediaServices.uploadFiles(content, true);
+      this.socket.emit('send_message', {
+        type: MessageTypes.media,
+        conversation_id: conversationId,
+        content: result,
+      });
+    } else {
+      this.socket.emit('send_message', {
+        type: MessageTypes.text,
+        conversation_id: conversationId,
+        content,
+      });
+    }
   }
 
   public initConversation(conversationId: string): void {
-    // if (this.socket === null) {
-    //   throw new Error('Socket is not connected');
-    // }
-    // if (this.messages[conversationId] !== undefined) {
-    //   this.notifyMessagesEventListeners(conversationId);
-    // }
-    // this.socket.emit('init_chat', {
-    //   conversation_id: conversationId,
-    // });
+    if (this.socket === null) {
+      throw new Error('Socket is not connected');
+    }
+    if (this.messages[conversationId] !== undefined) {
+      this.notifyMessagesEventListeners(conversationId);
+    }
+    this.socket.emit('init_chat', {
+      conversation_id: conversationId,
+    });
   }
 
   public async initSocket(): Promise<void> {
-    // if (this.socket !== null) {
-    //   return;
-    // }
-    // const accessToken = await AuthService.getInstance().getAccessToken();
-    // this.socket = connect('http://localhost:8000/conversations', {
-    //   auth: {
-    //     token: accessToken,
-    //   },
-    // });
-    // this.socket.on('conversations', (data: { type: SocketEvent; data: any }) => {
-    //   this.handleConversationEvent(data.type, data.data);
-    // });
-    // this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
-    //   console.log('On messages: ', data);
-    //   this.handleMessageEvent(data.type, data);
-    // });
+    if (this.socket !== null) {
+      return;
+    }
+    const accessToken = await AuthService.getInstance().getAccessToken();
+    this.socket = connect('http://localhost:8000/conversations', {
+      auth: {
+        token: accessToken,
+      },
+    });
+    this.socket.on('conversations', (data: { type: SocketEvent; data: any }) => {
+      this.handleConversationEvent(data.type, data.data);
+    });
+    this.socket.on('messages', (data: { type: SocketEvent; data: any }) => {
+      console.log('On messages: ', data);
+      this.handleMessageEvent(data.type, data);
+    });
   }
 
   public disconnectSocket(): void {
-    // if (this.socket !== null) {
-    //   this.socket.disconnect();
-    // }
+    if (this.socket !== null) {
+      this.socket.disconnect();
+    }
   }
 }
 

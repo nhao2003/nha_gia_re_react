@@ -13,9 +13,7 @@ const Header: React.FC = () => {
   const theme = useTheme();
   const matches1440 = useMediaQuery(theme.breakpoints.up(1400));
   const matches = useMediaQuery(theme.breakpoints.up(950));
-
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const toggleDrawer = () => {
     setOpenDrawer(false);
   };
