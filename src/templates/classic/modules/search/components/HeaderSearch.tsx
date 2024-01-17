@@ -55,7 +55,7 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
   const searchParams = new URLSearchParams(location.search);
   const searchTerm = searchParams.get('q') ?? ''; // Add this line to get the search term from the URL
 
-  const [search, setSearch] = React.useState<string | null>(null);
+  const [search, setSearch] = React.useState<string>('');
   const [open, setOpen] = React.useState(false);
 
   const [selectProvince, setSelectProvince] = React.useState<number | null>(null);
@@ -80,16 +80,32 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
   const [params, setParams] = React.useState({});
 
   const handleSearch = () => {
-    if (search !== null) {
+    if (search.length !== 0) {
       setParams((params) => ({ ...params, search: encodeURIComponent(search).toString() }));
+    } else {
+      setParams((params) => ({ ...params, search: undefined }));
     }
 
     if (selectType !== null) {
       setParams((params) => ({ ...params, type_id: selectType }));
+    } else {
+      setParams((params) => ({ ...params, type_id: undefined }));
     }
 
     if (selectProvince !== null) {
       setParams((params) => ({ ...params, province_code: selectProvince }));
+    } else {
+      setParams((params) => ({ ...params, province_code: undefined }));
+    }
+    if (selectDistrict !== null) {
+      setParams((params) => ({ ...params, district_code: selectDistrict }));
+    } else {
+      setParams((params) => ({ ...params, district_code: undefined }));
+    }
+    if (selectWard !== null) {
+      setParams((params) => ({ ...params, ward_code: selectWard }));
+    } else {
+      setParams((params) => ({ ...params, ward_code: undefined }));
     }
 
     if (price[0] > 0 || price[1] < 120000000000) {
@@ -102,10 +118,14 @@ export const HeaderSearch = (props: HeaderSearchProps) => {
 
     if (sortBy !== null) {
       setParams((params) => ({ ...params, sortBy: sortBy }));
+    } else {
+      setParams((params) => ({ ...params, sortBy: undefined }));
     }
 
     if (postBy != null) {
       setParams((params) => ({ ...params, postBy: postBy }));
+    } else {
+      setParams((params) => ({ ...params, postBy: undefined }));
     }
 
     console.log('province', selectProvince, selectType);
