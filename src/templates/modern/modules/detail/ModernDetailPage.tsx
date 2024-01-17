@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
+import { Chat } from '@mui/icons-material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -28,12 +29,15 @@ import type RealEstatePost from '../../../../models/RealEstatePost';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 import dateUtils from '../../../../utils/dateUtils';
 import { Direction, LegalDocumentStatus, PropertyTypes } from '../../../../constants/enums';
+import AuthService from '../../../../services/auth.service';
 
 export function ModernDetailPage(): JSX.Element {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const [listImage, setListImage] = useState<ImageInfo[]>([]);
+
+  const [isMe, setIsMe] = useState(false);
 
   // Get state
   const [post, setPost] = React.useState<RealEstatePost>(useLocation().state as RealEstatePost);
@@ -49,6 +53,7 @@ export function ModernDetailPage(): JSX.Element {
   }
 
   React.useEffect(() => {
+    const userId = AuthService.getInstance().getUserIdFromToken();
     if (post === null)
       fetchPost()
         .then((response) => {
@@ -59,6 +64,7 @@ export function ModernDetailPage(): JSX.Element {
           if (firstPost !== undefined) {
             setPost(firstPost);
             setListImage(formatImages(firstPost.images));
+            setIsMe(firstPost.user.id === userId);
           }
         })
         .catch((error) => {
@@ -66,6 +72,7 @@ export function ModernDetailPage(): JSX.Element {
         });
     else {
       setListImage(formatImages(post.images));
+      setIsMe(post.user.id === userId);
     }
   }, []);
 
@@ -136,6 +143,10 @@ export function ModernDetailPage(): JSX.Element {
 
   const navigateToProfile = () => {
     if (post !== null) navigate(`/user/${post.user.id}`, { state: post.user });
+  };
+
+  const navigateToChat = () => {
+    if (post !== null) navigate(`/chat/${post.user.id}`);
   };
 
   // Get API Relate
@@ -461,6 +472,23 @@ export function ModernDetailPage(): JSX.Element {
               </Stack>
             </Stack>
 
+            {!isMe && (
+              <Button
+                variant='contained'
+                sx={{
+                  marginTop: 1,
+                  width: '100%',
+                  backgroundColor: CUSTOM_COLOR.white,
+                  borderColor: CUSTOM_COLOR.green,
+                  borderWidth: '2px',
+                  color: CUSTOM_COLOR.green,
+                }}
+                endIcon={<Chat />}
+                onClick={navigateToChat}
+              >
+                Chat với người đăng
+              </Button>
+            )}
             <Button
               variant='contained'
               sx={{
