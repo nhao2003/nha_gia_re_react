@@ -1,8 +1,6 @@
 import { Avatar, Box, Button, CircularProgress, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { Chat } from '@mui/icons-material';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import BeenhereOutlinedIcon from '@mui/icons-material/BeenhereOutlined';
@@ -12,23 +10,20 @@ import WcIcon from '@mui/icons-material/Wc';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import CropIcon from '@mui/icons-material/Crop';
 import BedroomParentOutlinedIcon from '@mui/icons-material/BedroomParentOutlined';
-import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import EastIcon from '@mui/icons-material/East';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Carousel } from '../home/components/Carousel';
 import PostListComponent from '../home/components/PostListComponent';
-import Grid from '@mui/material/Grid';
 import CUSTOM_COLOR from '../../../classic/constants/colors';
 import { TileIcon } from '../../../classic/modules/Detail/components/TileIcon';
 import type RealEstatePost from '../../../../models/RealEstatePost';
 import { ApiServiceBuilder } from '../../../../services/api.service';
 import dateUtils from '../../../../utils/dateUtils';
-import { Direction, LegalDocumentStatus, PropertyTypes } from '../../../../constants/enums';
+import { LegalDocumentStatus, PropertyTypes } from '../../../../constants/enums';
 import AuthService from '../../../../services/auth.service';
 
 export function ModernDetailPage(): JSX.Element {

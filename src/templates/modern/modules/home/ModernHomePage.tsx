@@ -1,6 +1,4 @@
 import {
-  Box,
-  CircularProgress,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -14,9 +12,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import { ProvinceListComponent } from './components/ProvinceListComponent';
 import PostListComponent from './components/PostListComponent';
 import { Carousel } from './components/Carousel';
-import { ApiServiceBuilder } from '../../../../services/api.service';
-import React from 'react';
-import type RealEstatePost from '../../../../models/RealEstatePost';
 
 export function ModernHomePage(): JSX.Element {
   const theme = useTheme();
