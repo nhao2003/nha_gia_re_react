@@ -14,11 +14,6 @@ export function ModernSearchPage(): JSX.Element {
   console.log('TYPE', type);
   console.log('VALUE', value);
 
-  // type: province || value: province code
-  // type: nearby, sell, lease || value: null
-  // type: relate || value: post title
-
-  // const [params, setParams] = React.useState<URLSearchParams>(new URLSearchParams(window.location.search));
   const [params, setParams] = React.useState({});
   const [isLease, setIsLease] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
